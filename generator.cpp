@@ -144,14 +144,7 @@ static void printFooter() {
 )END";
 }
 
-int main() {
-  initPoints();
-  for (int i = 0; i < 100000; i++)
-    step();
-
-  printHeader();
-
-  // print result
+static void printPoints() {
   std::cout << "const points = [\n";
   for (int i = 0; i < result.size(); i += 100) {
     std::cout << "  [" << i << ",";
@@ -163,8 +156,9 @@ int main() {
     std::cout << "],\n";
   }
   std::cout << "];\n";
+}
 
-  // print xv
+static void printXV() {
   std::cout << "const xv = [\n";
   for (int i = 0; i < xv.size(); i += 100) {
     std::cout << "  [" << i << ", "
@@ -172,7 +166,16 @@ int main() {
               << xv[i].v << "],\n";
   }
   std::cout << "];\n";
+}
 
+int main() {
+  initPoints();
+  for (int i = 0; i < 100000; i++)
+    step();
+
+  printHeader();
+  printPoints();
+  printXV();
   printFooter();
 }
 
