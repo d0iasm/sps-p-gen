@@ -143,20 +143,36 @@ static double getM() {
 
 static void printHeader() {
   std::cout << R"END(<html>
+<head>
+  <meta charset=utf-8>
+  <title>SPS-P</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
 <body>
-<canvas id=canvas width=650 height=650></canvas>
-<span>)END";
+<div class=container>
+<div id=left>
+  <canvas id=graph width=250 height=250></canvas>
+</div>
+<div id=right>
+  <div class=container>
+    <div class=component>timestep: <input type=text size=6 id=timestep></input></div>
+    <div class=component>)END";
   std::cout << "K="
             << kparam[0][0] << "," << kparam[0][1] << ","
             << kparam[1][0] << "," << kparam[1][1];
+  std::cout << "</div><div class=component>";
   std::cout << " K[a,b,p,m]=" 
             << kparam[0][0] << "," << kparam[1][1] << ","
             << getP() << "," << getM();
-  std::cout <<  R"END(</span>
-timestep: <span id=timestep></span>
-<button id=start>Stop</button>
-<button id=reset>Reset</button>
-<canvas id=graph width=200 height=200></canvas>
+  std::cout <<  R"END(</div>
+  </div>
+  <canvas id=canvas width=650 height=650></canvas>
+  <div class=container>
+    <button id=start>Stop</button>
+    <button id=reset>Reset</button>
+  </div>
+</div>
+</div>
 <script>
 )END";
 }
@@ -179,7 +195,7 @@ ctx.translate(500, 500);
 // Log log graph
 const graph = document.getElementById("graph");
 const gctx = graph.getContext('2d');
-gctx.scale(200, 200);
+gctx.scale(250, 250);
 
 // HTML elements
 const startButton = document.getElementById('start');
@@ -273,9 +289,8 @@ function drawGraph() {
 }
 
 function drawGraphGrid() {
-  gctx.clearRect(0, 0, 1, 1);
-
   gctx.save();
+  gctx.clearRect(0, 0, 1, 1);
   gctx.strokeStyle = '#ccc';
   gctx.lineWidth = 0.005;
 
@@ -323,7 +338,7 @@ function redraw() {
     drawPoint(points[index][i]);
   }
 
-  document.getElementById('timestep').innerText = points[index][0];
+  document.getElementById('timestep').value = points[index][0];
   ctx.restore();
 }
 
@@ -348,6 +363,9 @@ function stop() {
 }
 
 function reset() {
+  drawGraphGrid();
+  drawGraph();
+
   const running = handle;
   if (running) stop();
   index = 0;
@@ -364,6 +382,13 @@ startButton.addEventListener('click', function() {
 });
 
 resetButton.addEventListener('click', reset);
+
+document.getElementById('timestep').addEventListener('change', e => {
+  index = parseInt(e.currentTarget.value / 100);
+  drawGraphGrid();
+  drawGraph();
+  redraw();
+});
 
 drawGraphGrid();
 drawGraph();

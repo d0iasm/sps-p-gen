@@ -6,11 +6,26 @@
 
 .container {
   display: flex;
-  margin: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
-.container>div {
-  margin: 10px;
+.component {
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+}
+
+#left {
+  background-color: #f3f3f3;
+  height: 100vh;
+  width: 250px;
+}
+
+#right {
+  height: 100vh;
+  width: 650px;
 }
 
 button {
@@ -22,7 +37,7 @@ button {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  width: 300px;
 }
 
 button:hover {
