@@ -133,10 +133,26 @@ static void step() {
   computeXV(delta);
 }
 
+static double getP() {
+  return (kparam[0][1] + kparam[1][0]) / 2;
+}
+
+static double getM() {
+  return kparam[0][1] -getP();
+}
+
 static void printHeader() {
   std::cout << R"END(<html>
 <body>
 <canvas id=canvas width=650 height=650></canvas>
+<span>)END";
+    std::cout << "K=" 
+    << kparam[0][0] << "," << kparam[0][1] << ","
+    << kparam[1][0] << "," << kparam[1][1];
+  std::cout << " K[a,b,p,m]=" 
+    << kparam[0][0] << "," << kparam[1][1] << ","
+    << getP() << "," << getM();
+  std::cout <<  R"END(</span>
 timestep: <span id=timestep></span>
 <button id=start>Stop</button>
 <button id=reset>Reset</button>
@@ -224,14 +240,14 @@ function redraw() {
   ctx.restore();
 }
 
-function step() {
-  if (index < points.length) {
-    redraw();
-    index++;
-  } else {
-    stop();
+  function step() {
+    if (index < points.length) {
+      redraw();
+      index++;
+    } else {
+      stop();
+    }
   }
-}
 
 function start() {
   handle = window.setInterval(step, 0);
@@ -253,12 +269,12 @@ function reset() {
 }
 
 startButton.addEventListener('click', function() {
-  if (handle) {
+    if (handle) {
     stop();
-  } else {
+    } else {
     start();
-  }
-});
+    }
+    });
 
 resetButton.addEventListener('click', reset);
 
@@ -272,9 +288,9 @@ static void printPoints() {
     std::cout << "  [" << i << ",";
     for (Point &p : result[i])
       std::cout << "{x:" << p.x
-                << ",y:" << p.y
-                << ",color:" << p.color
-                << "},";
+        << ",y:" << p.y
+        << ",color:" << p.color
+        << "},";
     std::cout << "],\n";
   }
   std::cout << "];\n";
@@ -284,15 +300,15 @@ static void printXV() {
   std::cout << "const xv = [\n";
   for (int i = 0; i < xv.size(); i += 100) {
     std::cout << "  [" << i << ", "
-              << "{x:" << xv[i].x 
-              << ",y:" <<xv[i].v
-              << "}],\n";
+      << "{x:" << xv[i].x 
+      << ",y:" <<xv[i].v
+      << "}],\n";
   }
   std::cout << "];\n";
 }
 
 static void usage() {
-  std::cerr << "Usage: generator [ -k k0 k1 k2 k3 ] [ -seed number ] [ -gen number ]\n";
+  std::cerr << "Usage: generator [ -k k0 k1 k2 k3 ] [ -kx ka kb kp km ] [ -seed number ] [ -gen number ]\n";
   exit(1);
 }
 
@@ -305,6 +321,22 @@ static void parseArgs(int argc, char **argv) {
       kparam[0][1] = std::stod(argv[2]);
       kparam[1][0] = std::stod(argv[3]);
       kparam[1][1] = std::stod(argv[4]);
+      argc -= 5;
+      argv += 5;
+      continue;
+    }
+
+    if (strcmp("-kx", argv[0]) == 0) {
+      if (argc < 5)
+        usage();
+      double a = std::stod(argv[1]);
+      double b = std::stod(argv[2]);
+      double p = std::stod(argv[3]);
+      double m = std::stod(argv[4]);
+      kparam[0][0] = a;
+      kparam[0][1] = p + m;
+      kparam[1][0] = p - m; 
+      kparam[1][1] = b; 
       argc -= 5;
       argv += 5;
       continue;
