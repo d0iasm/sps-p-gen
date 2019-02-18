@@ -33,7 +33,7 @@ static int timestep = 0;
 static Point points[NPOINTS];
 static std::vector<std::vector<Point>> result;
 static int seed = 1;
-static int maxgen = 100000;
+static int maxgen = 50000;
 
 // Graph
 static std::vector<XV> xv;
@@ -146,16 +146,17 @@ static void printHeader() {
 <body>
 <canvas id=canvas width=650 height=650></canvas>
 <span>)END";
-    std::cout << "K=" 
-    << kparam[0][0] << "," << kparam[0][1] << ","
-    << kparam[1][0] << "," << kparam[1][1];
+  std::cout << "K="
+            << kparam[0][0] << "," << kparam[0][1] << ","
+            << kparam[1][0] << "," << kparam[1][1];
   std::cout << " K[a,b,p,m]=" 
-    << kparam[0][0] << "," << kparam[1][1] << ","
-    << getP() << "," << getM();
+            << kparam[0][0] << "," << kparam[1][1] << ","
+            << getP() << "," << getM();
   std::cout <<  R"END(</span>
 timestep: <span id=timestep></span>
 <button id=start>Stop</button>
 <button id=reset>Reset</button>
+<canvas id=graph width=200 height=200></canvas>
 <script>
 )END";
 }
@@ -174,6 +175,11 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext('2d');
 ctx.scale(0.65, 0.65);
 ctx.translate(500, 500);
+
+// Log log graph
+const graph = document.getElementById("graph");
+const gctx = graph.getContext('2d');
+gctx.scale(200, 200);
 
 // HTML elements
 const startButton = document.getElementById('start');
@@ -228,26 +234,107 @@ function scaleout() {
   ctx.scale(currentScale, currentScale);
 }
 
+function chaseGraph() {
+  gctx.save();
+  gctx.translate(0.25, 0.75);
+  gctx.scale(0.25, -0.25);
+
+  gctx.fillStyle = 'red';
+
+  const p = xv[index][1];
+  const v = Math.log10(1000 * p.v + 1);
+  const x = Math.log10(1000 * p.x + 1);
+
+  gctx.beginPath();
+  gctx.arc(x, v, 0.03, 0, 2 * Math.PI, true);
+  gctx.fill();
+
+  gctx.restore();
+}
+
+function drawGraph() {
+  gctx.save();
+  gctx.translate(0.25, 0.75);
+  gctx.scale(0.25, -0.25);
+
+  gctx.fillStyle = 'blue';
+
+  for (let i = 0; i < xv.length; i++) {
+    const p = xv[i][1];
+    const v = Math.log10(1000 * p.v + 1);
+    const x = Math.log10(1000 * p.x + 1);
+
+    gctx.beginPath();
+    gctx.arc(x, v, 0.03, 0, 2 * Math.PI, true);
+    gctx.fill();
+  }
+
+  gctx.restore();
+}
+
+function drawGraphGrid() {
+  gctx.clearRect(0, 0, 1, 1);
+
+  gctx.save();
+  gctx.strokeStyle = '#ccc';
+  gctx.lineWidth = 0.005;
+
+  for (let x = 0.25; x < 1; x += 0.25) {
+    gctx.beginPath();
+    gctx.moveTo(x, 0);
+    gctx.lineTo(x, 1);
+    gctx.stroke();
+
+    gctx.beginPath();
+    gctx.moveTo(0, x);
+    gctx.lineTo(1, x);
+    gctx.stroke();
+  }
+
+  gctx.lineWidth = 0.02;
+  gctx.beginPath();
+  gctx.moveTo(0.25, 0);
+  gctx.lineTo(0.25, 1);
+  gctx.stroke();
+
+  gctx.beginPath();
+  gctx.moveTo(0, 0.75);
+  gctx.lineTo(1, 0.75);
+  gctx.stroke();
+  gctx.restore();
+
+  gctx.save();
+  gctx.scale(.005, .005);
+  gctx.fillText('log10(10^3*V+1)', 5, 10);
+  gctx.fillText('log10(10^3*X+1)', 120, 165);
+  gctx.restore();
+}
+
 function redraw() {
   ctx.save();
   ctx.clearRect(-50000, -50000, 100000, 100000);
+ 
+  chaseGraph();
+
   scaleout();
   drawGrid();
+
   for (let i = 1; i < points[index].length; i++) {
     drawPoint(points[index][i]);
   }
+
   document.getElementById('timestep').innerText = points[index][0];
   ctx.restore();
 }
 
-  function step() {
-    if (index < points.length) {
-      redraw();
-      index++;
-    } else {
-      stop();
-    }
+function step() {
+  if (index < points.length) {
+    redraw();
+    index++;
+  } else {
+    stop();
   }
+}
 
 function start() {
   handle = window.setInterval(step, 0);
@@ -269,15 +356,17 @@ function reset() {
 }
 
 startButton.addEventListener('click', function() {
-    if (handle) {
+  if (handle) {
     stop();
-    } else {
+  } else {
     start();
-    }
-    });
+  }
+});
 
 resetButton.addEventListener('click', reset);
 
+drawGraphGrid();
+drawGraph();
 start();
 )END";
 }
@@ -288,9 +377,9 @@ static void printPoints() {
     std::cout << "  [" << i << ",";
     for (Point &p : result[i])
       std::cout << "{x:" << p.x
-        << ",y:" << p.y
-        << ",color:" << p.color
-        << "},";
+                << ",y:" << p.y
+                << ",color:" << p.color
+                << "},";
     std::cout << "],\n";
   }
   std::cout << "];\n";
@@ -300,9 +389,9 @@ static void printXV() {
   std::cout << "const xv = [\n";
   for (int i = 0; i < xv.size(); i += 100) {
     std::cout << "  [" << i << ", "
-      << "{x:" << xv[i].x 
-      << ",y:" <<xv[i].v
-      << "}],\n";
+              << "{x:" << xv[i].x 
+              << ",v:" <<xv[i].v
+              << "}],\n";
   }
   std::cout << "];\n";
 }
