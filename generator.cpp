@@ -175,14 +175,6 @@ static void printHeader() {
 )END";
 }
 
-static void printFooter() {
-  std::cout << "</body></html>\n";
-}
-
-static void printScript() {
-  std::cout << "<script src=script.js></script>\n";
-}
-
 static void printPoints() {
   std::cout << "<script>const points = [\n";
   for (int i = 0; i < result.size(); i += 100) {
@@ -275,7 +267,7 @@ int main(int argc, char **argv) {
   printHeader();
   printPoints();
   printXV();
-  printScript();
-  printFooter();
+  std::cout << "<script src=script.js></script>\n";
+  std::cout << "</body></html>\n";
 }
 

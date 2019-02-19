@@ -104,7 +104,7 @@ function drawGraphGrid() {
   gctx.save();
   gctx.clearRect(0, 0, 1, 1);
   gctx.strokeStyle = '#ccc';
-  gctx.strokeWidth = 0.005;
+  gctx.lineWidth = 0.005;
 
   for (let x = 0.25; x < 1; x += 0.25) {
     gctx.beginPath();
