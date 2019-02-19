@@ -150,28 +150,27 @@ static void printHeader() {
 </head>
 <body>
 <div class=container>
-<div id=left>
-  <canvas id=graph width=250 height=250></canvas>
+<div class="component min-width">
+  timestep: <input type=text size=6 id=timestep></input>
 </div>
-<div id=right>
-  <div class=container>
-    <div class=component>timestep: <input type=text size=6 id=timestep></input></div>
-    <div class=component>)END";
+<div class="component min-width">)END";
   std::cout << "K="
             << kparam[0][0] << "," << kparam[0][1] << ","
             << kparam[1][0] << "," << kparam[1][1];
-  std::cout << "</div><div class=component>";
+  std::cout << "</div><div class=\"component min-width\">";
   std::cout << " K[a,b,p,m]=" 
             << kparam[0][0] << "," << kparam[1][1] << ","
             << getP() << "," << getM();
-  std::cout <<  R"END(</div>
-  </div>
-  <canvas id=canvas width=650 height=650></canvas>
-  <div class=container>
-    <button id=start>Stop</button>
-    <button id=reset>Reset</button>
-  </div>
+  std::cout <<  R"END(</div></div>
+<div class=container>
+  <button id=start>Stop</button>
+  <button id=reset>Reset</button>
 </div>
+<div class=component>
+  <canvas id=canvas width=650 height=650></canvas>
+</div>
+<div class=component>
+  <canvas id=graph width=250 height=250></canvas>
 </div>
 <script>
 )END";
