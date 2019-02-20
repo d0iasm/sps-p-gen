@@ -10,7 +10,6 @@
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  width: 650px;
 }
 
 .component {
@@ -18,10 +17,6 @@
   line-height: 100px;
   text-align: center;
   width: 650px;
-}
-
-.min-width {
-  width: 200px;
 }
 
 button {
@@ -33,7 +28,7 @@ button {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  width: 100px;
+  width: 120px;
 }
 
 button:hover {

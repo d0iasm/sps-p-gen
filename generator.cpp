@@ -113,14 +113,18 @@ double heider(int pi, int pj, int pk) {
 /**
  * @return Balance value by all triangles. 
  */
-double balance() {
+double balance(bool useave) {
   int size = 0;
   double sum = 0; 
   for (int i = 0; i < NPOINTS-2; i++) {
     for (int j = i+1; j < NPOINTS-1; j++) {
       for (int k = j+1; k < NPOINTS; k++) {
         size++;
-        sum += average(i, j, k);
+        if (useave) { 
+          sum += average(i, j, k);
+        } else {
+          sum += heider(i, j, k);
+        }
       }
     }
   }
@@ -230,39 +234,30 @@ static double getM() {
   return kparam[0][1] -getP();
 }
 
-static void printHeader() {
-  std::cout << R"END(<html>
-<head>
-  <meta charset=utf-8>
-  <title>SPS-P</title>
-  <link rel="stylesheet" href="./style.css">
-</head>
-<body>
+static void printBody() {
+  std::cout << R"END(<body>
 <div class=container>
-<div class="component min-width">
-  heider: <span id=balance></span>
-</div>
-<div class="component min-width">
-  timestep: <input type=text size=6 id=timestep></input>
-</div>
-<div class="component min-width">)END";
+  <canvas id=canvas width=650 height=650></canvas>
+  <div>
+    <div class=container>
+      <button id=start>Stop</button>
+      <button id=reset>Reset</button>
+    </div>
+    <div>timestep: <input type=text size=6 id=timestep></input></div>
+    <div>)END";
   std::cout << "K="
             << kparam[0][0] << "," << kparam[0][1] << ","
             << kparam[1][0] << "," << kparam[1][1];
-  std::cout << "</div><div class=\"component min-width\">";
+  std::cout << "</div><div>";
   std::cout << " K[a,b,p,m]=" 
             << kparam[0][0] << "," << kparam[1][1] << ","
             << getP() << "," << getM();
-  std::cout <<  R"END(</div></div>
-<div class=container>
-  <button id=start>Stop</button>
-  <button id=reset>Reset</button>
-</div>
-<div class=component>
-  <canvas id=canvas width=650 height=650></canvas>
-</div>
-<div class=component>
-  <canvas id=graph width=250 height=250></canvas>
+  std::cout <<  R"END(</div>
+    <br />
+    <div>balance value(average): <span id=average></span></div>
+    <div>balance value(heider): <span id=heider></span></div>
+    <canvas id=graph width=250 height=250></canvas>
+  </div>
 </div>
 )END";
 }
@@ -356,12 +351,17 @@ int main(int argc, char **argv) {
   for (int i = 0; i < maxgen; i++)
     step();
 
-  printHeader();
+
+  std::cout << "<head><link rel=stylesheet href=style.css></head>";
+  printBody();
   printPoints();
   printXV();
   std::cout << "<script src=script.js></script>\n";
-  std::cout << "<script>document.getElementById('balance').innerText="
-            << balance() 
+  std::cout << "<script>"
+            << "document.getElementById('average').innerText="
+            << balance(true) << ";" 
+            << "document.getElementById('heider').innerText="
+            << balance(false) << ";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
