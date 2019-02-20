@@ -31,9 +31,9 @@ double balance() {
  * @return Balance value per one triangle. 
  */
 double average(int pi, int pj, int pk) {
-  int pcol = getColor(getColor[pi]);
-  int ocol = getColor(getColor[pj]);
-  int xcol = getColor(getColor[pk]);
+  int pcol = getColor(pi);
+  int ocol = getColor(pj);
+  int xcol = getColor(pk);
 
   double a = (kparam[pcol][ocol] + kparam[ocol][pcol]) / 2;
   double b = (kparam[pcol][xcol] + kparam[xcol][pcol]) / 2;
@@ -67,9 +67,9 @@ double average(int pi, int pj, int pk) {
  * @return Balance value per one triangle. 
  */
 double heider(int pi, int pj, int pk) {
-  int a = getColor(getColor[pi]);
-  int b = getColor(getColor[pj]);
-  int c = getColor(getColor[pk]);
+  int a = getColor(pi);
+  int b = getColor(pj);
+  int c = getColor(pk);
 
   // p->o, o->x, p->x
   double p1 = kparam[a][b] * kparam[b][c] * kparam[a][c];
