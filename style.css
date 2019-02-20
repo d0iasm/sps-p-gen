@@ -12,13 +12,6 @@
   margin: 0 auto;
 }
 
-.component {
-  margin: 10px auto;
-  line-height: 100px;
-  text-align: center;
-  width: 650px;
-}
-
 button {
   background-color: #aaa; /* Green */
   border: 2px solid white;

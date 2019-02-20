@@ -243,9 +243,11 @@ static void printBody() {
       <button id=start>Stop</button>
       <button id=reset>Reset</button>
     </div>
+    <br />
     <div>timestep: <input type=text size=6 id=timestep></input></div>
+    <br />
     <div>)END";
-  std::cout << "K="
+  std::cout << "K[00,01,10,11]="
             << kparam[0][0] << "," << kparam[0][1] << ","
             << kparam[1][0] << "," << kparam[1][1];
   std::cout << "</div><div>";
@@ -256,6 +258,8 @@ static void printBody() {
     <br />
     <div>balance value(average): <span id=average></span></div>
     <div>balance value(heider): <span id=heider></span></div>
+    <br />
+    <div>X-V log log plot:</div>
     <canvas id=graph width=250 height=250></canvas>
   </div>
 </div>
@@ -288,13 +292,13 @@ static void printXV() {
 }
 
 static void usage() {
-  std::cerr << "Usage: generator [ -k k0 k1 k2 k3 ] [ -kx ka kb kp km ] [ -seed number ] [ -gen number ]\n";
+  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen number ]\n";
   exit(1);
 }
 
 static void parseArgs(int argc, char **argv) {
   while (argc > 0) {
-    if (strcmp("-k", argv[0]) == 0) {
+    if (strcmp("-k1", argv[0]) == 0) {
       if (argc < 5)
         usage();
       kparam[0][0] = std::stod(argv[1]);
@@ -306,7 +310,7 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
-    if (strcmp("-kx", argv[0]) == 0) {
+    if (strcmp("-k2", argv[0]) == 0) {
       if (argc < 5)
         usage();
       double a = std::stod(argv[1]);
