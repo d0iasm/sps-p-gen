@@ -108,7 +108,7 @@ double heider(int pi, int pj, int pk) {
   double p5 = kparam[c][a] * kparam[a][b] * kparam[c][b];
   double p6 = kparam[c][b] * kparam[b][a] * kparam[c][a];
 
-  return (p1 * p2 * p3 * p4 * p5 * p6) / 6;
+  return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
 /**
  * @return Balance value by all triangles. 
@@ -247,11 +247,11 @@ static void printBody() {
     <div>timestep: <input type=text size=6 id=timestep></input></div>
     <br />
     <div>)END";
-  std::cout << "K[00,01,10,11]="
+  std::cout << "K[00,01,10,11]: "
             << kparam[0][0] << "," << kparam[0][1] << ","
             << kparam[1][0] << "," << kparam[1][1];
   std::cout << "</div><div>";
-  std::cout << " K[a,b,p,m]=" 
+  std::cout << " K[a, b, p, m]: " 
             << kparam[0][0] << "," << kparam[1][1] << ","
             << getP() << "," << getM();
   std::cout <<  R"END(</div>
