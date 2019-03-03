@@ -45,34 +45,7 @@ Color getColor(int i) {
 }
 
 /**
- * Calculate the balance value per one triangle in the average way. 
- * i.e. c[] = {1, 4, 39};
- * {1, 4}, {1, 39}, {4, 39}
- * Calculate the average of each combination.
- * (K(1->4) + K(4->1)) / 2
- * (K(1->39) + K(39->1)) / 2
- * (K(4->39) + K(39->3)) / 2
- * Then, multiply all averages.
- *
- * @param pi First point. 
- * @param pj Second point. 
- * @param pk Third point. 
- * @return Balance value per one triangle. 
- */
-double average(int pi, int pj, int pk) {
-  int pcol = getColor(pi);
-  int ocol = getColor(pj);
-  int xcol = getColor(pk);
-
-  double a = (kparam[pcol][ocol] + kparam[ocol][pcol]) / 2;
-  double b = (kparam[pcol][xcol] + kparam[xcol][pcol]) / 2;
-  double c = (kparam[ocol][xcol] + kparam[xcol][ocol]) / 2;
-
-  return a * b * c;
-}
-
-/**
- * Calculate the balance value per one triangle in the Heider theory.
+ * Calculate the balance energy per one triangle in the Heider theory.
  * In HB theory, only P->O, P->X, O->X directions are valid.
  * i.e. c[] = {1, 4, 39};
  * P  |  O  |  X
@@ -93,7 +66,7 @@ double average(int pi, int pj, int pk) {
  * @param pi First point. 
  * @param pj Second point. 
  * @param pk Third point. 
- * @return Balance value per one triangle. 
+ * @return Balance energy per one triangle. 
  */
 double heider(int pi, int pj, int pk) {
   int a = getColor(pi);
@@ -110,21 +83,18 @@ double heider(int pi, int pj, int pk) {
 
   return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
+
 /**
- * @return Balance value by all triangles. 
+ * @return Balance energy by all triangles. 
  */
-double balance(bool useave) {
+double balance() {
   int size = 0;
   double sum = 0; 
   for (int i = 0; i < NPOINTS-2; i++) {
     for (int j = i+1; j < NPOINTS-1; j++) {
       for (int k = j+1; k < NPOINTS; k++) {
         size++;
-        if (useave) { 
-          sum += average(i, j, k);
-        } else {
-          sum += heider(i, j, k);
-        }
+        sum += heider(i, j, k);
       }
     }
   }
@@ -256,8 +226,7 @@ static void printBody() {
             << getP() << "," << getM();
   std::cout <<  R"END(</div>
     <br />
-    <div>balance value(average): <span id=average></span></div>
-    <div>balance value(heider): <span id=heider></span></div>
+    <div>balance energy: <span id=energy></span></div>
     <br />
     <div>X-V log log plot:</div>
     <canvas id=graph width=250 height=250></canvas>
@@ -355,17 +324,14 @@ int main(int argc, char **argv) {
   for (int i = 0; i < maxgen; i++)
     step();
 
-
   std::cout << "<head><link rel=stylesheet href=style.css></head>";
   printBody();
   printPoints();
   printXV();
   std::cout << "<script src=script.js></script>\n";
   std::cout << "<script>"
-            << "document.getElementById('average').innerText="
-            << balance(true) << ";" 
-            << "document.getElementById('heider').innerText="
-            << balance(false) << ";" 
+            << "document.getElementById('energy').innerText="
+            << balance() << ";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
