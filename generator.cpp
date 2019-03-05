@@ -101,6 +101,28 @@ double balance() {
   return sum / size;
 }
 
+double variance() {
+  double average = 0;
+  average += kparam[0][0];
+  average += kparam[0][1];
+  average += kparam[1][0];
+  average += kparam[1][1];
+  average /= 4;
+ 
+  int size = 0;
+  double sum = 0;
+  double tmp = 0;
+  for (int i = 0; i < NPOINTS-2; i++) {
+    for (int j = i+1; j < NPOINTS-1; j++) {
+      for (int k = j+1; k < NPOINTS; k++) {
+        size++;
+        tmp = heider(i, j, k);
+        sum += (tmp - average) * (tmp - average);
+      }
+    }
+  }
+  return sum / size;
+}
 
 static Point computeCenter() {
   double x = 0;
@@ -226,7 +248,8 @@ static void printBody() {
             << getP() << "," << getM();
   std::cout <<  R"END(</div>
     <br />
-    <div>balance energy: <span id=energy></span></div>
+    <div>balance energy (average): <span id=energy></span></div>
+    <div>balance energy (variance): <span id=variance></span></div>
     <br />
     <div>X-V log log plot:</div>
     <canvas id=graph width=250 height=250></canvas>
@@ -332,6 +355,8 @@ int main(int argc, char **argv) {
   std::cout << "<script>"
             << "document.getElementById('energy').innerText="
             << balance() << ";" 
+            << "document.getElementById('variance').innerText="
+            << variance() << ";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
