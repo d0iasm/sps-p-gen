@@ -349,6 +349,36 @@ static void parseArgs(int argc, char **argv) {
   }
 }
 
+static void html() {
+  std::cout << "<head><link rel=stylesheet href=style.css></head>";
+  printBody();
+  printPoints();
+  printXV();
+  std::cout << "<script src=script.js></script>\n";
+  std::cout << "<script>"
+            << "document.getElementById('energy').innerText="
+            << balance() << ";" 
+            << "document.getElementById('variance').innerText="
+            << variance() << ";" 
+            << "</script>\n";
+  std::cout << "</body></html>\n";
+}
+
+static void csv() {
+  std::cout << kparam[0][0] << " " << kparam[0][1] << " " << kparam[1][0] << " " << kparam[1][1] << ","
+            << kparam[0][0] << ","
+            << kparam[0][1] << ","
+            << kparam[1][0] << ","
+            << kparam[1][1] << ","
+            << kparam[0][0] << " " << kparam[1][1] << " " << getP() << " " << getM() << ","
+            << kparam[0][0] << ","
+            << kparam[1][1] << ","
+            << getP() << ","
+            << getM() << ","
+            << balance() << ","
+            << variance() << "\n";
+}
+
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
@@ -357,31 +387,9 @@ int main(int argc, char **argv) {
     step();
 
   if (outhtml) {
-    std::cout << "<head><link rel=stylesheet href=style.css></head>";
-    printBody();
-    printPoints();
-    printXV();
-    std::cout << "<script src=script.js></script>\n";
-    std::cout << "<script>"
-              << "document.getElementById('energy').innerText="
-              << balance() << ";" 
-              << "document.getElementById('variance').innerText="
-              << variance() << ";" 
-              << "</script>\n";
-    std::cout << "</body></html>\n";
+    html();  
   } else {
-    std::cout << kparam[0][0] << " " << kparam[0][1] << " " << kparam[1][0] << " " << kparam[1][1] << ","
-              << kparam[0][0] << ","
-              << kparam[0][1] << ","
-              << kparam[1][0] << ","
-              << kparam[1][1] << ","
-              << kparam[0][0] << " " << kparam[1][1] << " " << getP() << " " << getM() << ","
-              << kparam[0][0] << ","
-              << kparam[1][1] << ","
-              << getP() << ","
-              << getM() << ","
-              << balance() << ","
-              << variance() << "\n";
+    csv();
   }
 }
 
