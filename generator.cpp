@@ -36,6 +36,8 @@ static std::vector<std::vector<Point>> result;
 static int seed = 1;
 static int maxgen = 50000;
 
+static bool outhtml = true;
+
 // Graph
 static std::vector<XV> xv;
 static Point center;
@@ -336,6 +338,13 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
+    if (strcmp("-csv", argv[0]) == 0) {
+      outhtml = false;
+      argc -= 1;
+      argv += 1;
+      continue;
+    }
+
     usage();
   }
 }
@@ -347,17 +356,32 @@ int main(int argc, char **argv) {
   for (int i = 0; i < maxgen; i++)
     step();
 
-  std::cout << "<head><link rel=stylesheet href=style.css></head>";
-  printBody();
-  printPoints();
-  printXV();
-  std::cout << "<script src=script.js></script>\n";
-  std::cout << "<script>"
-            << "document.getElementById('energy').innerText="
-            << balance() << ";" 
-            << "document.getElementById('variance').innerText="
-            << variance() << ";" 
-            << "</script>\n";
-  std::cout << "</body></html>\n";
+  if (outhtml) {
+    std::cout << "<head><link rel=stylesheet href=style.css></head>";
+    printBody();
+    printPoints();
+    printXV();
+    std::cout << "<script src=script.js></script>\n";
+    std::cout << "<script>"
+              << "document.getElementById('energy').innerText="
+              << balance() << ";" 
+              << "document.getElementById('variance').innerText="
+              << variance() << ";" 
+              << "</script>\n";
+    std::cout << "</body></html>\n";
+  } else {
+    std::cout << kparam[0][0] << " " << kparam[0][1] << " " << kparam[1][0] << " " << kparam[1][1] << ","
+              << kparam[0][0] << ","
+              << kparam[0][1] << ","
+              << kparam[1][0] << ","
+              << kparam[1][1] << ","
+              << kparam[0][0] << " " << kparam[1][1] << " " << getP() << " " << getM() << ","
+              << kparam[0][0] << ","
+              << kparam[1][1] << ","
+              << getP() << ","
+              << getM() << ","
+              << balance() << ","
+              << variance() << "\n";
+  }
 }
 
