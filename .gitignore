@@ -3,4 +3,7 @@
 !*.cpp
 !*.sh
 !*.md
-!out/
+out/*
+!out/*.css
+!out/*.html
+!out/*.js*
