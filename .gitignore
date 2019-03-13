@@ -4,6 +4,3 @@
 !*.sh
 !*.md
 !out/
-out/*
-!out/*.css
-!out/*.js

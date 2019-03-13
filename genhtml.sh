@@ -1,7 +1,8 @@
 #!/bin/bash
 
 out="out/"
-maxgen=50000
+index="out/index.html"
+maxgen=500000
 
 clang++ -ffast-math -O3 -march=native -std=c++11 -o generator generator.cpp
 
@@ -17,4 +18,8 @@ do
   done
 done
 
-for i in *.html; do echo "<a href="$i">$i</a><br>"; done > index.html
+cd out/
+echo "<h1>SPS-P Model Simulation</h1><ul>" > index.html 
+for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> index.html
+echo "</ul>" >> index.html 
+echo Done Write to index.html 

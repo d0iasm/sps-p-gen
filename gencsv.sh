@@ -1,6 +1,6 @@
 #!/bin/bash
 
-maxgen=50000
+maxgen=100
 
 clang++ -ffast-math -O3 -march=native -std=c++11 -o generator generator.cpp
 
