@@ -6,6 +6,7 @@
 
 // Constants
 #define NPOINTS 50
+#define R 10 
 
 enum Color {
   RED,
@@ -206,8 +207,13 @@ static void step() {
       double dy = pj.y - pi.y;
       double dist = sqrt(dx * dx + dy * dy);
       double k = kparam[pi.color][pj.color];
-      x += (k / dist - pow(dist, -2)) * dx / dist;
-      y += (k / dist - pow(dist, -2)) * dy / dist;
+     
+      // Particle j can influence only when close to particle i (distance < R).
+      if (dist < R) {
+        x += (k / dist - pow(dist, -2)) * dx / dist;
+        y += (k / dist - pow(dist, -2)) * dy / dist;
+      }
+
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
