@@ -6,7 +6,6 @@
 
 // Constants
 #define NPOINTS 50
-#define R 10 
 
 enum Color {
   RED,
@@ -47,36 +46,13 @@ Color getColor(int i) {
   return points[i].color;
 }
 
-/**
- * Calculate the balance energy per one triangle in the Heider theory.
- * In HB theory, only P->O, P->X, O->X directions are valid.
- * i.e. c[] = {1, 4, 39};
- * P  |  O  |  X
- * ===============
- * 1  |  4  |  39
- * 1  |  39 |  4
- * 4  |  1  |  39
- * 4  |  39 |  1
- * 39 |  1  |  4
- * 39 |  4  |  1
- * Calculate the average of the sum of each pattern.
- * ( K(1->4) * K(1->39) * K(4->39)
- * + K(1->39) * K(1->4) * K(4->39)
- * + K(4->1) * K(4->39) * K(1->39)
- * + ....
- * ) / 6
- *
- * @param pi First point. 
- * @param pj Second point. 
- * @param pk Third point. 
- * @return Balance energy per one triangle. 
- */
+// Calculate an energy for a triangle based on Heider Balance theory. 
 double heider(int pi, int pj, int pk) {
   int a = getColor(pi);
   int b = getColor(pj);
   int c = getColor(pk);
 
-  // p->o, o->x, p->x
+  // Permutation(3) = 6 patterns p->o, o->x, p->x.
   double p1 = kparam[a][b] * kparam[b][c] * kparam[a][c];
   double p2 = kparam[a][c] * kparam[c][b] * kparam[a][b];
   double p3 = kparam[b][a] * kparam[a][c] * kparam[b][c];
@@ -87,9 +63,7 @@ double heider(int pi, int pj, int pk) {
   return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
 
-/**
- * @return Balance energy by all triangles. 
- */
+// Calculate an average energy of all triangles.
 double energy_ave() {
   int size = 0;
   double sum = 0; 
@@ -104,6 +78,7 @@ double energy_ave() {
   return sum / size;
 }
 
+// Calculate a variance energy of all triangles.
 double energy_var() {
   double average = 0;
   average += kparam[0][0];
@@ -207,13 +182,8 @@ static void step() {
       double dy = pj.y - pi.y;
       double dist = sqrt(dx * dx + dy * dy);
       double k = kparam[pi.color][pj.color];
-     
-      // Particle j can influence only when close to particle i (distance < R).
-      if (dist < R) {
-        x += (k / dist - pow(dist, -2)) * dx / dist;
-        y += (k / dist - pow(dist, -2)) * dy / dist;
-      }
-
+      x += (k / dist - pow(dist, -2)) * dx / dist;
+      y += (k / dist - pow(dist, -2)) * dy / dist;
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
