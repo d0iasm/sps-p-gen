@@ -90,7 +90,7 @@ double heider(int pi, int pj, int pk) {
 /**
  * @return Balance energy by all triangles. 
  */
-double balance() {
+double energy_ave() {
   int size = 0;
   double sum = 0; 
   for (int i = 0; i < NPOINTS-2; i++) {
@@ -104,7 +104,7 @@ double balance() {
   return sum / size;
 }
 
-double variance() {
+double energy_var() {
   double average = 0;
   average += kparam[0][0];
   average += kparam[0][1];
@@ -256,8 +256,8 @@ static void printBody() {
             << getP() << "," << getM();
   std::cout <<  R"END(</div>
     <br />
-    <div>balance energy (average): <span id=energy></span></div>
-    <div>balance energy (variance): <span id=variance></span></div>
+    <div>balance energy (average): <span id=energy_ave></span></div>
+    <div>balance energy (variance): <span id=energy_var></span></div>
     <br />
     <div>X-V log log plot:</div>
     <canvas id=graph width=250 height=250></canvas>
@@ -362,10 +362,10 @@ static void html() {
   printXV();
   std::cout << "<script src=script.js></script>\n";
   std::cout << "<script>"
-            << "document.getElementById('energy').innerText="
-            << balance() << ";" 
-            << "document.getElementById('variance').innerText="
-            << variance() << ";" 
+            << "document.getElementById('energy_ave').innerText="
+            << energy_ave() << ";" 
+            << "document.getElementById('energy_var').innerText="
+            << energy_var() << ";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
@@ -381,8 +381,8 @@ static void csv() {
             << kparam[1][1] << ","
             << getP() << ","
             << getM() << ","
-            << balance() << ","
-            << variance() << "\n";
+            << energy_ave() << ","
+            << energy_var() << "\n";
 }
 
 int main(int argc, char **argv) {
