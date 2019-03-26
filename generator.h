@@ -21,15 +21,11 @@ struct Point {
   Color color;
 };
 
-struct XV {
-  double x;
-  double v;
-};
-
-// Variables
+// Global variables.
 extern double kparam[2][2];
 extern Point points[NPOINTS];
 
+// Variables which scope is only this file. 
 static int timestep = 0;
 static std::vector<std::vector<Point>> result;
 static int seed = 1;
@@ -38,8 +34,6 @@ static int maxgen = 50000;
 static bool outhtml = true;
 static bool interact_all = true;
 
-// Graph
-static std::vector<XV> xv;
-static Point center;
+double distance(Point p, Point q);
 
 #endif // GENERATOR_H

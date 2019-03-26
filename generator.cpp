@@ -1,3 +1,7 @@
+// This file implements basic algorithm to calcualte next step for all
+// particles and output a HTML file embedded particle's X-Y coordinate
+// and color as a json format inside a script tag.
+
 #include <iostream>
 #include <cstring>
 #include <random>
@@ -5,18 +9,18 @@
 #include <vector>
 #include "energy.h"
 #include "generator.h"
+#include "xv.h"
 
+// Global variables.
 double kparam[2][2];
 Point points[NPOINTS];
 
-static Point computeCenter() {
-  double x = 0;
-  double y = 0;
-  for (Point &p : points) {
-    x += p.x;
-    y += p.y;
-  }
-  return {x, y};
+Point center;
+
+double distance(Point p, Point q) {
+  double dx = p.x - q.x;
+  double dy = p.y - q.y;
+  return sqrt(dx * dx + dy * dy);
 }
 
 static void initPoints() {
@@ -29,7 +33,6 @@ static void initPoints() {
     points[i].y = dist(gen);
     points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
   }
-  center = computeCenter();
 }
 
 static double rungeKutta(double k1) {
@@ -37,37 +40,6 @@ static double rungeKutta(double k1) {
   double k3 = k1 + k2 * 0.002 * 0.5;
   double k4 = k1 + k3 * 0.002;
   return (k1 + 2 * k2 + 2 * k3 + k4) * (0.002 / 6.0);
-}
-
-static double distance(Point p, Point q) {
-  double dx = p.x - q.x;
-  double dy = p.y - q.y;
-  return sqrt(dx * dx + dy * dy);
-}
-
-static void computeXV(Point *delta) {
-  // Compute X.
-  double sum = 0;
-  for (Point &p : points) {
-    sum += distance(center, p);
-  }
-  double x = NPOINTS / sum;
-
-  // Compute V.
-  Point newCenter = computeCenter();
-  double cx = newCenter.x - center.x;
-  double cy = newCenter.y - center.y;
-  sum = 0;
-  for (int i = 0; i < NPOINTS; i++) {
-    Point &d = delta[i];
-    double dx = d.x - cx;
-    double dy = d.y - cy;
-    sum += sqrt(dx * dx + dy * dy);
-  }
-  double v = sum / NPOINTS;
-
-  center = newCenter;
-  xv.push_back({x, v});
 }
 
 static void step() {
@@ -146,7 +118,7 @@ static void printBody() {
     <br />
     <div>X-V log log plot:</div>
     <canvas id=graph width=250 height=250></canvas>
-  </div>
+  </div
 </div>
 )END";
 }
@@ -281,6 +253,8 @@ int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
   initPoints();
+  center = computeCenter();
+
   for (int i = 0; i < maxgen; i++)
     step();
 
