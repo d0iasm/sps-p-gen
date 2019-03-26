@@ -1,9 +1,6 @@
 *
 !.gitignore
 !*.cpp
+!*.h
 !*.sh
 !*.md
-out/*
-!out/*.css
-!out/*.html
-!out/*.js*
