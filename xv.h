@@ -14,6 +14,6 @@ extern Point center;
 extern std::vector<XV> xv;
 
 Point computeCenter();
-void computeXV(Point *delta);
+XV computeXV(Point *delta);
 
 #endif // XV_H

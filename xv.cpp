@@ -6,9 +6,6 @@
 
 #include "xv.h"
 
-extern Point center;
-std::vector<XV> xv;
-
 Point computeCenter() {
   double x = 0;
   double y = 0;
@@ -19,7 +16,7 @@ Point computeCenter() {
   return {x, y};
 }
 
-void computeXV(Point *delta) {
+XV computeXV(Point *delta) {
   // Compute X.
   double sum = 0;
   for (Point &p : points) {
@@ -41,5 +38,6 @@ void computeXV(Point *delta) {
   double v = sum / NPOINTS;
 
   center = newCenter;
-  xv.push_back({x, v});
+  return {x, v};
 }
+

@@ -17,6 +17,7 @@ Point points[NPOINTS];
 
 // Global variables declared in xv.cpp.
 Point center;
+std::vector<XV> xv;
 
 // Global variables declared in energy.cpp.
 std::vector<double> energy;
@@ -85,7 +86,7 @@ static void step() {
   result.push_back(std::vector<Point>(points, points + NPOINTS));
   memcpy(points, ps, sizeof(ps));
 
-  computeXV(delta);
+  xv.push_back(computeXV(delta));
   energy.push_back(energy_var_dist());
 }
 

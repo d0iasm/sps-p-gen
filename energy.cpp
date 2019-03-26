@@ -15,10 +15,10 @@ Color getColor(int i) {
 }
 
 // Calculate an energy for a triangle based on Heider Balance theory. 
-double heider(int pi, int pj, int pk) {
-  int a = getColor(pi);
-  int b = getColor(pj);
-  int c = getColor(pk);
+static double heider(int i, int j, int k) {
+  int a = getColor(i);
+  int b = getColor(j);
+  int c = getColor(k);
 
   // Permutation(3) = 6 patterns p->o, o->x, p->x.
   double p1 = kparam[a][b] * kparam[b][c] * kparam[a][c];
@@ -33,14 +33,14 @@ double heider(int pi, int pj, int pk) {
 
 // Calculate an energy for a triangle based on Heider Balance theory.
 // This result is influenced from the distance between particles.
-double heider_dist(int pi_idx, int pj_idx, int pk_idx) {
-  int a = getColor(pi_idx);
-  int b = getColor(pj_idx);
-  int c = getColor(pk_idx);
+static double heider_dist(int i, int j, int k) {
+  int a = getColor(i);
+  int b = getColor(j);
+  int c = getColor(k);
 
-  Point &pi = points[pi_idx];
-  Point &pj = points[pj_idx];
-  Point &pk = points[pk_idx];
+  Point &pi = points[i];
+  Point &pj = points[j];
+  Point &pk = points[k];
 
   // Distance between a and b.
   double dx_ij = pj.x - pi.x;
@@ -77,7 +77,7 @@ double heider_dist(int pi_idx, int pj_idx, int pk_idx) {
             * (kparam[b][a] / dist_ij)
             * (kparam[c][a] / dist_ik);
  
-  //std::cerr << heider(pi_idx, pj_idx, pk_idx) << ", "
+  //std::cerr << heider(i, j, k) << ", "
   //  << (p1 + p2 + p3 + p4 + p5 + p6) / 6 << ", "
   //  << dist_ij << ", " 
   //  << dist_ik << ", " 
@@ -148,3 +148,4 @@ double energy_var_dist() {
   }
   return sum / size;
 }
+
