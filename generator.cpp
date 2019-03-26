@@ -15,7 +15,11 @@
 double kparam[2][2];
 Point points[NPOINTS];
 
+// Global variables declared in xv.cpp.
 Point center;
+
+// Global variables declared in energy.cpp.
+std::vector<double> energy;
 
 double distance(Point p, Point q) {
   double dx = p.x - q.x;
@@ -80,7 +84,9 @@ static void step() {
   }
   result.push_back(std::vector<Point>(points, points + NPOINTS));
   memcpy(points, ps, sizeof(ps));
+
   computeXV(delta);
+  energy.push_back(energy_var_dist());
 }
 
 static double getP() {
@@ -117,7 +123,9 @@ static void printBody() {
     <div>balance energy (variance): <span id=energy_var></span></div>
     <br />
     <div>X-V log log plot:</div>
-    <canvas id=graph width=250 height=250></canvas>
+    <canvas id=graphXV width=250 height=250></canvas>
+    <div>Variance Energy:</div>
+    <canvas id=graphEnergy width=250 height=250></canvas>
   </div
 </div>
 )END";
@@ -144,6 +152,16 @@ static void printXV() {
               << "{x:" << xv[i].x 
               << ",v:" <<xv[i].v
               << "}],\n";
+  }
+  std::cout << "];</script>\n";
+}
+
+static void printEnergy() {
+  std::cout << "<script>const energy = [\n";
+  for (int i = 0; i < energy.size(); i += 100) {
+    std::cout << "{step: " << i << ", "
+              << "energy:" << energy[i] 
+              << "},\n";
   }
   std::cout << "];</script>\n";
 }
@@ -224,6 +242,7 @@ static void html() {
   printBody();
   printPoints();
   printXV();
+  printEnergy();
   std::cout << "<script src=script.js></script>\n";
   std::cout << "<script>"
             << "document.getElementById('energy_ave').innerText="
