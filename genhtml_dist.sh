@@ -1,6 +1,6 @@
 #!/bin/bash
 
-out="../sps-p-out/"
+out="out/"
 index="out/index.html"
 maxgen=100000
 
