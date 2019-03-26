@@ -3,6 +3,7 @@
 // (2) variance energy of all triangles. Energy is decided only by K parameters
 // and the energy doesn't change during one execution.
 
+#include <iostream>
 #include <math.h>
 #include "energy.h"
 #include "generator.h"
@@ -75,7 +76,12 @@ double heider_dist(int pi_idx, int pj_idx, int pk_idx) {
   double p6 = (kparam[c][b] / dist_jk)
             * (kparam[b][a] / dist_ij)
             * (kparam[c][a] / dist_ik);
-  
+ 
+  //std::cerr << heider(pi_idx, pj_idx, pk_idx) << ", "
+  //  << (p1 + p2 + p3 + p4 + p5 + p6) / 6 << ", "
+  //  << dist_ij << ", " 
+  //  << dist_ik << ", " 
+  //  << dist_jk << "\n";
   return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
 

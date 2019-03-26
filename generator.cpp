@@ -159,9 +159,9 @@ static void printXV() {
 static void printEnergy() {
   std::cout << "<script>const energy = [\n";
   for (int i = 0; i < energy.size(); i += 100) {
-    std::cout << "{step: " << i << ", "
-              << "energy:" << energy[i] 
-              << "},\n";
+    std::cout << " [" << i << ", "
+              << "{energy_var:" << energy[i] 
+              << "}],\n";
   }
   std::cout << "];</script>\n";
 }
