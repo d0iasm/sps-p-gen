@@ -4,7 +4,7 @@ out="../sps-p-out/"
 index="out/index.html"
 maxgen=100000
 
-clang++ -ffast-math -O3 -march=native -std=c++11 -o generator generator.cpp
+make generator
 
 for i in {-8..12}
 do

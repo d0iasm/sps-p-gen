@@ -2,7 +2,7 @@
 
 maxgen=100
 
-clang++ -ffast-math -O3 -march=native -std=c++11 -o generator generator.cpp
+make generator
 
 file="csv/result.csv"
 echo "k1,k00,k01,k10,k11,k2,ka,kb,kp,km,HBEaverage,HBEvariancen" > $file
