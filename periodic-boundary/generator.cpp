@@ -22,10 +22,41 @@ std::vector<XV> xv;
 // Global variables declared in energy.cpp.
 std::vector<double> energy;
 
+// Nearest particle selection method.
 double distance(Point p, Point q) {
   double dx = p.x - q.x;
   double dy = p.y - q.y;
-  return sqrt(dx * dx + dy * dy);
+  double closest = sqrt(dx * dx + dy * dy);
+
+  double x1 = remainder(p.x, cycle);
+  double y1 = remainder(p.y, cycle);
+  double x2 = remainder(q.x, cycle);
+  double y2 = remainder(q.x, cycle);
+
+  for (int i=-1; i<=1; i++) {
+    for (int j=-1; j<=1; j++) {
+      dx = x1 - (x2 + cycle * i);
+      dy = y1 - (y2 + cycle * j);
+      double tmp = sqrt(dx * dx + dy * dy);
+      if (tmp < closest)
+        closest = tmp;
+    }
+  }
+  return closest;
+}
+
+// Nearest particle selection method.
+static double diff(double a, double b) {
+  double closest = a - b;
+  a = remainder(a, cycle);
+  b = remainder(b, cycle);
+  for (int i=-1; i<=1; i++) {
+    double tmp = a + cycle * i - b;
+    if (abs(tmp) < abs(closest)) {
+      closest = tmp;
+    }
+  }
+  return closest;
 }
 
 static void initPoints() {
@@ -38,6 +69,16 @@ static void initPoints() {
     points[i].y = dist(gen);
     points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
   }
+}
+
+// Adjust the posision from -|cycle/2| to |cycle/2|. 
+static double imaging(double x) {
+  //if (x < cycle / 2) return remainder(x, cycle) + cycle;
+  //if (x > cycle / 2) return remainder(x, cycle); 
+  //return x;
+  if (x < 0) return remainder(x, cycle) + cycle;
+  if (x > cycle) return remainder(x, cycle);
+  return x;
 }
 
 static double rungeKutta(double k1) {
@@ -62,9 +103,9 @@ static void step() {
         continue;
       Point &pj = points[j];
 
-      double dx = pj.x - pi.x;
-      double dy = pj.y - pi.y;
-      double dist = sqrt(dx * dx + dy * dy);
+      double dx = diff(pi.x, pj.x);
+      double dy = diff(pi.y, pj.y);
+      double dist = distance(pi, pj);
       double k = kparam[pi.color][pj.color];
 
       if (interact_all) {
@@ -80,7 +121,7 @@ static void step() {
     x = rungeKutta(x);
     y = rungeKutta(y);
 
-    ps[i] = {pi.x + x, pi.y + y, pi.color};
+    ps[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     delta[i] = {x, y};
   }
   result.push_back(std::vector<Point>(points, points + NPOINTS));
@@ -127,7 +168,7 @@ static void printBody() {
     <canvas id=graphXV width=250 height=250></canvas>
     <div>Variance Energy:</div>
     <canvas id=graphEnergy width=250 height=250></canvas>
-  </div
+  </div>
 </div>
 )END";
 }

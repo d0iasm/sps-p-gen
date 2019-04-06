@@ -34,6 +34,8 @@ static int maxgen = 50000;
 static bool outhtml = true;
 static bool interact_all = true;
 
+static int cycle = 10;
+
 double distance(Point p, Point q);
 
 #endif // GENERATOR_H
