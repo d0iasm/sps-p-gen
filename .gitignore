@@ -9,6 +9,7 @@
 !open-boundary/*.h
 !open-boundary/*.sh
 !open-boundary/*.md
+!open-boundary/script.js
 
 !/periodic-boundary/
 /periodic-boundary/**
@@ -17,3 +18,4 @@
 !periodic-boundary/*.h
 !periodic-boundary/*.sh
 !periodic-boundary/*.md
+!periodic-boundary/script.js

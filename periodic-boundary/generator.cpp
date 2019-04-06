@@ -24,10 +24,7 @@ std::vector<double> energy;
 
 // Nearest particle selection method.
 double distance(Point p, Point q) {
-  double dx = p.x - q.x;
-  double dy = p.y - q.y;
-  double closest = sqrt(dx * dx + dy * dy);
-
+  double closest = (double) INT_MAX;
   double x1 = remainder(p.x, cycle);
   double y1 = remainder(p.y, cycle);
   double x2 = remainder(q.x, cycle);
@@ -35,8 +32,8 @@ double distance(Point p, Point q) {
 
   for (int i=-1; i<=1; i++) {
     for (int j=-1; j<=1; j++) {
-      dx = x1 - (x2 + cycle * i);
-      dy = y1 - (y2 + cycle * j);
+      double dx = (x2 + cycle * i) - x1;
+      double dy = (y2 + cycle * j) - y1;
       double tmp = sqrt(dx * dx + dy * dy);
       if (tmp < closest)
         closest = tmp;
@@ -46,15 +43,15 @@ double distance(Point p, Point q) {
 }
 
 // Nearest particle selection method.
+// The direction is always a->b.
 static double diff(double a, double b) {
-  double closest = a - b;
+  double closest = b - a;
   a = remainder(a, cycle);
   b = remainder(b, cycle);
   for (int i=-1; i<=1; i++) {
-    double tmp = a + cycle * i - b;
-    if (abs(tmp) < abs(closest)) {
+    double tmp = (cycle * i + b) - a;
+    if (abs(tmp) < abs(closest))
       closest = tmp;
-    }
   }
   return closest;
 }
@@ -108,6 +105,8 @@ static void step() {
       double dist = distance(pi, pj);
       double k = kparam[pi.color][pj.color];
 
+      //std::cerr << "dx, dy, dist: " << dx << ", " << dy << ", "<< dist << "\n"; 
+
       if (interact_all) {
         x += (k / dist - pow(dist, -2)) * dx / dist;
         y += (k / dist - pow(dist, -2)) * dy / dist;
@@ -121,6 +120,8 @@ static void step() {
     x = rungeKutta(x);
     y = rungeKutta(y);
 
+    std::cerr << "x, y " << imaging(pi.x + x) << ", " << imaging(pi.y + y) << "\n";
+
     ps[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     delta[i] = {x, y};
   }
@@ -128,7 +129,7 @@ static void step() {
   memcpy(points, ps, sizeof(ps));
 
   xv.push_back(computeXV(delta));
-  energy.push_back(energy_var_dist());
+  //energy.push_back(energy_var_dist());
 }
 
 static double getP() {
@@ -284,7 +285,7 @@ static void html() {
   printBody();
   printPoints();
   printXV();
-  printEnergy();
+  //printEnergy();
   std::cout << "<script src=script.js></script>\n";
   std::cout << "<script>"
             << "document.getElementById('energy_ave').innerText="
