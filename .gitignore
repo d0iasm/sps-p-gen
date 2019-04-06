@@ -9,3 +9,11 @@
 !open-boundary/*.h
 !open-boundary/*.sh
 !open-boundary/*.md
+
+!/periodic-boundary/
+/periodic-boundary/**
+!periodic-boundary/Makefile
+!periodic-boundary/*.cpp
+!periodic-boundary/*.h
+!periodic-boundary/*.sh
+!periodic-boundary/*.md
