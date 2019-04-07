@@ -33,7 +33,7 @@ static double heider(int i, int j, int k) {
 
 // Calculate an energy for a triangle based on Heider Balance theory.
 // This result is influenced from the distance between particles.
-static double heider_dist(int i, int j, int k) {
+static double heiderDist(int i, int j, int k) {
   int a = getColor(i);
   int b = getColor(j);
   int c = getColor(k);
@@ -75,7 +75,7 @@ static double heider_dist(int i, int j, int k) {
 }
 
 // Calculate an average energy of all triangles.
-double energy_ave() {
+double energyAve() {
   int size = 0;
   double sum = 0; 
   for (int i = 0; i < NPOINTS-2; i++) {
@@ -90,7 +90,7 @@ double energy_ave() {
 }
 
 // Calculate a variance energy of all triangles.
-double energy_var() {
+double energyVar() {
   double average = 0;
   average += kparam[0][0];
   average += kparam[0][1];
@@ -115,7 +115,7 @@ double energy_var() {
 
 // Calculate a variance energy of all triangles. This result is influenced
 // from distance between particles.
-double energy_var_dist() {
+double energyVarDist() {
   double average = 0;
   average += kparam[0][0];
   average += kparam[0][1];
@@ -130,7 +130,7 @@ double energy_var_dist() {
     for (int j = i+1; j < NPOINTS-1; j++) {
       for (int k = j+1; k < NPOINTS; k++) {
         size++;
-        tmp = heider_dist(i, j, k);
+        tmp = heiderDist(i, j, k);
         sum += (tmp - average) * (tmp - average);
       }
     }

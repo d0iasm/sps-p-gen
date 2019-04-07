@@ -7,11 +7,14 @@
 // Global variables.
 extern std::vector<double> energy;
 
-Color getColor(int i);
+// Local functions.
 static double heider(int pi, int pj, int pk);
-static double heider_dist(int pi, int pj, int pk);
-double energy_ave();
-double energy_var();
-double energy_var_dist();
+static double heiderDist(int pi, int pj, int pk);
+
+// Global functions.
+Color getColor(int i);
+double energyAve();
+double energyVar();
+double energyVarDist();
 
 #endif // ENERGY_H

@@ -105,22 +105,13 @@ static void step() {
       double dist = distance(pi, pj);
       double k = kparam[pi.color][pj.color];
 
-      //std::cerr << "dx, dy, dist: " << dx << ", " << dy << ", "<< dist << "\n"; 
-
-      if (interact_all) {
-        x += (k / dist - pow(dist, -2)) * dx / dist;
-        y += (k / dist - pow(dist, -2)) * dy / dist;
-      } else {
-        //std::cerr << "k, dist, k/dist: " << k << " " << dist << " " << k/dist << "\n";
-        k = k / dist;
-        x += (k / dist - pow(dist, -2)) * dx / dist;
-        y += (k / dist - pow(dist, -2)) * dy / dist;
-      }
+      x += (k / dist - pow(dist, -2)) * dx / dist;
+      y += (k / dist - pow(dist, -2)) * dy / dist;
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
 
-    std::cerr << "x, y " << imaging(pi.x + x) << ", " << imaging(pi.y + y) << "\n";
+    //std::cerr << "x, y " << imaging(pi.x + x) << ", " << imaging(pi.y + y) << "\n";
 
     ps[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     delta[i] = {x, y};
@@ -129,7 +120,7 @@ static void step() {
   memcpy(points, ps, sizeof(ps));
 
   xv.push_back(computeXV(delta));
-  //energy.push_back(energy_var_dist());
+  //energy.push_back(energyVarDist());
 }
 
 static double getP() {
@@ -289,9 +280,9 @@ static void html() {
   std::cout << "<script src=script.js></script>\n";
   std::cout << "<script>"
             << "document.getElementById('energy_ave').innerText="
-            << energy_ave() << ";" 
+            << energyAve() << ";" 
             << "document.getElementById('energy_var').innerText="
-            << energy_var() << ";" 
+            << energyVar() << ";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
@@ -307,8 +298,8 @@ static void csv() {
             << kparam[1][1] << ","
             << getP() << ","
             << getM() << ","
-            << energy_ave() << ","
-            << energy_var() << "\n";
+            << energyAve() << ","
+            << energyVar() << "\n";
 }
 
 int main(int argc, char **argv) {
