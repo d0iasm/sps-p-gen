@@ -67,13 +67,9 @@ static double diff(double a, double b) {
 static void initPoints() {
   std::default_random_engine gen;
   gen.seed(seed);
-  std::normal_distribution<double> dist(0, 1);
+  std::normal_distribution<double> dist(5.0, 2.0);
 
   for (int i = 0; i < NPOINTS; i++) {
-    // This is temporary code for debug.
-    //points[i].x = i * 5.0;
-    //points[i].y = (i * 5.0 + 2.0);
-    // ====== end ======
     points[i].x = dist(gen);
     points[i].y = dist(gen);
     points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
@@ -118,6 +114,8 @@ static void step() {
       double k = kparam[pi.color][pj.color];
 
       if (dist == 0) continue;
+      //x += (k * pow(dist, -0.8) - 1 / dist) * dx / dist;
+      //y += (k * pow(dist, -0.8) - 1 / dist) * dy / dist;
       x += (k / dist - pow(dist, -2)) * dx / dist;
       y += (k / dist - pow(dist, -2)) * dy / dist;
     }
