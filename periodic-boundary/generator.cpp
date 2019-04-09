@@ -22,38 +22,75 @@ std::vector<XV> xv;
 // Global variables declared in energy.cpp.
 std::vector<double> energy;
 
+static double distanceDirect(double x1, double y1, double x2, double y2) {
+  return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+double rem(double x, long y) {
+    return (long)x % y + (x - (long)x);
+}
+
 // Nearest particle selection method.
 double distance(Point p, Point q) {
-  double closest = (double) INT_MAX;
-  double x1 = remainder(p.x, cycle);
-  double y1 = remainder(p.y, cycle);
-  double x2 = remainder(q.x, cycle);
-  double y2 = remainder(q.x, cycle);
-
-  for (int i=-1; i<=1; i++) {
-    for (int j=-1; j<=1; j++) {
-      double dx = (x2 + cycle * i) - x1;
-      double dy = (y2 + cycle * j) - y1;
-      double tmp = sqrt(dx * dx + dy * dy);
-      if (tmp < closest)
+  double tmp;
+  double iX = rem(p.x, cycle);
+  double iY = rem(p.y, cycle);
+  double jX = rem(q.x, cycle);
+  double jY = rem(q.y, cycle);
+  int d[] = {-1, 0, 1};
+  double closest = distanceDirect(p.x, p.y, q.x, q.y);
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      tmp = distanceDirect(iX, iY, cycle * d[i] + jX, cycle * d[j] + jY);
+      if (tmp < closest) {
         closest = tmp;
+      }
     }
   }
   return closest;
+  
+  //double closest = (double) INT_MAX;
+  //double x1 = rem(p.x, cycle);
+  //double y1 = rem(p.y, cycle);
+  //double x2 = rem(q.x, cycle);
+  //double y2 = rem(q.x, cycle);
+
+  //for (int i=-1; i<=1; i++) {
+    //for (int j=-1; j<=1; j++) {
+      //double dx = (x2 + cycle * i) - x1;
+      //double dy = (y2 + cycle * j) - y1;
+      //double tmp = sqrt(dx * dx + dy * dy);
+      //if (tmp < closest)
+        //closest = tmp;
+    //}
+  //}
+  //return closest;
 }
 
 // Nearest particle selection method.
 // The direction is always a->b.
 static double diff(double a, double b) {
-  double closest = b - a;
-  a = remainder(a, cycle);
-  b = remainder(b, cycle);
-  for (int i=-1; i<=1; i++) {
-    double tmp = (cycle * i + b) - a;
-    if (abs(tmp) < abs(closest))
-      closest = tmp;
+  double tmp;
+  double iX = rem(a, cycle);
+  double jX = rem(b, cycle);
+  int d[] = {-1, 0, 1};
+  double diffX = b - a; 
+  for (int i = 0; i < 3; i++) {
+      tmp = jX + cycle * d[i] - iX;
+      if (abs(tmp) < abs(diffX)) {
+          diffX = tmp;
+      }
   }
-  return closest;
+  return diffX;
+  //double closest = b - a;
+  //a = rem(a, cycle);
+  //b = rem(b, cycle);
+  //for (int i=-1; i<=1; i++) {
+    //double tmp = (cycle * i + b) - a;
+    //if (abs(tmp) < abs(closest))
+      //closest = tmp;
+  //}
+  //return closest;
 }
 
 static void initPoints() {
@@ -62,6 +99,10 @@ static void initPoints() {
   std::normal_distribution<double> dist(0, 1);
 
   for (int i = 0; i < NPOINTS; i++) {
+    // This is temporary code for debug.
+    //points[i].x = i * 5.0;
+    //points[i].y = (i * 5.0 + 2.0);
+    // ====== end ======
     points[i].x = dist(gen);
     points[i].y = dist(gen);
     points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
@@ -70,11 +111,11 @@ static void initPoints() {
 
 // Adjust the posision from -|cycle/2| to |cycle/2|. 
 static double imaging(double x) {
-  //if (x < cycle / 2) return remainder(x, cycle) + cycle;
-  //if (x > cycle / 2) return remainder(x, cycle); 
+  //if (x < cycle / 2) return rem(x, cycle) + cycle;
+  //if (x > cycle / 2) return rem(x, cycle); 
   //return x;
-  if (x < 0) return remainder(x, cycle) + cycle;
-  if (x > cycle) return remainder(x, cycle);
+  if (x < 0) return rem(x, cycle) + cycle;
+  if (x > cycle) return rem(x, cycle);
   return x;
 }
 
@@ -105,13 +146,12 @@ static void step() {
       double dist = distance(pi, pj);
       double k = kparam[pi.color][pj.color];
 
+      if (dist == 0) continue;
       x += (k / dist - pow(dist, -2)) * dx / dist;
       y += (k / dist - pow(dist, -2)) * dy / dist;
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
-
-    //std::cerr << "x, y " << imaging(pi.x + x) << ", " << imaging(pi.y + y) << "\n";
 
     ps[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     delta[i] = {x, y};
