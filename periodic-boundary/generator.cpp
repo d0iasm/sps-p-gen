@@ -147,6 +147,7 @@ static void printBody() {
 <div class=container>
   <canvas id=canvas width=650 height=650></canvas>
   <div>
+    <h1>SPS-P: Periodic Boundary</h1>
     <div class=container>
       <button id=start>Stop</button>
       <button id=reset>Reset</button>

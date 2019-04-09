@@ -23,14 +23,13 @@ const RED = 0;
 const BLUE = 1;
 
 // Variables
-let currentScale = 1;
 let handle;
 let index = 0;
 
 function drawGrid() {
   ctx.save();
   ctx.strokeStyle = '#aaa';
-  ctx.lineWidth = 1 / currentScale;
+  ctx.lineWidth = 0.02;
 
   const len = 5000;
   for (let x = -len; x < len; x += 10) {
@@ -49,22 +48,12 @@ function drawGrid() {
 
 function drawPoint(p) {
   ctx.save();
+  ctx.translate(-5, -5);
   ctx.fillStyle = (p.color == RED) ? 'red' : 'blue';
   ctx.beginPath();
-  ctx.arc(p.x, p.y, 5 / currentScale, 0, 2 * Math.PI, true);
+  ctx.arc(p.x, p.y, 0.1, 0, 2 * Math.PI, true);
   ctx.fill();
   ctx.restore();
-}
-
-function scaleout() {
-  let max = 0;
-  for (let i = 1; i < points[index].length; i++) {
-    const p = points[index][i];
-    max = Math.max(max, Math.abs(p.x), Math.abs(p.y));
-  }
-
-  currentScale = 500 / (max * 1.2);
-  ctx.scale(currentScale, currentScale);
 }
 
 function chaseGraph() {
@@ -193,27 +182,13 @@ function redraw() {
   ctx.clearRect(-50000, -50000, 100000, 100000);
  
   chaseGraph();
-
-  scaleout();
   drawGrid();
 
   for (let i = 1; i < points[index].length; i++) {
     drawPoint(points[index][i]);
   }
-  debugPoint(0, 0);
-  debugPoint(5, 5);
-  debugPoint(-5, -5);
 
   document.getElementById('timestep').value = points[index][0];
-  ctx.restore();
-}
-
-function debugPoint(x, y) {
-  ctx.save();
-  ctx.fillStyle = 'green'; 
-  ctx.beginPath();
-  ctx.arc(x, y, 10 / currentScale, 0, 2 * Math.PI, true);
-  ctx.fill();
   ctx.restore();
 }
 
@@ -227,7 +202,7 @@ function step() {
 }
 
 function start() {
-  handle = window.setInterval(step, 0);
+  handle = window.setInterval(step, 100);
   startButton.innerText = 'Stop';
 }
 
@@ -268,6 +243,9 @@ document.getElementById('timestep').addEventListener('change', e => {
   //drawGraphEnergy();
   redraw();
 });
+
+// Fixed scale.
+ctx.scale(98, 98);
 
 drawGraphGrid(gxvCtx);
 drawGraph();
