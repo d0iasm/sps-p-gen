@@ -32,65 +32,36 @@ double rem(double x, long y) {
 
 // Nearest particle selection method.
 double distance(Point p, Point q) {
-  double tmp;
-  double iX = rem(p.x, cycle);
-  double iY = rem(p.y, cycle);
-  double jX = rem(q.x, cycle);
-  double jY = rem(q.y, cycle);
-  int d[] = {-1, 0, 1};
-  double closest = distanceDirect(p.x, p.y, q.x, q.y);
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      tmp = distanceDirect(iX, iY, cycle * d[i] + jX, cycle * d[j] + jY);
-      if (tmp < closest) {
+  double closest = (double) INT_MAX;
+  double x1 = rem(p.x, cycle);
+  double y1 = rem(p.y, cycle);
+  double x2 = rem(q.x, cycle);
+  double y2 = rem(q.y, cycle);
+
+  for (int i=-1; i<=1; i++) {
+    for (int j=-1; j<=1; j++) {
+      double dx = (x2 + cycle * i) - x1;
+      double dy = (y2 + cycle * j) - y1;
+      double tmp = sqrt(dx * dx + dy * dy);
+      if (tmp < closest)
         closest = tmp;
-      }
     }
   }
   return closest;
-  
-  //double closest = (double) INT_MAX;
-  //double x1 = rem(p.x, cycle);
-  //double y1 = rem(p.y, cycle);
-  //double x2 = rem(q.x, cycle);
-  //double y2 = rem(q.x, cycle);
-
-  //for (int i=-1; i<=1; i++) {
-    //for (int j=-1; j<=1; j++) {
-      //double dx = (x2 + cycle * i) - x1;
-      //double dy = (y2 + cycle * j) - y1;
-      //double tmp = sqrt(dx * dx + dy * dy);
-      //if (tmp < closest)
-        //closest = tmp;
-    //}
-  //}
-  //return closest;
 }
 
 // Nearest particle selection method.
 // The direction is always a->b.
 static double diff(double a, double b) {
-  double tmp;
-  double iX = rem(a, cycle);
-  double jX = rem(b, cycle);
-  int d[] = {-1, 0, 1};
-  double diffX = b - a; 
-  for (int i = 0; i < 3; i++) {
-      tmp = jX + cycle * d[i] - iX;
-      if (abs(tmp) < abs(diffX)) {
-          diffX = tmp;
-      }
+  double closest = b - a;
+  a = rem(a, cycle);
+  b = rem(b, cycle);
+  for (int i=-1; i<=1; i++) {
+    double tmp = (cycle * i + b) - a;
+    if (abs(tmp) < abs(closest))
+      closest = tmp;
   }
-  return diffX;
-  //double closest = b - a;
-  //a = rem(a, cycle);
-  //b = rem(b, cycle);
-  //for (int i=-1; i<=1; i++) {
-    //double tmp = (cycle * i + b) - a;
-    //if (abs(tmp) < abs(closest))
-      //closest = tmp;
-  //}
-  //return closest;
+  return closest;
 }
 
 static void initPoints() {
