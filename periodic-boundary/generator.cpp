@@ -78,9 +78,6 @@ static void initPoints() {
 
 // Adjust the posision from -|cycle/2| to |cycle/2|. 
 static double imaging(double x) {
-  //if (x < cycle / 2) return rem(x, cycle) + cycle;
-  //if (x > cycle / 2) return rem(x, cycle); 
-  //return x;
   if (x < 0) return rem(x, cycle) + cycle;
   if (x > cycle) return rem(x, cycle);
   return x;
@@ -98,6 +95,7 @@ static void step() {
   Point ps[NPOINTS];
   Point delta[NPOINTS];
 
+  std::cerr << "================\n";
   for (int i = 0; i < NPOINTS; i++) {
     Point &pi = points[i];
     double x = 0;
@@ -116,11 +114,16 @@ static void step() {
       if (dist == 0) continue;
       //x += (k * pow(dist, -0.8) - 1 / dist) * dx / dist;
       //y += (k * pow(dist, -0.8) - 1 / dist) * dy / dist;
+      
+      if (!interact_all) {
+        k = k / dist;
+      } 
       x += (k / dist - pow(dist, -2)) * dx / dist;
       y += (k / dist - pow(dist, -2)) * dy / dist;
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
+    std::cerr << "color, (dx, dy): " << pi.color << "," <<x << ", " << y << "\n";
 
     ps[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     delta[i] = {x, y};
