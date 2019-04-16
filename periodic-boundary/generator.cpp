@@ -32,7 +32,7 @@ double rem(double x, long y) {
 
 // Nearest particle selection method.
 double distance(Point p, Point q) {
-  double closest = (double) INT_MAX;
+  double closest = (double) 2147483647; // Instead of INT_MAX.
   double x1 = rem(p.x, cycle);
   double y1 = rem(p.y, cycle);
   double x2 = rem(q.x, cycle);
@@ -95,7 +95,7 @@ static void step() {
   Point ps[NPOINTS];
   Point delta[NPOINTS];
 
-  std::cerr << "================\n";
+  //std::cerr << "================\n";
   for (int i = 0; i < NPOINTS; i++) {
     Point &pi = points[i];
     double x = 0;
@@ -123,7 +123,7 @@ static void step() {
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
-    std::cerr << "color, (dx, dy): " << pi.color << "," <<x << ", " << y << "\n";
+    //std::cerr << "color, (dx, dy): " << pi.color << "," <<x << ", " << y << "\n";
 
     ps[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     delta[i] = {x, y};

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-out="../sps-p-out/"
-index="out/index.html"
+out="../../sps-p-out/periodic/"
+index="index.html"
 maxgen=100000
 
 make generator
@@ -18,8 +18,8 @@ do
   done
 done
 
-cd out/
-echo "<h1>SPS-P Model Simulation</h1><ul>" > index.html 
-for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> index.html
-echo "</ul>" >> index.html 
-echo Done Write to index.html 
+cd $out
+echo "<h1>SPS-P Model Simulation</h1><ul>" > $index
+for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $index
+echo "</ul>" >> $index
+echo Done Write to $index
