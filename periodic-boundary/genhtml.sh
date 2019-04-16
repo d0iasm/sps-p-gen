@@ -1,6 +1,6 @@
 #!/bin/bash
 
-out="../../sps-p-out/periodic/"
+out="../../sps-p-out/periodic-boundary/"
 index="index.html"
 maxgen=100000
 
