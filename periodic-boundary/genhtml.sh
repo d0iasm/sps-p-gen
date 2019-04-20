@@ -25,7 +25,7 @@
 SRC=$(pwd)
 DEST="../../sps-p-out/periodic-boundary/"
 INDEX="index.html"
-MAX_GEN=100
+MAX_GEN=1000
 
 # Function definition.
 check_dependencies() {
@@ -49,7 +49,7 @@ exec_generator() {
       local p=`echo $i | awk '{ printf "%.1f", $1 / 10 }'`
       local m=`echo $j | awk '{ printf "%.1f", $1 / 10 }'`
       local file=$DEST"abpm=0.8,0.4,"$p","$m".html"
-      ./generator -k2 0.8 0.4 $p $m -gen $MAX_GEN > $file 
+      echo ./generator -k2 0.8 0.4 $p $m -gen $MAX_GEN > $file 
       echo Generated $file
     done
   done
