@@ -10,6 +10,7 @@
 !open-boundary/*.sh
 !open-boundary/*.md
 !open-boundary/script.js
+!open-boundary/style.css
 
 !/periodic-boundary/
 /periodic-boundary/**
@@ -19,3 +20,4 @@
 !periodic-boundary/*.sh
 !periodic-boundary/*.md
 !periodic-boundary/script.js
+!periodic-boundary/style.css
