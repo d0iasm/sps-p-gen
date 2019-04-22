@@ -95,7 +95,6 @@ static void step() {
   Point ps[NPOINTS];
   Point delta[NPOINTS];
 
-  //std::cerr << "================\n";
   for (int i = 0; i < NPOINTS; i++) {
     Point &pi = points[i];
     double x = 0;
@@ -112,19 +111,17 @@ static void step() {
       double k = kparam[pi.color][pj.color];
 
       if (dist == 0) continue;
-      //x += (k * pow(dist, -0.8) - 1 / dist) * dx / dist;
-      //y += (k * pow(dist, -0.8) - 1 / dist) * dy / dist;
-      
+      double plsx = (k / dist - pow(dist, -2)) * dx / dist;
+      double plsy = (k / dist - pow(dist, -2)) * dy / dist;
       if (!interact_all) {
-        k = k / dist;
+        plsx = plsx / dist;
+        plsy = plsy / dist;
       } 
-      x += (k / dist - pow(dist, -2)) * dx / dist;
-      y += (k / dist - pow(dist, -2)) * dy / dist;
+      x += plsx;
+      y += plsy;
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
-    //std::cerr << "color, (dx, dy): " << pi.color << "," <<x << ", " << y << "\n";
-
     ps[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     delta[i] = {x, y};
   }
@@ -180,7 +177,7 @@ static void printBody() {
 
 static void printPoints() {
   std::cout << "<script>const points = [\n";
-  for (int i = 0; i < result.size(); i += 100) {
+  for (int i = 0; i < result.size(); i += thinning) {
     std::cout << "  [" << i << ",";
     for (Point &p : result[i])
       std::cout << "{x:" << p.x
@@ -194,7 +191,7 @@ static void printPoints() {
 
 static void printXV() {
   std::cout << "<script>const xv = [\n";
-  for (int i = 0; i < xv.size(); i += 100) {
+  for (int i = 0; i < xv.size(); i += thinning) {
     std::cout << "  [" << i << ", "
               << "{x:" << xv[i].x 
               << ",v:" <<xv[i].v
@@ -205,7 +202,7 @@ static void printXV() {
 
 static void printEnergy() {
   std::cout << "<script>const energy = [\n";
-  for (int i = 0; i < energy.size(); i += 100) {
+  for (int i = 0; i < energy.size(); i += thinning) {
     std::cout << " [" << i << ", "
               << "{energy_var:" << energy[i] 
               << "}],\n";
