@@ -25,7 +25,7 @@
 SRC=$(pwd)
 DEST="../../sps-p-out/periodic-boundary/"
 INDEX="index.html"
-MAX_GEN=100
+MAX_GEN=100000
 
 # Function definition.
 check_dependencies() {
