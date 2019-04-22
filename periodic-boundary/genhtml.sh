@@ -25,7 +25,7 @@
 SRC=$(pwd)
 DEST="../../sps-p-out/periodic-boundary/"
 INDEX="index.html"
-MAX_GEN=1000
+MAX_GEN=100
 
 # Function definition.
 check_dependencies() {
@@ -40,19 +40,8 @@ check_dependencies() {
 }
 
 exec_generator() {
-  for i in {-8..12}; do
-    #local p=`echo $i | awk '{ printf "%.1f", $1 / 10 }'`
-    #files=$(for j in {-8..12}; do echo $DEST"abpm=0.8,0.4,"$p","`echo $j | awk '{ printf "%.1f", $1 / 10 }'`".html"; done)
-    #parallel -a $files ./generator -k2 0.8 0.4 $p $m -gen $MAX_GEN > {}
-    #echo Generated $files
-    for j in {-8..12}; do
-      local p=`echo $i | awk '{ printf "%.1f", $1 / 10 }'`
-      local m=`echo $j | awk '{ printf "%.1f", $1 / 10 }'`
-      local file=$DEST"abpm=0.8,0.4,"$p","$m".html"
-      echo ./generator -k2 0.8 0.4 $p $m -gen $MAX_GEN > $file 
-      echo Generated $file
-    done
-  done
+  local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
+  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN '>' $DEST'abpm=0.8,0.4,{1},{2}.html' ::: $range ::: $range
 }
 
 make_index() {
