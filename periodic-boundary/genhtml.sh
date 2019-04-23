@@ -46,7 +46,7 @@ exec_generator() {
 
 make_index() {
   cd $DEST
-  echo "<h1>SPS-P Model Simulation</h1><ul>" > $INDEX
+  echo "<h1>SPS-P Model Simulation: Periodic Boundary</h1><ul>" > $INDEX
   for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $INDEX
   echo "</ul>" >> $INDEX
   echo Generated $INDEX
