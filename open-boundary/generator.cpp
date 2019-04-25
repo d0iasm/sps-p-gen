@@ -67,15 +67,15 @@ static void step() {
       double dist = sqrt(dx * dx + dy * dy);
       double k = kparam[pi.color][pj.color];
 
-      if (interact_all) {
-        x += (k / dist - pow(dist, -2)) * dx / dist;
-        y += (k / dist - pow(dist, -2)) * dy / dist;
-      } else {
-        //std::cerr << "k, dist, k/dist: " << k << " " << dist << " " << k/dist << "\n";
-        k = k / dist;
-        x += (k / dist - pow(dist, -2)) * dx / dist;
-        y += (k / dist - pow(dist, -2)) * dy / dist;
+      if (dist == 0) continue;
+      double plsx = (k / dist - pow(dist, -2)) * dx / dist;
+      double plsy = (k / dist - pow(dist, -2)) * dy / dist;
+      if (!interact_all) {
+        plsx = plsx / dist;
+        plsy = plsy / dist;
       }
+      x += plsx;
+      y += plsy;
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
