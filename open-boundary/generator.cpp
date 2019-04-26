@@ -49,8 +49,8 @@ static double rungeKutta(double k1) {
 
 static void step() {
   timestep++;
-  Point ps[NPOINTS];
-  Point delta[NPOINTS];
+  Point next[NPOINTS];
+  Point dxdy[NPOINTS];
 
   for (int i = 0; i < NPOINTS; i++) {
     Point &pi = points[i];
@@ -80,13 +80,13 @@ static void step() {
     x = rungeKutta(x);
     y = rungeKutta(y);
 
-    ps[i] = {pi.x + x, pi.y + y, pi.color};
-    delta[i] = {x, y};
+    next[i] = {pi.x + x, pi.y + y, pi.color};
+    dxdy[i] = {x, y};
   }
   result.push_back(std::vector<Point>(points, points + NPOINTS));
-  memcpy(points, ps, sizeof(ps));
+  memcpy(points, next, sizeof(next));
 
-  xv.push_back(computeXV(delta));
+  xv.push_back(computeXV(dxdy));
   energy.push_back(energy_var_dist());
 }
 
