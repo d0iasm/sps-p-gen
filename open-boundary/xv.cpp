@@ -4,6 +4,7 @@
 // zero when the relative velocities of all particles with respect to the
 // center of gravity converge to zero.
 
+#include <iostream>
 #include "xv.h"
 
 Point computeCenter() {
@@ -13,7 +14,7 @@ Point computeCenter() {
     x += p.x;
     y += p.y;
   }
-  return {x, y};
+  return {x / NPOINTS, y / NPOINTS};
 }
 
 XV computeXV(Point *delta) {
