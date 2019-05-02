@@ -69,7 +69,7 @@ function scaleout() {
 
 function chaseGraph() {
   gxvCtx.save();
-  gxvCtx.translate(0.25, 0.75);
+  gxvCtx.translate(0.15, 0.30);
   gxvCtx.scale(0.25, -0.25);
 
   gxvCtx.fillStyle = 'red';
@@ -87,7 +87,7 @@ function chaseGraph() {
 
 function drawGraph() {
   gxvCtx.save();
-  gxvCtx.translate(0.25, 0.75);
+  gxvCtx.translate(0.15, 0.30);
   gxvCtx.scale(0.25, -0.25);
 
   gxvCtx.fillStyle = 'blue';
