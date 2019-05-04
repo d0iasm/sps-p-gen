@@ -265,8 +265,10 @@ static void csv() {
             << kparam[1][1] << ","
             << getP() << ","
             << getM() << ","
+            << classify() << ","
             << energy_ave() << ","
-            << energy_var() << "\n";
+            << energy_var() << ","
+            << "\n";
 }
 
 int main(int argc, char **argv) {

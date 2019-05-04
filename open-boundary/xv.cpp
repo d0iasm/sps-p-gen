@@ -41,3 +41,20 @@ XV computeXV(Point *dxdy) {
   return {x, v};
 }
 
+int classify() {
+  XV s = xv[1];
+  XV e = xv[xv.size() - 1]; 
+  XV m = xv[xv.size() / 2];
+
+  if (s.x > m.x && m.x > e.x && s.v > m.v && m.v > e.v) {
+    return 1; 
+  } else if (s.v > m.v && m.v > e.v) {
+    return 2;
+  } else if (s.x > m.x && m.x > e.x) {
+    return 3;
+  } else if (e.x > 0.1 && e.v > 0.1) {
+    return 4;
+  }
+
+  return 7; // class 5 or 6.
+}

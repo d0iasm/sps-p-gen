@@ -5,7 +5,7 @@ OUT="csv/result.csv"
 
 # Execution.
 make generator
-echo "k1,k00,k01,k10,k11,k2,ka,kb,kp,km,HBEaverage,HBEvariancen" > $OUT
+echo "k1,k00,k01,k10,k11,k2,ka,kb,kp,km,class,evergy(average),energy(variance)" > $OUT
 
 for i in {-8..12}
 do
