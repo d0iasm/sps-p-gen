@@ -2,6 +2,8 @@
 !/*.md
 !/.gitignore
 
+!utils/*
+
 !/open-boundary/
 /open-boundary/**
 !open-boundary/Makefile
