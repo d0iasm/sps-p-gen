@@ -11,6 +11,7 @@
 !open-boundary/*.md
 !open-boundary/script.js
 !open-boundary/style.css
+!open-boundary/csv/*
 
 !/periodic-boundary/
 /periodic-boundary/**

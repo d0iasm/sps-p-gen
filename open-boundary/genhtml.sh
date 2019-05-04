@@ -25,7 +25,7 @@
 SRC=$(pwd)
 DEST="../../sps-p-out/open-boundary/"
 INDEX="index.html"
-MAX_GEN=100000
+MAX_GEN=300000
 
 # Function definition.
 check_dependencies() {
