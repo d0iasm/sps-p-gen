@@ -255,12 +255,10 @@ static void html() {
 }
 
 static void csv() {
-  std::cout << kparam[0][0] << " " << kparam[0][1] << " " << kparam[1][0] << " " << kparam[1][1] << ","
-            << kparam[0][0] << ","
+  std::cout << kparam[0][0] << ","
             << kparam[0][1] << ","
             << kparam[1][0] << ","
             << kparam[1][1] << ","
-            << kparam[0][0] << " " << kparam[1][1] << " " << getP() << " " << getM() << ","
             << kparam[0][0] << ","
             << kparam[1][1] << ","
             << getP() << ","
