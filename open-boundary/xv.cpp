@@ -4,8 +4,9 @@
 // zero when the relative velocities of all particles with respect to the
 // center of gravity converge to zero.
 
-#include <cfloat>
 #include <iostream>
+#include <numeric>
+#include <vector>
 #include "xv.h"
 
 Point computeCenter() {
@@ -42,51 +43,74 @@ XV computeXV(Point *dxdy) {
   return {x, v};
 }
 
+std::vector<std::vector<double> > normalize() {
+  double maxx = -1;
+  double minx = 1;
+  double maxv = -1;
+  double minv = 1;
+  // Skip first values because an initial position is random.
+  for (int i=1; i<xv.size(); i++) {
+    if (maxx < xv[i].x) maxx = xv[i].x;
+    if (minx > xv[i].x) minx = xv[i].x;
+    if (maxv < xv[i].v) maxv = xv[i].v;
+    if (minv > xv[i].v) minv = xv[i].v;
+  }
+
+  std::vector<std::vector<double> > n(2);
+  std::vector<double> nx;
+  std::vector<double> nv;
+  double dx = maxx - minx;
+  double dv = maxv - minv;
+  for (int i=1; i<xv.size(); i++) {
+    nx.push_back((xv[i].x - minx) / dx);
+    nv.push_back((xv[i].v - minv) / dv);
+  }
+  n[0] = nx;
+  n[1] = nv;
+  return n;
+}
+
 int classify() {
-  XV s = xv[1];
-  XV e = xv[xv.size() - 1]; 
-  XV m = xv[xv.size() / 2];
+  std::vector<std::vector<double>> n = normalize(); 
 
   // Calculate center.
-  double sumx = 0;
-  double sumv = 0;
-  for(auto const& a: xv) {
-    sumx += a.x;
-    sumv += a.v; 
-  }
-  double gx = sumx / xv.size();
-  double gv = sumv / xv.size();
+  //double sumx = std::accumulate(n[0].begin(), n[0].end(), 0);
+  //double sumv = std::accumulate(n[1].begin(), n[1].end(), 0);
+  //double gx = sumx / n.size();
+  //double gv = sumv / n.size();
+  double g = 0.5; 
 
   // Calculate variance.
-  sumx = 0;
-  sumv = 0;
-  for (auto const& a:xv) {
-    sumx += (a.x - gx) * (a.x - gx);
-    sumv += (a.v - gv) * (a.v - gv);
+  double sumx = 0;
+  double sumv = 0;
+  for (int i=0; i<n[0].size(); i++) {
+    sumx += (n[0][i] - g) * (n[0][i] - g);
+    sumv += (n[1][i] - g) * (n[1][i] - g);
   }
-  double varx = sumx / xv.size();
-  double varv = sumv / xv.size();
-
+  int l = n[0].size();
+  double varx = sumx / l;
+  double varv = sumv / l;
+  
   std::cerr << "\n------------\n";
-  std::cerr << "start (x, v) " << s.x << ", " << s.v << "\n";
-  std::cerr << "mid   (x, v) " << m.x << ", " << m.v << "\n";
-  std::cerr << "end   (x, v) " << e.x << ", " << e.v << "\n";
-  std::cerr << "\ngx, gv: " << gx << ", " << gv << "\n"; 
-  std::cerr << "\nvx, vv: " << varx << ", " << varv << "\n"; 
+  std::cerr << "start (x, v) " << n[0][0] << ", " << n[1][0] << "\n";
+  std::cerr << "mid   (x, v) " << n[0][l/2] << ", " << n[1][l/2] << "\n";
+  std::cerr << "end   (x, v) " << n[0][l-1] << ", " << n[1][l-1] << "\n";
+  std::cerr << "sumx, sumv: " << sumx << ", " << sumv << "\n"; 
+  std::cerr << "vx, vv: " << varx << ", " << varv << "\n"; 
   std::cerr << "------------\n";
 
-  if (e.x <= DBL_EPSILON && e.v <= DBL_EPSILON) {
-    return 1; 
-  } else if (e.v <= DBL_EPSILON) {
-    return 2;
-  } else if (e.x <= DBL_EPSILON) {
-    return 3;
-  } else if (s.x > m.x && m.x > e.x && s.v > m.v && m.v > e.v) {
-    return 4;
-  } else if (varx < FLT_EPSILON && varv < FLT_EPSILON) {
+  if ((varx + varv) / 2 < 0.22) {
     return 5;
-  } else if (varx > 1 && varv > 1) {
+  } else if (varx > 0.5 && varv > 0.5) {
     return 6; 
+  } else if (n[0][l-1] <= 0.01 && n[1][l-1] <= 0.01) {
+    return 1; 
+  } else if (n[1][l-1] <= 0.01) {
+    return 2;
+  } else if (n[0][l-1] <= 0.01) {
+    return 3;
+  } else if (n[0][l-1] > 0.01 && n[1][l-1] > 0.01) {
+    return 4;
   }
 
   return 0; 
