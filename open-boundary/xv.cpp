@@ -46,6 +46,12 @@ int classify() {
   XV e = xv[xv.size() - 1]; 
   XV m = xv[xv.size() / 2];
 
+  std::cerr << "\n------------\n";
+  std::cerr << "start (x, v) " << s.x << ", " << s.v << "\n";
+  std::cerr << "mid   (x, v) " << m.x << ", " << m.v << "\n";
+  std::cerr << "end   (x, v) " << e.x << ", " << e.v << "\n";
+  std::cerr << "------------\n";
+
   if (s.x > m.x && m.x > e.x && s.v > m.v && m.v > e.v) {
     return 1; 
   } else if (s.v > m.v && m.v > e.v) {
