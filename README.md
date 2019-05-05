@@ -27,3 +27,12 @@ generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen nu
 -csv: Output csv data instead of html file.
 -dist: Change the way to calcurate step() to reduce depending on distance.
 ```
+
+## Utils
+- class2dhist.py: Plot 2d histgram with Kp as x-axis and Km as y-axis.
+
+### Dependencies
+matplotlib==3.0.3  
+numpy==1.16.3  
+PyQt5==5.12.1  
+PyQt5-sip==4.19.15  
