@@ -27,9 +27,9 @@ def shape(data):
     c = []
     for i in range(0, len(data), len(kp)):
         c.append([int(x['class']) for x in data[i:i+len(kp)]])
-        print("===================", i)
-        print([x['kp'] for x in data[i:i+len(kp)]], [x['km'] for x in data[i:i+len(kp)]])
-        print([int(x['class']) for x in data[i:i+len(kp)]])
+        #print("===================", i)
+        #print([x['kp'] for x in data[i:i+len(kp)]], [x['km'] for x in data[i:i+len(kp)]])
+        #print([int(x['class']) for x in data[i:i+len(kp)]])
         
     return kp, km, c
 
