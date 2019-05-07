@@ -91,13 +91,13 @@ int classify() {
   double varx = sumx / l;
   double varv = sumv / l;
   
-  std::cerr << "\n------------\n";
-  std::cerr << "start (x, v) " << n[0][0] << ", " << n[1][0] << "\n";
-  std::cerr << "mid   (x, v) " << n[0][l/2] << ", " << n[1][l/2] << "\n";
-  std::cerr << "end   (x, v) " << n[0][l-1] << ", " << n[1][l-1] << "\n";
-  std::cerr << "sumx, sumv: " << sumx << ", " << sumv << "\n"; 
-  std::cerr << "vx, vv: " << varx << ", " << varv << "\n"; 
-  std::cerr << "------------\n";
+  //std::cerr << "\n------------\n";
+  //std::cerr << "start (x, v) " << n[0][0] << ", " << n[1][0] << "\n";
+  //std::cerr << "mid   (x, v) " << n[0][l/2] << ", " << n[1][l/2] << "\n";
+  //std::cerr << "end   (x, v) " << n[0][l-1] << ", " << n[1][l-1] << "\n";
+  //std::cerr << "sumx, sumv: " << sumx << ", " << sumv << "\n"; 
+  //std::cerr << "vx, vv: " << varx << ", " << varv << "\n"; 
+  //std::cerr << "------------\n";
 
   if ((varx + varv) / 2 < 0.22) {
     return 5;
