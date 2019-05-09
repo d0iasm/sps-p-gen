@@ -36,3 +36,4 @@ matplotlib==3.0.3
 numpy==1.16.3  
 PyQt5==5.12.1  
 PyQt5-sip==4.19.15  
+Pillow==6.0.0
