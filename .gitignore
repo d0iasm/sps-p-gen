@@ -3,6 +3,7 @@
 !/.gitignore
 
 !utils/*
+!images/*
 
 !/open-boundary/
 /open-boundary/**

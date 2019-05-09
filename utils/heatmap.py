@@ -30,9 +30,6 @@ def shape(data):
     c = []
     for i in range(0, len(data), len(kp)):
         c.append([float(x[z_axis]) for x in data[i:i+len(kp)]])
-        #print("===================", i)
-        #print([x['kp'] for x in data[i:i+len(kp)]], [x['km'] for x in data[i:i+len(kp)]])
-        #print([float(x['energy-average']) for x in data[i:i+len(kp)]])
         
     return kp, km, c
 
@@ -61,6 +58,8 @@ def plot(x, y, z):
     ax.set_title(title)
     ax.set_xlabel(x_axis)
     ax.set_ylabel(y_axis)
+    plt.colorbar(im);
+
     fig.tight_layout()
     plt.show()
 
