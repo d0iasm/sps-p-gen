@@ -20,16 +20,39 @@ def read_csv():
         for row in reader:
             data.append(dict(row))
 
-    data = sorted(data, key = lambda x: (float(x[y_axis]), float(x[x_axis])))
+    return data
+
+
+def read_spreadsheet_csv():
+    data = []
+    with open(src) as f:
+        reader = csv.reader(f, delimiter=',')
+        for row in reader:
+            data.append(row)
+
     return data
 
 
 def shape(data):
+    data = sorted(data, key = lambda x: (float(x[y_axis]), float(x[x_axis])))
+
     kp = np.array([x / 10 for x in np.arange(-8, 13)])
     km = np.array([x / 10 for x in np.arange(-8, 13)])
     c = []
     for i in range(0, len(data), len(kp)):
         c.append([float(x[z_axis]) for x in data[i:i+len(kp)]])
+        
+    return kp, km, c
+
+
+def shape_spreadsheet(data):
+    data = data[1:]
+    print(data)
+    kp = np.array([x / 10 for x in np.arange(-8, 13)])
+    km = np.array([x / 10 for x in np.arange(-8, 13)])
+    c = []
+    for i in range(len(data)):
+        c.append([int(x) for x in data[i][1:]])
         
     return kp, km, c
 
@@ -51,7 +74,8 @@ def plot(x, y, z):
         for i in range(len(y)):
             #print(c[i])
             for j in range(len(x)):
-                t = int(c[i][j]) if c[i][j].is_integer() else c[i][j]
+                #t = int(c[i][j]) if c[i][j].is_integer() else c[i][j]
+                t = c[i][j]
                 text = ax.text(j, i, t,
                         ha="center", va="center", color="w")
 
@@ -98,7 +122,9 @@ def parse_args():
 if __name__ == '__main__':
     parse_args()
     print("title (x, y, z) src: ", title, x_axis, y_axis, z_axis, src)
-    data = read_csv()
-    kp, km, c = shape(data)
+    #data = read_csv()
+    #kp, km, c = shape(data)
+    data = read_spreadsheet_csv()
+    kp, km, c = shape_spreadsheet(data)
     plot(kp, km, c)
 
