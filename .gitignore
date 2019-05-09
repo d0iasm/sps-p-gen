@@ -2,8 +2,9 @@
 !/*.md
 !/.gitignore
 
-!utils/*
+!csv/*
 !images/*
+!utils/*
 
 !/open-boundary/
 /open-boundary/**
