@@ -100,6 +100,22 @@ double energy_ave() {
   return sum / size;
 }
 
+// Calculate an average energy of all triangles. This result is influenced
+// from distance between particles.
+double energy_ave_dist() {
+  int size = 0;
+  double sum = 0; 
+  for (int i = 0; i < NPOINTS-2; i++) {
+    for (int j = i+1; j < NPOINTS-1; j++) {
+      for (int k = j+1; k < NPOINTS; k++) {
+        size++;
+        sum += heider_dist(i, j, k);
+      }
+    }
+  }
+  return sum / size;
+}
+
 // Calculate a variance energy of all triangles.
 double energy_var() {
   double average = 0;

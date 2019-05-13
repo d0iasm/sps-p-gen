@@ -20,7 +20,7 @@ Point center;
 std::vector<XV> xv;
 
 // Global variables declared in energy.cpp.
-std::vector<double> energy;
+std::vector<std::vector<double> > energy;
 
 double distance(Point p, Point q) {
   double dx = p.x - q.x;
@@ -86,8 +86,14 @@ static void step() {
   result.push_back(std::vector<Point>(points, points + NPOINTS));
   memcpy(points, next, sizeof(next));
 
+  // XV.
   xv.push_back(computeXV(dxdy));
-  energy.push_back(energy_var_dist());
+
+  // Energies.
+  std::vector<double> e(2);
+  e[0] = energy_ave_dist();
+  e[1] = energy_var_dist();
+  energy.push_back(e);
 }
 
 static double getP() {
@@ -161,7 +167,7 @@ static void printEnergy() {
   std::cout << "<script>const energy = [\n";
   for (int i = 0; i < energy.size(); i++) {
     std::cout << " [" << i << ", "
-              << "{energy_var:" << energy[i] 
+              << "{energy_var:" << energy[1][i] 
               << "}],\n";
   }
   std::cout << "];</script>\n";
@@ -277,9 +283,9 @@ static void csv() {
 }
 
 static void csve() {
-  std::cout << "step,energy-variance\n";
+  std::cout << "step,energy-average,energy-variance\n";
   for (int i = 0; i < energy.size(); i++) {
-    std::cout << i << "," << energy[i] << "\n"; 
+    std::cout << i << "," << energy[i][0] << "," << energy[i][1] << "\n"; 
   }
 }
 
