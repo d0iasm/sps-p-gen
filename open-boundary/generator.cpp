@@ -159,7 +159,7 @@ static void printXV() {
 
 static void printEnergy() {
   std::cout << "<script>const energy = [\n";
-  for (int i = 0; i < energy.size(); i += 100) {
+  for (int i = 0; i < energy.size(); i++) {
     std::cout << " [" << i << ", "
               << "{energy_var:" << energy[i] 
               << "}],\n";
@@ -221,7 +221,14 @@ static void parseArgs(int argc, char **argv) {
     }
 
     if (strcmp("-csv", argv[0]) == 0) {
-      outhtml = false;
+      output = CSV;
+      argc -= 1;
+      argv += 1;
+      continue;
+    }
+    
+    if (strcmp("-csve", argv[0]) == 0) {
+      output = CSVE;
       argc -= 1;
       argv += 1;
       continue;
@@ -269,6 +276,13 @@ static void csv() {
             << "\n";
 }
 
+static void csve() {
+  std::cout << "step,energy-variance\n";
+  for (int i = 0; i < energy.size(); i++) {
+    std::cout << i << "," << energy[i] << "\n"; 
+  }
+}
+
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
@@ -278,10 +292,10 @@ int main(int argc, char **argv) {
   for (int i = 0; i < maxgen; i++)
     step();
 
-  if (outhtml) {
-    html();  
-  } else {
-    csv();
+  switch (output) {
+    case HTML: html();
+    case CSV: csv();
+    case CSVE: csve();
   }
 }
 

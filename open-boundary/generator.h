@@ -12,6 +12,12 @@ enum Color {
   NONE,
 };
 
+enum Output {
+  HTML,
+  CSV,
+  CSVE,
+};
+
 struct Point {
   Point(double x = 0, double y = 0, Color c = NONE)
     : x(x), y(y), color(c) {}
@@ -31,7 +37,7 @@ static std::vector<std::vector<Point>> result;
 static int seed = 1;
 static int maxgen = 50000;
 
-static bool outhtml = true;
+static Output output = HTML;
 static bool interact_all = true;
 
 double distance(Point p, Point q); 
