@@ -33,7 +33,7 @@ def plot(d):
     ax.grid()
     
     fig.tight_layout()
-    plt.show()
+    plt.savefig(kparam + '.png')
 
 
 def parse_args():
@@ -41,13 +41,13 @@ def parse_args():
     global kparam
 
     parser = argparse.ArgumentParser(description='Customize src csv file to generate log plot for energies.')
-    parser.add_argument('-k', required=True,
+    parser.add_argument('-k', required=True, nargs='+',
             help='The K parameters')
     parser.add_argument('-src', required=True,
             help='The source csv file.') 
 
     args = parser.parse_args()
-    kparam = args.k
+    kparam = ','.join(args.k)
     src = args.src
 
 
