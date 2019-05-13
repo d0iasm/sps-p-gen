@@ -21,7 +21,7 @@
 # mentioned in the release notes of next version of GNU Parallel.
 
 # Constant definition.
-MAX_GEN=200
+MAX_GEN=200000
 OUT="csv/"
 TOOL="../utils/logplot.py"
 IMGOUT="../images/energy/"
