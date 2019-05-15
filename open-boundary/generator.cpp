@@ -131,8 +131,10 @@ static void printBody() {
     <br />
     <div>X-V log log plot:</div>
     <canvas id=graphXV width=250 height=250></canvas>
+    <!--
     <div>Variance Energy:</div>
     <canvas id=graphEnergy width=250 height=250></canvas>
+    -->
   </div
 </div>
 )END";
@@ -166,9 +168,10 @@ static void printXV() {
 static void printEnergy() {
   std::cout << "<script>const energy = [\n";
   for (int i = 0; i < energy.size(); i++) {
-    std::cout << " [" << i << ", "
-              << "{energy_var:" << energy[1][i] 
-              << "}],\n";
+    std::cout << "[" << i << ", "
+              << "{energy_ave:" << energy[0][i] << ", "
+              << "energy_var:" << energy[1][i] 
+              << "},\n";
   }
   std::cout << "];</script>\n";
 }
@@ -299,9 +302,15 @@ int main(int argc, char **argv) {
     step();
 
   switch (output) {
-    case HTML: html();
-    case CSV: csv();
-    case CSVE: csve();
+    case HTML:
+      html();
+      break;
+    case CSV:
+      csv();
+      break;
+    case CSVE:
+      csve();
+      break;
   }
 }
 
