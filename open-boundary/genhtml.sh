@@ -1,4 +1,6 @@
 #!/bin/bash
+# Generate html files for open boundary.
+
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:
 # @book{tange_ole_2018_1146014,
@@ -20,41 +22,22 @@
 # If you send a copy of your published article to tange@gnu.org, it will be
 # mentioned in the release notes of next version of GNU Parallel.
 
-
-# Constant definition.
-SRC=$(pwd)
-DEST="../../sps-p-out/open-boundary/"
-INDEX="index.html"
-MAX_GEN=200000
-
-# Function definition.
-check_dependencies() {
-  if ! [ -x "$(command -v clang++)" ]; then
-    echo 'Error: clang++ is not installed.' >&2
-    exit 1
-  fi
-  if ! [ -x "$(command -v parallel)" ]; then
-    echo 'Error: parallel is not installed.' >&2
-    exit 1
-  fi
-}
-
 exec_generator() {
   local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
-  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN '>' $DEST'abpm=0.8,0.4,{1},{2}.html' ::: $range ::: $range
+  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_OB/'abpm=0.8,0.4,{1},{2}.html' ::: $range ::: $range
 }
 
 make_index() {
-  cd $DEST
-  echo "<h1>SPS-P Model Simulation: Open Boundary</h1><ul>" > $INDEX
+  cd $OUT_OB
+  echo "<h1>SPS-P Model Simulation: Open Boundary</h1>\n<ul>" > $INDEX
   for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $INDEX
   echo "</ul>" >> $INDEX
-  echo Generated $INDEX
-  cd $SRC
+  echo Generated $OUT_OB/$INDEX
+  cd $ROOT/$OB
 }
 
 copy_js() {
-  local dest=$DEST/script.js
+  local dest=$OUT_OB/script.js
   if [ -f $dest ]; then
     rm $dest 
   fi
@@ -62,7 +45,7 @@ copy_js() {
 }
 
 copy_css() {
-  local dest=$DEST/style.css
+  local dest=$OUT_OB/style.css
   if [ -f $dest ]; then
     rm $dest 
   fi
@@ -70,6 +53,8 @@ copy_css() {
 }
 
 # Execution.
+exepath=$(pwd)/$(diename $0)
+source $exepath/../config.sh
 check_dependencies 
 make generator
 exec_generator
