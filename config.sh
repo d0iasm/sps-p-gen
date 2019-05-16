@@ -3,7 +3,7 @@
 echo ====== File path configuration ======
 
 # Variables for experiment.
-MAX_GEN=200
+MAX_GEN=200000
 RANGE="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
 echo max generation step: $MAX_GEN
 echo Kp and Km range: $RANGE
