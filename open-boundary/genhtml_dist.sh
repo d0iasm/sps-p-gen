@@ -1,4 +1,6 @@
 #!/bin/bash
+# Generate html files for open boundary changing based on distance.
+
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:
 # @book{tange_ole_2018_1146014,
@@ -21,59 +23,51 @@
 # mentioned in the release notes of next version of GNU Parallel.
 
 
-# Constant definition.
-SRC=$(pwd)
-DEST="../../sps-p-out/open-boundary-dist/"
-INDEX="index.html"
-MAX_GEN=500000
-
-# Function definition.
-check_dependencies() {
-  if ! [ -x "$(command -v clang++)" ]; then
-    echo 'Error: clang++ is not installed.' >&2
-    exit 1
-  fi
-  if ! [ -x "$(command -v parallel)" ]; then
-    echo 'Error: parallel is not installed.' >&2
-    exit 1
-  fi
-}
-
 exec_generator() {
-  local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
-  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -dist '>' $DEST'abpm=0.8,0.4,{1},{2}.html' ::: $range ::: $range
+  if [ ! -d $OUT_OBD ]; then
+    mkdir $OUT_OBD
+  fi
+
+  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_OBD/'abpm=0.8,0.4,{1},{2}.html' ::: $RAGNE ::: $RAGNE
 }
 
 make_index() {
-  cd $DEST
-  echo "<h1>SPS-P Model Simulation: Open Boundary by Distance</h1><ul>" > $INDEX
-  for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $INDEX
-  echo "</ul>" >> $INDEX
-  echo Generated $INDEX
-  cd $SRC
+  cd $OUT_OBD
+  local dest=$OUT_OBD/index.html
+  echo "<h1>SPS-P Model Simulation: Open Boundary Changing Based on Distance</h1><ul>" > $dest
+  for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $dest
+  echo "</ul>" >> $dest
+  echo Generate $dest
+  cd $ROOT/$OB
 }
 
 copy_js() {
-  local dest=$DEST/script.js
+  local dest=$OUT_OBD/script.js
   if [ -f $dest ]; then
     rm $dest 
   fi
+  echo Copy from $ROOT/$OB/script.js to $dest
   cp ./script.js $dest 
 }
 
 copy_css() {
-  local dest=$DEST/style.css
+  local dest=$OUT_OBD/style.css
   if [ -f $dest ]; then
     rm $dest 
   fi
+  echo Copy from $ROOT/$OB/style.css to $dest
   cp ./style.css $dest 
 }
 
 # Execution.
+exepath=$(pwd)/$(dirname $0)
+source $exepath/../config.sh
 check_dependencies 
+
+cd $ROOT/$OB
 make generator
 exec_generator
 make_index
 copy_js
 copy_css
-
+cd $exepath

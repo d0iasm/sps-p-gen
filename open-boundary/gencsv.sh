@@ -1,4 +1,6 @@
 #!/bin/bash
+# Generate csv data open boundary.
+
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:
 # @book{tange_ole_2018_1146014,
@@ -20,30 +22,21 @@
 # If you send a copy of your published article to tange@gnu.org, it will be
 # mentioned in the release notes of next version of GNU Parallel.
 
-# Constant definition.
-MAX_GEN=200000
-OUT="csv/result.csv"
-
-# Function definition.
-check_dependencies() {
-  if ! [ -x "$(command -v clang++)" ]; then
-    echo 'Error: clang++ is not installed.' >&2
-    exit 1
-  fi
-  if ! [ -x "$(command -v parallel)" ]; then
-    echo 'Error: parallel is not installed.' >&2
-    exit 1
-  fi
-}
 
 exec_generator_csv() {
-  echo "k00,k01,k10,k11,ka,kb,kp,km,class,energy-average,energy-variance" > $OUT
-  local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
-  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -csv '>>' $OUT ::: $range ::: $range
+  local dest=$DATA_CSV/open-boundary.csv
+  echo "k00,k01,k10,k11,ka,kb,kp,km,class,energy-average,energy-variance" > $dest
+  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -csv '>>' $dest ::: $RAGNE ::: $RAGNE
+  echo Generate $DATA_CSV/open-boundary.csv
 }
 
 # Execution.
-check_dependencies
+exepath=$(pwd)/$(dirname $0)
+source $exepath/../config.sh
+check_dependencies 
+
+cd $ROOT/$OB
 make generator
 exec_generator_csv
+cd $exepath
 

@@ -1,4 +1,6 @@
 #!/bin/bash
+# Generate csv data of open boundary and images for each parameter.
+
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:
 # @book{tange_ole_2018_1146014,
@@ -26,37 +28,41 @@ OUT="csv/"
 TOOL="../utils/logplot.py"
 IMGOUT="../images/energy/"
 
-# Function definition.
-check_dependencies() {
-  if ! [ -x "$(command -v clang++)" ]; then
-    echo 'Error: clang++ is not installed.' >&2
-    exit 1
-  fi
-  if ! [ -x "$(command -v parallel)" ]; then
-    echo 'Error: parallel is not installed.' >&2
-    exit 1
-  fi
-}
 
 exec_generator_csve() {
-  local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
-  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -csve '>' $OUT'0.8,0.4,{1},{2}.csv' ::: $range ::: $range
+  local dir=$DATA_CSV/open-boundary-energy
+  if [ ! -d $dir ]; then
+    mkdir $dir
+  fi
+
+  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -csve '>' $dir/'0.8,0.4,{1},{2}.csv' ::: $RANGE ::: $RANGE
 }
 
 generate_images() {
-  local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
-  parallel python3 $TOOL -k '0.8 0.4 {1} {2}' -src $OUT'0.8,0.4,{1},{2}.csv' ::: $range ::: $range
+  local tool=$UTIL/logplot.py
+  local src=$DATA_CSV/open-boundary-energy
+
+  parallel python3 $tool -k '0.8 0.4 {1} {2}' -src $src/'0.8,0.4,{1},{2}.csv' ::: $RANGE ::: $RANGE
 }
 
 mv_images() {
-  rm $IMGOUT"*.png"
-  mv *.png $IMGOUT
+  local dir=$DATA_IMG/open-boundary-energy
+  if [ ! -d $dir ]; then
+    mkdir $dir
+  fi
+
+  mv *.png $dir
 }
 
 # Execution.
+exepath=$(pwd)/$(dirname $0)
+source $exepath/../config.sh
 check_dependencies
+
+cd $ROOT/$OB
 make generator
 exec_generator_csve
 generate_images
 mv_images
+cd $exepath
 

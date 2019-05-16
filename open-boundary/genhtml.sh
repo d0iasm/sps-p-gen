@@ -28,8 +28,8 @@ exec_generator() {
     mkdir $OUT_OB
   fi
 
-  local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
-  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_OB/'abpm=0.8,0.4,{1},{2}.html' ::: $range ::: $range
+  local RANGE="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
+  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_OB/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
 }
 
 make_index() {

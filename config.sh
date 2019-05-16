@@ -4,15 +4,13 @@ echo ====== File path configuration ======
 
 # Variables for experiment.
 MAX_GEN=200
+RANGE="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
 
 # Variables for each directory.
 OB=open-boundary
 OBD=open-boundary-dist
 PB=periodic-boundary
 PBD=periodic-boundary-dist
-
-CSV=csv
-IMG=images
 
 # Project root directory.
 exepath=$(pwd)/$(dirname $0)
@@ -23,10 +21,13 @@ cd $curpath
 echo root directory: $ROOT
 
 # Data directories. 
-DATA_CSV=$ROOT/$CSV
-DATA_IMG=$ROOT/$IMG
+DATA_CSV=$ROOT/csv
+DATA_IMG=$ROOT/images
 echo csv data directory: $DATA_CSV
 echo image directory: $DATA_IMG
+
+# Utility tools directory.
+UTIL=$ROOT/utils
 
 # Output directory for static web hosting publicly.
 OUT=$ROOT/public
