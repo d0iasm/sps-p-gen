@@ -23,7 +23,7 @@
 
 # Constant definition.
 SRC=$(pwd)
-DEST="../../sps-p-out/periodic-boundary/"
+DEST="../../sps-p-out/open-boundary-dist/"
 INDEX="index.html"
 MAX_GEN=500000
 
@@ -41,12 +41,12 @@ check_dependencies() {
 
 exec_generator() {
   local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
-  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN '>' $DEST'abpm=0.8,0.4,{1},{2}.html' ::: $range ::: $range
+  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -dist '>' $DEST'abpm=0.8,0.4,{1},{2}.html' ::: $range ::: $range
 }
 
 make_index() {
   cd $DEST
-  echo "<h1>SPS-P Model Simulation: Periodic Boundary</h1><ul>" > $INDEX
+  echo "<h1>SPS-P Model Simulation: Open Boundary by Distance</h1><ul>" > $INDEX
   for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $INDEX
   echo "</ul>" >> $INDEX
   echo Generated $INDEX
