@@ -177,7 +177,7 @@ static void printEnergy() {
 }
 
 static void usage() {
-  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen number ] [ -csv ] [ -dist ]\n";
+  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen number ] [ -csv ] [-csve] [ -dist ]\n";
   exit(1);
 }
 

@@ -12,6 +12,12 @@ enum Color {
   NONE,
 };
 
+enum Output {
+  HTML,
+  CSV,
+  CSVE,
+};
+
 struct Point {
   Point(double x = 0, double y = 0, Color c = NONE)
     : x(x), y(y), color(c) {}
@@ -32,7 +38,7 @@ static int seed = 1;
 static int maxgen = 50000;
 static int thinning = 10;
 
-static bool outhtml = true;
+static Output output = HTML;
 static bool interact_all = true;
 
 static int cycle = 10;

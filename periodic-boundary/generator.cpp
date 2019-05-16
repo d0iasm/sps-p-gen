@@ -20,7 +20,7 @@ Point center;
 std::vector<XV> xv;
 
 // Global variables declared in energy.cpp.
-std::vector<double> energy;
+std::vector<std::vector<double> > energy;
 
 static double distanceDirect(double x1, double y1, double x2, double y2) {
   return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -128,8 +128,14 @@ static void step() {
   result.push_back(std::vector<Point>(points, points + NPOINTS));
   memcpy(points, ps, sizeof(ps));
 
+  // XV.
   xv.push_back(computeXV(delta));
-  //energy.push_back(energyVarDist());
+
+  // Energies.
+  std::vector<double> e(2);
+  e[0] = energy_ave_dist();
+  e[1] = energy_var_dist();
+  energy.push_back(e);
 }
 
 static double getP() {
@@ -168,8 +174,10 @@ static void printBody() {
     <br />
     <div>X-V log log plot:</div>
     <canvas id=graphXV width=250 height=250></canvas>
+    <!--
     <div>Variance Energy:</div>
     <canvas id=graphEnergy width=250 height=250></canvas>
+    -->
   </div>
 </div>
 )END";
@@ -202,16 +210,17 @@ static void printXV() {
 
 static void printEnergy() {
   std::cout << "<script>const energy = [\n";
-  for (int i = 0; i < energy.size(); i += thinning) {
+  for (int i = 0; i < energy.size(); i++) {
     std::cout << " [" << i << ", "
-              << "{energy_var:" << energy[i] 
+              << "{energy_ave:" << energy[0][i] << ", "
+              << "energy_var:" << energy[1][i] 
               << "}],\n";
   }
   std::cout << "];</script>\n";
 }
 
 static void usage() {
-  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen number ] [ -csv ] [ -dist ]\n";
+  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen number ] [ -csv ] [-csve] [ -dist ]\n";
   exit(1);
 }
 
@@ -264,7 +273,14 @@ static void parseArgs(int argc, char **argv) {
     }
 
     if (strcmp("-csv", argv[0]) == 0) {
-      outhtml = false;
+      output = CSV;
+      argc -= 1;
+      argv += 1;
+      continue;
+    }
+
+    if (strcmp("-csve", argv[0]) == 0) {
+      output = CSVE;
       argc -= 1;
       argv += 1;
       continue;
@@ -290,9 +306,9 @@ static void html() {
   std::cout << "<script src=script.js></script>\n";
   std::cout << "<script>"
             << "document.getElementById('energy_ave').innerText="
-            << energyAve() << ";" 
+            << energy_ave() << ";" 
             << "document.getElementById('energy_var').innerText="
-            << energyVar() << ";" 
+            << energy_var() << ";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
@@ -308,8 +324,15 @@ static void csv() {
             << kparam[1][1] << ","
             << getP() << ","
             << getM() << ","
-            << energyAve() << ","
-            << energyVar() << "\n";
+            << energy_ave() << ","
+            << energy_var() << "\n";
+}
+
+static void csve() {
+  std::cout << "step,energy-average,energy-variance\n";
+  for (int i = 0; i < energy.size(); i++) {
+    std::cout << i << "," << energy[i][0] << "," << energy[i][1] << "\n"; 
+  }
 }
 
 int main(int argc, char **argv) {
@@ -321,10 +344,16 @@ int main(int argc, char **argv) {
   for (int i = 0; i < maxgen; i++)
     step();
 
-  if (outhtml) {
-    html();  
-  } else {
-    csv();
+  switch (output) {
+    case HTML:
+      html();
+      break;
+    case CSV:
+      csv();
+      break;
+    case CSVE:
+      csve();
+      break;
   }
 }
 
