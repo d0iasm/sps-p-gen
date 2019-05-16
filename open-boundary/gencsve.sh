@@ -22,12 +22,6 @@
 # If you send a copy of your published article to tange@gnu.org, it will be
 # mentioned in the release notes of next version of GNU Parallel.
 
-# Constant definition.
-MAX_GEN=200000
-OUT="csv/"
-TOOL="../utils/logplot.py"
-IMGOUT="../images/energy/"
-
 
 exec_generator_csve() {
   local dir=$DATA_CSV/open-boundary-energy

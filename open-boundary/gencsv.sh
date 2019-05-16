@@ -1,5 +1,5 @@
 #!/bin/bash
-# Generate csv data open boundary.
+# Generate csv data for open boundary.
 
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Generate csv data for periodic boundary.
+# Generate csv data of periodic boundary and images for each parameter.
 
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:
@@ -23,20 +23,40 @@
 # mentioned in the release notes of next version of GNU Parallel.
 
 
-exec_generator_csv() {
-  local dest=$DATA_CSV/periodic-boundary.csv
-  echo "k00,k01,k10,k11,ka,kb,kp,km,class,energy-average,energy-variance" > $dest
-  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -csv '>>' $dest ::: $RAGNE ::: $RAGNE
-  echo Generate $DATA_CSV/periodic-boundary.csv
+exec_generator_csve() {
+  local dir=$DATA_CSV/periodic-boundary-energy
+  if [ ! -d $dir ]; then
+    mkdir $dir
+  fi
+
+  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -csve '>' $dir/'0.8,0.4,{1},{2}.csv' ::: $RANGE ::: $RANGE
+}
+
+generate_images() {
+  local tool=$UTIL/logplot.py
+  local src=$DATA_CSV/periodic-boundary-energy
+
+  parallel python3 $tool -k '0.8 0.4 {1} {2}' -src $src/'0.8,0.4,{1},{2}.csv' ::: $RANGE ::: $RANGE
+}
+
+mv_images() {
+  local dir=$DATA_IMG/periodic-boundary-energy
+  if [ ! -d $dir ]; then
+    mkdir $dir
+  fi
+
+  mv *.png $dir
 }
 
 # Execution.
 exepath=$(pwd)/$(dirname $0)
 source $exepath/../config.sh
-check_dependencies 
+check_dependencies
 
 cd $ROOT/$PB
 make generator
-exec_generator_csv
+exec_generator_csve
+generate_images
+mv_images
 cd $exepath
 
