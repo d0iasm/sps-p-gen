@@ -1,8 +1,9 @@
 #!/bin/bash
 
+echo ====== File path configuration ======
+
 # Variables for experiment.
-MAX_GEN=200000
-INDEX=index.html
+MAX_GEN=200
 
 # Variables for each directory.
 OB=open-boundary
@@ -40,7 +41,7 @@ echo output directory for open boundary: $OUT_OB
 echo output directory for open boundary dist: $OUT_OBD
 echo output directory for periodic boundary: $OUT_PB
 echo output directory for periodic boundary dist: $OUT_PBD
-
+echo =====================================
 
 check_dependencies() {
   if ! [ -x "$(command -v clang++)" ]; then

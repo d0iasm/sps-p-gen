@@ -24,16 +24,21 @@
 
 
 exec_generator() {
+  if [ ! -d $OUT_OB ]; then
+    mkdir $OUT_OB
+  fi
+
   local range="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
   parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_OB/'abpm=0.8,0.4,{1},{2}.html' ::: $range ::: $range
 }
 
 make_index() {
   cd $OUT_OB
-  echo "<h1>SPS-P Model Simulation: Open Boundary</h1>\n<ul>" > $INDEX
-  for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $INDEX
-  echo "</ul>" >> $INDEX
-  echo Generated $OUT_OB/$INDEX
+  local dest=$OUT_OB/index.html
+  echo "<h1>SPS-P Model Simulation: Open Boundary</h1><ul>" > $dest
+  for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $dest
+  echo "</ul>" >> $dest
+  echo Generate $dest
   cd $ROOT/$OB
 }
 
@@ -42,6 +47,7 @@ copy_js() {
   if [ -f $dest ]; then
     rm $dest 
   fi
+  echo Copy from $ROOT/$OB/script.js to $dest
   cp ./script.js $dest 
 }
 
@@ -50,16 +56,19 @@ copy_css() {
   if [ -f $dest ]; then
     rm $dest 
   fi
+  echo Copy from $ROOT/$OB/style.css to $dest
   cp ./style.css $dest 
 }
 
 # Execution.
-exepath=$(pwd)/$(diename $0)
+exepath=$(pwd)/$(dirname $0)
 source $exepath/../config.sh
 check_dependencies 
+
+cd $ROOT/$OB
 make generator
 exec_generator
 make_index
 copy_js
 copy_css
-
+cd $exepath
