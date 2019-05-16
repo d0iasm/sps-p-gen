@@ -41,15 +41,11 @@ check_dependencies
 target=$OB
 filename=open-boundary.csv
 if [ "$1" = "-periodic" ]; then
-  echo "Generate csv files for periodic boundary."
+  echo "Generate csv files for PERIODIC BOUNDARY."
   target=$PB
   filename=periodic-boundary.csv
-fi
-
-if [ "$1" = "-open" ]; then
-  echo "Generate csv files for open boundary."
-  target=$OB
-  filename=open-boundary.csv
+else
+  echo "Generate csv files for OPEN BOUNDARY."
 fi
 
 cd $ROOT/$target

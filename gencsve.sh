@@ -59,15 +59,11 @@ check_dependencies
 target=$OB
 out=open-boundary-energy
 if [ "$1" = "-periodic" ]; then
-  echo "Generate csv files and images for periodic boundary."
+  echo "Generate csv files and images for PERIODIC BOUNDARY."
   target=$PB
   out=periodic-boundary-energy
-fi
-
-if [ "$1" = "-open" ]; then
-  echo "Generate csv files and images for open boundary."
-  target=$OB
-  out=open-boundary-energy
+else
+  echo "Generate csv files and images OPEN BOUNDARY."
 fi
 
 cd $ROOT/$target
