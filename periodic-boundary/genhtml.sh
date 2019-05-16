@@ -24,17 +24,17 @@
 
 
 exec_generator() {
-  if [ ! -d $OUT_PB ]; then
-    mkdir $OUT_PB
+  if [ ! -d $out ]; then
+    mkdir $out 
   fi
 
-  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_PB/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
+  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN $flag '>' $out/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
 }
 
 make_index() {
-  cd $OUT_PB
-  local dest=$OUT_PB/index.html
-  echo "<h1>SPS-P Model Simulation: Periodic Boundary</h1><ul>" > $dest
+  cd $out 
+  local dest=$out/index.html
+  echo "<h1>$title</h1><ul>" > $dest
   for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $dest
   echo "</ul>" >> $dest
   echo Generate $dest
@@ -42,7 +42,7 @@ make_index() {
 }
 
 copy_js() {
-  local dest=$OUT_PB/script.js
+  local dest=$out/script.js
   if [ -f $dest ]; then
     rm $dest 
   fi
@@ -51,7 +51,7 @@ copy_js() {
 }
 
 copy_css() {
-  local dest=$OUT_PB/style.css
+  local dest=$out/style.css
   if [ -f $dest ]; then
     rm $dest 
   fi
@@ -63,6 +63,17 @@ copy_css() {
 exepath=$(pwd)/$(dirname $0)
 source $exepath/../config.sh
 check_dependencies 
+
+# Set flag for distance or not.
+out=$OUT_PB
+title="SPS-P Model Simulation: Periodic Boundary"
+flag=""
+if [ "$1" = "-dist" ]; then
+  echo -dist flag is found.
+  out=$OUT_PBD
+  title="SPS-P Model Simulation: Periodic Boundary Changing Based on Distance"
+  flag="-dist"
+fi
 
 cd $ROOT/$PB
 make generator

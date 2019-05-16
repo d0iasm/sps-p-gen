@@ -24,18 +24,17 @@
 
 
 exec_generator() {
-  if [ ! -d $OUT_OB ]; then
-    mkdir $OUT_OB
+  if [ ! -d $out ]; then
+    mkdir $out
   fi
 
-  local RANGE="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
-  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_OB/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
+  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN $flag '>' $out/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
 }
 
 make_index() {
-  cd $OUT_OB
-  local dest=$OUT_OB/index.html
-  echo "<h1>SPS-P Model Simulation: Open Boundary</h1><ul>" > $dest
+  cd $out
+  local dest=$out/index.html
+  echo "<h1>$title</h1><ul>" > $dest
   for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $dest
   echo "</ul>" >> $dest
   echo Generate $dest
@@ -43,7 +42,7 @@ make_index() {
 }
 
 copy_js() {
-  local dest=$OUT_OB/script.js
+  local dest=$out/script.js
   if [ -f $dest ]; then
     rm $dest 
   fi
@@ -52,7 +51,7 @@ copy_js() {
 }
 
 copy_css() {
-  local dest=$OUT_OB/style.css
+  local dest=$out/style.css
   if [ -f $dest ]; then
     rm $dest 
   fi
@@ -64,6 +63,17 @@ copy_css() {
 exepath=$(pwd)/$(dirname $0)
 source $exepath/../config.sh
 check_dependencies 
+
+# Set flag for distance or not.
+out=$OUT_OB
+title="SPS-P Model Simulation: Open Boundary"
+flag=""
+if [ "$1" = "-dist" ]; then
+  echo -dist flag is found.
+  out=$OUT_OBD
+  title="SPS-P Model Simulation: Open Boundary Changing Based on Distance"
+  flag="-dist"
+fi
 
 cd $ROOT/$OB
 make generator
