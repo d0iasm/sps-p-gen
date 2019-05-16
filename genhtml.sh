@@ -1,5 +1,7 @@
 #!/bin/bash
-# Generate html files for periodic boundary.
+# Generate html files.
+# Usage:
+#   genhtml.sh [-open/-periodic] [-dist (option)]
 
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:
@@ -25,20 +27,20 @@
 
 exec_generator() {
   if [ ! -d $out ]; then
-    mkdir $out 
+    mkdir $out
   fi
 
   parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN $flag '>' $out/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
 }
 
 make_index() {
-  cd $out 
+  cd $out
   local dest=$out/index.html
   echo "<h1>$title</h1><ul>" > $dest
   for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $dest
   echo "</ul>" >> $dest
   echo Generate $dest
-  cd $ROOT/$PB
+  cd $ROOT/$OB
 }
 
 copy_js() {
@@ -46,7 +48,7 @@ copy_js() {
   if [ -f $dest ]; then
     rm $dest 
   fi
-  echo Copy from $ROOT/$PB/script.js to $dest
+  echo Copy from $ROOT/$OB/script.js to $dest
   cp ./script.js $dest 
 }
 
@@ -55,27 +57,42 @@ copy_css() {
   if [ -f $dest ]; then
     rm $dest 
   fi
-  echo Copy from $ROOT/$PB/style.css to $dest
+  echo Copy from $ROOT/$OB/style.css to $dest
   cp ./style.css $dest 
 }
 
 # Execution.
 exepath=$(pwd)/$(dirname $0)
-source $exepath/../config.sh
+source ./config.sh
 check_dependencies 
 
-# Set flag for distance or not.
-out=$OUT_PB
-title="SPS-P Model Simulation: Periodic Boundary"
-flag=""
-if [ "$1" = "-dist" ]; then
-  echo -dist flag is found.
-  out=$OUT_PBD
-  title="SPS-P Model Simulation: Periodic Boundary Changing Based on Distance"
-  flag="-dist"
+# Set flags for open/periodic.
+target=$OB
+out=$OUT_OB
+title="SPS-P Model Simulation: Open Boundary"
+if [ "$1" = "-periodic" ]; then
+  echo "Generate html files for PERIODIC BOUNDARY."
+  target=$PB
+  out=$OUT_PB
+  title="SPS-P Model Simulation: Periodic Boundary"
+else
+  echo "Generate html files for OPEN BOUNDARY."
 fi
 
-cd $ROOT/$PB
+flag=""
+if [ "$2" = "-dist" ]; then
+  echo DIST flag is set.
+  flag="-dist"
+  if [ "$1" = "-periodic" ]; then
+    out=$OUT_PBD
+    title="SPS-P Model Simulation: Periodic Boundary Changing Based on Distance"
+  else
+    out=$OUT_OBD
+    title="SPS-P Model Simulation: Open Boundary Changing Based on Distance"
+  fi
+fi
+
+cd $ROOT/$target
 make generator
 exec_generator
 make_index
