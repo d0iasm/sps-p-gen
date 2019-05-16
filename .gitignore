@@ -1,6 +1,8 @@
 **/.DS_Store
 **/generator
+**/*.log
 .firebase
 public/**
+!public/index.html
 csv/**
 images/**
