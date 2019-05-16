@@ -15,9 +15,14 @@ PB=periodic-boundary
 PBD=periodic-boundary-dist
 
 # Project root directory.
+#exepath=$(pwd)/$(dirname $0)
+#curpath=$(pwd)
+#cd $exepath/..
+#ROOT=$(pwd)
+#cd $curpath
 exepath=$(pwd)/$(dirname $0)
 curpath=$(pwd)
-cd $exepath/..
+cd $exepath
 ROOT=$(pwd)
 cd $curpath
 echo root directory: $ROOT

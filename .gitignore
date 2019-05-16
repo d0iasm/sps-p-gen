@@ -1,8 +1,8 @@
 /**
+!/*.sh
 !/*.md
 !/.gitignore
 
-!config.sh
 !csv/*
 !images/*
 !utils/*

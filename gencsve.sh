@@ -1,5 +1,7 @@
 #!/bin/bash
-# Generate csv data of periodic boundary and images for each parameter.
+# Generate csv data of open/periodic boundary and images for each parameter.
+# Usage:
+#    gencsve.sh [-open/-periodic]
 
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:
@@ -24,7 +26,7 @@
 
 
 exec_generator_csve() {
-  local dir=$DATA_CSV/periodic-boundary-energy
+  local dir=$DATA_CSV/$out
   if [ ! -d $dir ]; then
     mkdir $dir
   fi
@@ -34,13 +36,13 @@ exec_generator_csve() {
 
 generate_images() {
   local tool=$UTIL/logplot.py
-  local src=$DATA_CSV/periodic-boundary-energy
+  local src=$DATA_CSV/$out
 
   parallel python3 $tool -k '0.8 0.4 {1} {2}' -src $src/'0.8,0.4,{1},{2}.csv' ::: $RANGE ::: $RANGE
 }
 
 mv_images() {
-  local dir=$DATA_IMG/periodic-boundary-energy
+  local dir=$DATA_IMG/$out
   if [ ! -d $dir ]; then
     mkdir $dir
   fi
@@ -50,10 +52,25 @@ mv_images() {
 
 # Execution.
 exepath=$(pwd)/$(dirname $0)
-source $exepath/../config.sh
+source ./config.sh
 check_dependencies
 
-cd $ROOT/$PB
+# Set flags for open or periodic.
+target=$OB
+out=open-boundary-energy
+if [ "$1" = "-periodic" ]; then
+  echo "Generate csv files and images for periodic boundary."
+  target=$PB
+  out=periodic-boundary-energy
+fi
+
+if [ "$1" = "-open" ]; then
+  echo "Generate csv files and images for open boundary."
+  target=$OB
+  out=open-boundary-energy
+fi
+
+cd $ROOT/$target
 make generator
 exec_generator_csve
 generate_images

@@ -1,5 +1,7 @@
 #!/bin/bash
-# Generate csv data for periodic boundary.
+# Generate csv data. Target directory is decided based on a flag.
+# Usage:
+#    gencsv.sh [-open/-periodic]
 
 # This shell script is using GNU Parallel.
 # Because of an academic tradition, Cite:
@@ -24,18 +26,33 @@
 
 
 exec_generator_csv() {
-  local dest=$DATA_CSV/periodic-boundary.csv
+  local dest=$DATA_CSV/$filename
   echo "k00,k01,k10,k11,ka,kb,kp,km,class,energy-average,energy-variance" > $dest
-  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -csv '>>' $dest ::: $RAGNE ::: $RAGNE
-  echo Generate $DATA_CSV/periodic-boundary.csv
+  parallel ./generator -k2 0.8 0.4 '{1}' '{2}' -gen $MAX_GEN -csv '>>' $dest ::: $RANGE ::: $RANGE
+  echo Generate $DATA_CSV/$filename
 }
 
 # Execution.
 exepath=$(pwd)/$(dirname $0)
-source $exepath/../config.sh
+source ./config.sh
 check_dependencies 
 
-cd $ROOT/$PB
+# Set flags for open or periodic.
+target=$OB
+filename=open-boundary.csv
+if [ "$1" = "-periodic" ]; then
+  echo "Generate csv files for periodic boundary."
+  target=$PB
+  filename=periodic-boundary.csv
+fi
+
+if [ "$1" = "-open" ]; then
+  echo "Generate csv files for open boundary."
+  target=$OB
+  filename=open-boundary.csv
+fi
+
+cd $ROOT/$target
 make generator
 exec_generator_csv
 cd $exepath
