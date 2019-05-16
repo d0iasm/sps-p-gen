@@ -17,8 +17,6 @@
 # More about funding GNU Parallel and the citation notice:
 # https://lists.gnu.org/archive/html/parallel/2013-11/msg00006.html
 # https://www.gnu.org/software/parallel/parallel_design.html#Citation-notice
-# https://git.savannah.gnu.org/cgit/parallel.git/tree/doc/citation-notice-faq.txt
-
 # If you send a copy of your published article to tange@gnu.org, it will be
 # mentioned in the release notes of next version of GNU Parallel.
 
@@ -28,7 +26,7 @@ exec_generator() {
     mkdir $OUT_PBD
   fi
 
-  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN -dist '>' $OUT_PBD/'abpm=0.8,0.4,{1},{2}.html' ::: $RAGNE ::: $RAGNE
+  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN -dist '>' $OUT_PBD/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
 }
 
 make_index() {

@@ -28,7 +28,6 @@ exec_generator() {
     mkdir $OUT_PB
   fi
 
-  local RANGE="-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2"
   parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_PB/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
 }
 

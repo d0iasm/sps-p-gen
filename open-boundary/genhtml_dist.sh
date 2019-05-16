@@ -28,7 +28,7 @@ exec_generator() {
     mkdir $OUT_OBD
   fi
 
-  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_OBD/'abpm=0.8,0.4,{1},{2}.html' ::: $RAGNE ::: $RAGNE
+  parallel ./generator -k2 '0.8 0.4 {1} {2}' -gen $MAX_GEN '>' $OUT_OBD/'abpm=0.8,0.4,{1},{2}.html' ::: $RANGE ::: $RANGE
 }
 
 make_index() {
