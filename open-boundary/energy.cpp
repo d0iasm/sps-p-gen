@@ -29,7 +29,7 @@ static double heider(int i, int j, int k) {
 }
 
 // Calculate an energy for a triangle based on Heider Balance theory.
-// This result is influenced from the distance between particles.
+// K parameters are influenced from the distance between particles.
 static double heider_dist(int i, int j, int k) {
   int a = get_color(i);
   int b = get_color(j);

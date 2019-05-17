@@ -43,7 +43,7 @@ XV computeXV(Point *dxdy) {
   return {x, v};
 }
 
-std::vector<std::vector<double> > normalize() {
+static std::vector<std::vector<double> > normalize() {
   double maxx = -1;
   double minx = 1;
   double maxv = -1;

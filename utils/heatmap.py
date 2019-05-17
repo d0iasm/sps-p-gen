@@ -85,7 +85,8 @@ def plot(x, y, z):
     plt.colorbar(im);
 
     fig.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.savefig(title)
 
 
 def parse_args():

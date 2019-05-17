@@ -15,5 +15,6 @@ extern std::vector<XV> xv;
 
 Point computeCenter();
 XV computeXV(Point *delta);
+int classify();
 
 #endif // XV_H
