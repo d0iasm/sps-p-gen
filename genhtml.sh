@@ -40,7 +40,7 @@ make_index() {
   for i in *.html; do echo "<li><a href="$i">$i</a></li>"; done >> $dest
   echo "</ul>" >> $dest
   echo Generate $dest
-  cd $ROOT/$OB
+  cd $ROOT/$target
 }
 
 copy_js() {
@@ -48,7 +48,7 @@ copy_js() {
   if [ -f $dest ]; then
     rm $dest 
   fi
-  echo Copy from $ROOT/$OB/script.js to $dest
+  echo Copy from $ROOT/$target/script.js to $dest
   cp ./script.js $dest 
 }
 
@@ -57,7 +57,7 @@ copy_css() {
   if [ -f $dest ]; then
     rm $dest 
   fi
-  echo Copy from $ROOT/$OB/style.css to $dest
+  echo Copy from $ROOT/$target/style.css to $dest
   cp ./style.css $dest 
 }
 
