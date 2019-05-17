@@ -1,8 +1,5 @@
 // This file implements calculating the energy based on Heider balance theory.
-// The definitions of the energy are (1) average energy of all triangles, and
-// (2) variance energy of all triangles. Energy is decided only by K parameters
-// and the energy doesn't change during one execution.
-#include <set>
+
 #include <iostream>
 #include <math.h>
 #include "energy.h"
