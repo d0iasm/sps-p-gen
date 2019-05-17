@@ -202,7 +202,7 @@ function step() {
 }
 
 function start() {
-  handle = window.setInterval(step, 10);
+  handle = window.setInterval(step, 0);
   startButton.innerText = 'Stop';
 }
 

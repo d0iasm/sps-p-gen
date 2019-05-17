@@ -99,8 +99,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Customize src csv file and header keys in it to generate heatmap.')
     parser.add_argument('-title', required=True,
             help='The title of headmap.')
-    parser.add_argument('-src', default='../open-boundary/csv/result.csv',
-            help='The source csv file. (Default: ../open-boundary/csv/result.csv)')
+    parser.add_argument('-src', default='../csv/open-boundary.csv',
+            help='The source csv file. (Default: ../csv/open-boundary.csv)')
     parser.add_argument('-x', default='kp',
             help='The x-axis key for heatmap. This is used as a key of csv (Default: kp).')
     parser.add_argument('-y', default='km',
@@ -122,9 +122,10 @@ def parse_args():
 if __name__ == '__main__':
     parse_args()
     print("title (x, y, z) src: ", title, x_axis, y_axis, z_axis, src)
-    #data = read_csv()
-    #kp, km, c = shape(data)
-    data = read_spreadsheet_csv()
-    kp, km, c = shape_spreadsheet(data)
+    data = read_csv()
+    kp, km, c = shape(data)
+    # These are for hand-writing google spreadsheet.
+    #data = read_spreadsheet_csv()
+    #kp, km, c = shape_spreadsheet(data)
     plot(kp, km, c)
 
