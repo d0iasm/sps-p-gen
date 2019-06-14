@@ -1,3 +1,7 @@
+test:
+	make -C open-boundary generator
+	./open-boundary/generator -gen 10000 -k2 0.8 0.4 0.4 0.4 > test.html
+
 all: html csv csve
 
 html:
