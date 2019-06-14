@@ -19,7 +19,7 @@ Point computeCenter() {
   return {x / NPOINTS, y / NPOINTS};
 }
 
-XV computeXV(Point *dxdy) {
+XV computeXV(Point *dydx) {
   // Compute X.
   double sum = 0;
   for (Point &p : points) {
@@ -34,7 +34,7 @@ XV computeXV(Point *dxdy) {
   Point c = {cx, cy};
   sum = 0;
   for (int i = 0; i < NPOINTS; i++) {
-    Point d = dxdy[i];
+    Point d = dydx[i];
     sum += distance(c, d);
   }
   double v = sum / NPOINTS;

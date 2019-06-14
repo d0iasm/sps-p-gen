@@ -16,7 +16,7 @@ Point computeCenter() {
   return {x, y};
 }
 
-XV computeXV(Point *delta) {
+XV computeXV(Point *dydx) {
   // Compute X.
   double sum = 0;
   for (Point &p : points) {
@@ -30,7 +30,7 @@ XV computeXV(Point *delta) {
   double cy = newCenter.y - center.y;
   sum = 0;
   for (int i = 0; i < NPOINTS; i++) {
-    Point &d = delta[i];
+    Point &d = dydx[i];
     double dx = d.x - cx;
     double dy = d.y - cy;
     sum += sqrt(dx * dx + dy * dy);
