@@ -185,7 +185,7 @@ static void printBody() {
 
 static void printPoints() {
   std::cout << "<script>const points = [\n";
-  for (int i = 0; i < result.size(); i += thinning) {
+  for (int i = 0; i < result.size(); i += 100) {
     std::cout << "  [" << i << ",";
     for (Point &p : result[i])
       std::cout << "{x:" << p.x
@@ -199,7 +199,7 @@ static void printPoints() {
 
 static void printXV() {
   std::cout << "<script>const xv = [\n";
-  for (int i = 0; i < xv.size(); i += thinning) {
+  for (int i = 0; i < xv.size(); i += 100) {
     std::cout << "  [" << i << ", "
               << "{x:" << xv[i].x 
               << ",v:" <<xv[i].v

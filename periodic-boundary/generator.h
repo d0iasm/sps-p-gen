@@ -36,7 +36,6 @@ static int timestep = 0;
 static std::vector<std::vector<Point>> result;
 static int seed = 1;
 static int maxgen = 50000;
-static int thinning = 10;
 
 static Output output = HTML;
 static bool interact_all = true;
