@@ -28,12 +28,11 @@ XV computeXV(Point *dydx) {
   Point newCenter = computeCenter();
   double cx = newCenter.x - center.x;
   double cy = newCenter.y - center.y;
+  Point c = {cx, cy};
   sum = 0;
   for (int i = 0; i < NPOINTS; i++) {
     Point &d = dydx[i];
-    double dx = d.x - cx;
-    double dy = d.y - cy;
-    sum += sqrt(dx * dx + dy * dy);
+    sum += distance(c, d);
   }
   double v = sum / NPOINTS;
 

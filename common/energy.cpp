@@ -35,25 +35,15 @@ static double heider_dist(int i, int j, int k) {
   int b = get_color(j);
   int c = get_color(k);
 
-  Point &pi = points[i];
-  Point &pj = points[j];
-  Point &pk = points[k];
-
   // Distance between a and b.
-  double dx_ij = pj.x - pi.x;
-  double dy_ij = pj.y - pi.y;
-  double dist_ij = sqrt(dx_ij * dx_ij + dy_ij * dy_ij);
+  double dist_ij = distance(pi, pj);
 
   // Distance between a and c.
-  double dx_ik = pk.x - pi.x;
-  double dy_ik = pk.y - pi.y;
-  double dist_ik = sqrt(dx_ik * dx_ik + dy_ik * dy_ik);
+  double dist_ik = distance(pi, pk);
 
   // Distance between b and c.
-  double dx_jk = pj.x - pk.x;
-  double dy_jk = pj.y - pk.y;
-  double dist_jk = sqrt(dx_jk * dx_jk + dy_jk * dy_jk);
-  
+  double dist_jk = distance(pj, pk);
+ 
   // Permutation(3) = 6 patterns p->o, o->x, p->x.
   double p1 = (kparam[a][b] / dist_ij)
             * (kparam[b][c] / dist_jk)
