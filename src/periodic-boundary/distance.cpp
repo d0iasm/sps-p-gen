@@ -55,5 +55,5 @@ double imaging(double x) {
 }
 
 void importScript() {
-  std::cout << "<script src=periodic-boundary/script.js></script>\n";
+  std::cout << "<script src=js/periodic-boundary/script.js></script>\n";
 }

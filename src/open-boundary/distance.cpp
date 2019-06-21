@@ -22,5 +22,5 @@ double imaging(double x) {
 }
 
 void importScript() {
-  std::cout << "<script src=open-boundary/script.js></script>\n";
+  std::cout << "<script src=js/open-boundary/script.js></script>\n";
 }
