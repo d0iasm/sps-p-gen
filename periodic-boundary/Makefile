@@ -1,6 +1,6 @@
 CLANG=clang++
 CFLAGS=-O2 -ffast-math -march=native -std=c++11
-INCLUDE=-I../include -I./
+INCLUDE=-I../include
 
 src += generator.cpp
 include ../common/Makefile.inc

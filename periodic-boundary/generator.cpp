@@ -22,6 +22,9 @@ std::vector<XV> xv;
 // Global variables declared in energy.cpp.
 std::vector<std::vector<double> > energy;
 
+// Variables which are specific periodic boundary.
+static int cycle = 10;
+
 static double distanceDirect(double x1, double y1, double x2, double y2) {
   return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
