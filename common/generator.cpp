@@ -22,68 +22,16 @@ std::vector<XV> xv;
 // Global variables declared in energy.cpp.
 std::vector<std::vector<double> > energy;
 
-// Variables which are specific periodic boundary.
-static int cycle = 10;
-
-static double distanceDirect(double x1, double y1, double x2, double y2) {
-  return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-}
-
-double rem(double x, long y) {
-    return (long)x % y + (x - (long)x);
-}
-
-// Nearest particle selection method.
-double distance(Point p, Point q) {
-  double closest = (double) 2147483647; // Instead of INT_MAX.
-  double x1 = rem(p.x, cycle);
-  double y1 = rem(p.y, cycle);
-  double x2 = rem(q.x, cycle);
-  double y2 = rem(q.y, cycle);
-
-  for (int i=-1; i<=1; i++) {
-    for (int j=-1; j<=1; j++) {
-      double dx = (x2 + cycle * i) - x1;
-      double dy = (y2 + cycle * j) - y1;
-      double tmp = sqrt(dx * dx + dy * dy);
-      if (tmp < closest)
-        closest = tmp;
-    }
-  }
-  return closest;
-}
-
-// Nearest particle selection method.
-// The direction is always a->b.
-static double diff(double a, double b) {
-  double closest = b - a;
-  a = rem(a, cycle);
-  b = rem(b, cycle);
-  for (int i=-1; i<=1; i++) {
-    double tmp = (cycle * i + b) - a;
-    if (abs(tmp) < abs(closest))
-      closest = tmp;
-  }
-  return closest;
-}
-
-static void initPoints() {
+static void initpoints() {
   std::default_random_engine gen;
   gen.seed(seed);
-  std::normal_distribution<double> dist(5.0, 2.0);
+  std::normal_distribution<double> dist(0, 1);
 
-  for (int i = 0; i < NPOINTS; i++) {
+  for (int i = 0; i < npoints; i++) {
     points[i].x = dist(gen);
     points[i].y = dist(gen);
-    points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
+    points[i].color = (i < npoints / 2) ? red : blue;
   }
-}
-
-// Adjust the posision from -|cycle/2| to |cycle/2|. 
-static double imaging(double x) {
-  if (x < 0) return rem(x, cycle) + cycle;
-  if (x > cycle) return rem(x, cycle);
-  return x;
 }
 
 static double rungeKutta(double k1) {
@@ -95,8 +43,8 @@ static double rungeKutta(double k1) {
 
 static void step() {
   timestep++;
-  Point ps[NPOINTS];
-  Point delta[NPOINTS];
+  Point next[NPOINTS];
+  Point dxdy[NPOINTS];
 
   for (int i = 0; i < NPOINTS; i++) {
     Point &pi = points[i];
@@ -116,23 +64,20 @@ static void step() {
       if (dist == 0) continue;
       double plsx = (k / dist - pow(dist, -2)) * dx / dist;
       double plsy = (k / dist - pow(dist, -2)) * dy / dist;
-      if (!interact_all) {
-        plsx = plsx / dist;
-        plsy = plsy / dist;
-      } 
       x += plsx;
       y += plsy;
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
-    ps[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
-    delta[i] = {x, y};
+
+    next[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
+    dxdy[i] = {x, y};
   }
   result.push_back(std::vector<Point>(points, points + NPOINTS));
-  memcpy(points, ps, sizeof(ps));
+  memcpy(points, next, sizeof(next));
 
   // XV.
-  xv.push_back(computeXV(delta));
+  xv.push_back(computeXV(dxdy));
 
   // Energies.
   std::vector<double> e(2);
@@ -154,7 +99,6 @@ static void printBody() {
 <div class=container>
   <canvas id=canvas width=650 height=650></canvas>
   <div>
-    <h1>SPS-P: Periodic Boundary</h1>
     <div class=container>
       <button id=start>Stop</button>
       <button id=reset>Reset</button>
@@ -181,7 +125,7 @@ static void printBody() {
     <div>Variance Energy:</div>
     <canvas id=graphEnergy width=250 height=250></canvas>
     -->
-  </div>
+  </div
 </div>
 )END";
 }
@@ -214,16 +158,16 @@ static void printXV() {
 static void printEnergy() {
   std::cout << "<script>const energy = [\n";
   for (int i = 0; i < energy.size(); i++) {
-    std::cout << " [" << i << ", "
+    std::cout << "[" << i << ", "
               << "{energy_ave:" << energy[0][i] << ", "
               << "energy_var:" << energy[1][i] 
-              << "}],\n";
+              << "},\n";
   }
   std::cout << "];</script>\n";
 }
 
 static void usage() {
-  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen number ] [ -csv ] [-csve] [ -dist ]\n";
+  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen number ] [ -csv ] [ -csve ]\n";
   exit(1);
 }
 
@@ -289,24 +233,18 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
-    if (strcmp("-dist", argv[0]) == 0) {
-      interact_all = false;
-      argc -= 1;
-      argv += 1;
-      continue;
-    }
-
     usage();
   }
 }
 
 static void html() {
-  std::cout << "<head><link rel=stylesheet href=style.css></head>";
+  std::cout << "<head><link rel=stylesheet href='css/style.css'></head>";
   printBody();
   printPoints();
   printXV();
-  //printEnergy();
-  std::cout << "<script src=script.js></script>\n";
+  printEnergy();
+  importScript();
+  std::cout << "<script src=open-boundary/script.js></script>\n";
   std::cout << "<script>"
             << "document.getElementById('energy_ave').innerText="
             << energy_ave() << ";" 
@@ -327,7 +265,8 @@ static void csv() {
             << getM() << ","
             << classify() << ","
             << energy_ave() << ","
-            << energy_var() << "\n";
+            << energy_var() << ","
+            << "\n";
 }
 
 static void csve() {
