@@ -4,6 +4,7 @@
 // zero when the relative velocities of all particles with respect to the
 // center of gravity converge to zero.
 
+#include "distance.h"
 #include "xv.h"
 
 Point computeCenter() {

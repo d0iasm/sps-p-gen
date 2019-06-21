@@ -40,6 +40,4 @@ static int maxgen = 50000;
 static Output output = HTML;
 static bool interact_all = true;
 
-double distance(Point p, Point q);
-
 #endif // GENERATOR_H

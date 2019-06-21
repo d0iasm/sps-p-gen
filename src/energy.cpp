@@ -2,8 +2,9 @@
 
 #include <iostream>
 #include <math.h>
-#include "energy.h"
+#include "distance.h"
 #include "generator.h"
+#include "energy.h"
 
 extern double kparam[2][2];
 
@@ -34,6 +35,10 @@ static double heider_dist(int i, int j, int k) {
   int a = get_color(i);
   int b = get_color(j);
   int c = get_color(k);
+
+  Point &pi = points[i];
+  Point &pj = points[j];
+  Point &pk = points[k];
 
   // Distance between a and b.
   double dist_ij = distance(pi, pj);

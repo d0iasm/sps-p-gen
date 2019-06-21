@@ -7,9 +7,10 @@
 #include <random>
 #include <math.h>
 #include <vector>
+#include "distance.h"
 #include "energy.h"
-#include "generator.h"
 #include "xv.h"
+#include "generator.h"
 
 // Global variables.
 double kparam[2][2];
@@ -22,15 +23,15 @@ std::vector<XV> xv;
 // Global variables declared in energy.cpp.
 std::vector<std::vector<double> > energy;
 
-static void initpoints() {
+static void initPoints() {
   std::default_random_engine gen;
   gen.seed(seed);
   std::normal_distribution<double> dist(0, 1);
 
-  for (int i = 0; i < npoints; i++) {
+  for (int i = 0; i < NPOINTS; i++) {
     points[i].x = dist(gen);
     points[i].y = dist(gen);
-    points[i].color = (i < npoints / 2) ? red : blue;
+    points[i].color = (i < NPOINTS / 2) ? RED : BLUE ;
   }
 }
 

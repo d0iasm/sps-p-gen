@@ -1,21 +1,28 @@
 CLANG=clang++
 CFLAGS=-O2 -ffast-math -march=native -std=c++11
-INCLUDE=-I./include
 
-src += generator.cpp
-src += energy.cpp
-src += xv.cpp
+TOP=$(CURDIR)
+INCLUDE=-I$(TOP)/include
+
+src-o += generator.cpp
+src-o += energy.cpp
+src-o += xv.cpp
+include $(TOP)/open-boundary/Makefile.inc
+
+src-p += generator.cpp
+src-p += energy.cpp
+src-p += xv.cpp
+include $(TOP)/periodic-boundary/Makefile.inc
+
+generator:
+	make open
+	make periodic
 
 open:
-	include ./open-boundary/Makefile.inc
-	make generator
+	$(CLANG) $(INCLUDE) $(CFLAGS) -o generator-o $(src-o)
 
 periodic:
-	include ./periodic-boundary/Makefile.inc
-	make generator
-
-generator: $(files)
-	$(clang) $(include) $(cflags) -o generator $(src)
+	$(CLANG) $(INCLUDE) $(CFLAGS) -o generator-p $(src-p)
 
 clean:
-	rm generator
+	rm generator-*

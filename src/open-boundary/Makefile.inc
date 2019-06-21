@@ -1,1 +1,1 @@
-src += distance.cpp
+src-o += open-boundary/distance.cpp

@@ -1,8 +1,10 @@
 // Calculate the nearest distance between particles based on
 // Nearest Particle Selection Method.
 
+#include <iostream>
 #include <math.h>
 #include "generator.h"
+#include "distance.h"
 
 // Variables which are specific periodic boundary.
 static int cycle = 10;

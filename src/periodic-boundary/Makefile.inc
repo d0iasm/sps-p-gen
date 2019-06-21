@@ -1,1 +1,1 @@
-src += distance.cpp
+src-p += periodic-boundary/distance.cpp

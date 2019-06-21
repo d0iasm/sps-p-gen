@@ -1,7 +1,9 @@
 // Calculate the distance between particles.
 
+#include <iostream>
 #include <math.h>
 #include "generator.h"
+#include "distance.h"
 
 double distance(Point p, Point q) {
   double dx = p.x - q.x;
