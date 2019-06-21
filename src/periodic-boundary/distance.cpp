@@ -6,9 +6,6 @@
 #include "generator.h"
 #include "distance.h"
 
-// Variables which are specific periodic boundary.
-static int cycle = 10;
-
 static double rem(double x, long y) {
     return (long)x % y + (x - (long)x);
 }

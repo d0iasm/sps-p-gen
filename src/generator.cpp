@@ -220,6 +220,15 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
+    if (strcmp("-cycle", argv[0]) == 0) {
+      if (argc < 2)
+        usage();
+      cycle = std::stoi(argv[1]);
+      argc -= 2;
+      argv += 2;
+      continue;
+    }
+
     if (strcmp("-csv", argv[0]) == 0) {
       output = CSV;
       argc -= 1;
