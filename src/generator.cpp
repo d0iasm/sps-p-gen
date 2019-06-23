@@ -15,6 +15,7 @@
 // Global variables.
 double kparam[2][2];
 Point points[NPOINTS];
+int cycle = 10;
 
 // Global variables declared in xv.cpp.
 Point center;
