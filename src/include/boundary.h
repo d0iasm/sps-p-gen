@@ -1,5 +1,5 @@
-#ifndef DISTANCE_H
-#define DISTANCE_H
+#ifndef BOUNDARY_H
+#define BOUNDARY_H
 
 #include "generator.h"
 
@@ -7,5 +7,6 @@ double distance(Point p, Point q);
 double diff(double a, double b);
 double imaging(double x);
 void importScript();
+void printCycle();
 
-#endif // DISTANCE_H
+#endif // BOUNDARY_H

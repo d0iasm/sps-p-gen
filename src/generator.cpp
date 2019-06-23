@@ -1,13 +1,13 @@
-// This file implements basic algorithm to calcualte next step for all
-// particles and output a HTML file embedded particle's X-Y coordinate
-// and color as a json format inside a script tag.
+// This is main file. It implements basic algorithm to calcualte next
+// step for all particles and output a HTML file embedded particle's X-Y
+// coordinate and color as a json format inside a script tag.
 
 #include <iostream>
 #include <cstring>
 #include <random>
 #include <math.h>
 #include <vector>
-#include "distance.h"
+#include "boundary.h"
 #include "energy.h"
 #include "xv.h"
 #include "generator.h"
@@ -254,6 +254,7 @@ static void html() {
   printPoints();
   printXV();
   printEnergy();
+  printCycle();
   importScript();
   std::cout << "<script src=open-boundary/script.js></script>\n";
   std::cout << "<script>"
@@ -308,4 +309,3 @@ int main(int argc, char **argv) {
       break;
   }
 }
-

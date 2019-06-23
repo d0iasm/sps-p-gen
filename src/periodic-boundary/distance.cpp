@@ -1,10 +1,9 @@
 // Calculate the nearest distance between particles based on
 // Nearest Particle Selection Method.
 
-#include <iostream>
 #include <math.h>
 #include "generator.h"
-#include "distance.h"
+#include "boundary.h"
 
 static double rem(double x, long y) {
     return (long)x % y + (x - (long)x);
@@ -49,8 +48,4 @@ double imaging(double x) {
   if (x < 0) return rem(x, cycle) + cycle;
   if (x > cycle) return rem(x, cycle);
   return x;
-}
-
-void importScript() {
-  std::cout << "<script src=js/periodic-boundary/script.js></script>\n";
 }

@@ -1,7 +1,8 @@
 // Main canvas
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext('2d');
-ctx.scale(0.65, 0.65);
+// The variabel of cycle is defined at c++.
+ctx.scale(0.65 / (cycle / 10), 0.65 / (cycle / 10));
 ctx.translate(500, 500);
 
 // Log log graph for X and V parameters.
@@ -202,7 +203,7 @@ function step() {
 }
 
 function start() {
-  handle = window.setInterval(step, 30);
+  handle = window.setInterval(step, 25);
   startButton.innerText = 'Stop';
 }
 

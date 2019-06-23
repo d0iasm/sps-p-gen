@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <math.h>
-#include "distance.h"
+#include "boundary.h"
 #include "generator.h"
 #include "energy.h"
 
