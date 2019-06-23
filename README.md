@@ -25,11 +25,11 @@ generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen nu
     kp - km (26<=i<=50, 1<=j<=25)
     kb (26<=i<=50, 26<=j<=50)
   }
--seed: Used when generate random positions for initialization. default seed is 1. Same result comes with same seed value.
+-seed: Used when generate random positions for an initialization. A default seed is 1. The same result comes with the same seed value.
 -gen: The number of max steps.
--csv: Output csv data instead of html file.
+-cycle: The length of 1 cycle for periodic boundary condition. It is useless for open boundary condition.
+-csv: Output csv data instead of a HTML file.
 -csve: Output csv data for each step.
--dist: Change the way to calcurate step() to reduce depending on distance.
 ```
 
 ## Utils
