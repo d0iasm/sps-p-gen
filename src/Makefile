@@ -4,14 +4,12 @@ CFLAGS=-O2 -ffast-math -march=native -std=c++11
 TOP=$(CURDIR)
 INCLUDE=-I$(TOP)/include
 
-src-o += generator.cpp
-src-o += energy.cpp
-src-o += xv.cpp
+common-files = generator.cpp energy.cpp xv.cpp dynamic.cpp
+
+src-o += $(common-files)
 include $(TOP)/open-boundary/Makefile.inc
 
-src-p += generator.cpp
-src-p += energy.cpp
-src-p += xv.cpp
+src-p += $(common-files)
 include $(TOP)/periodic-boundary/Makefile.inc
 
 generator:

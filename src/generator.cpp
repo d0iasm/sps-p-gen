@@ -8,6 +8,7 @@
 #include <math.h>
 #include <vector>
 #include "boundary.h"
+#include "dynamic.h"
 #include "energy.h"
 #include "xv.h"
 #include "generator.h"
@@ -238,6 +239,13 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
+    if (strcmp("-dynamic", argv[0]) == 0) {
+      dynamic = true;
+      argc -= 1;
+      argv += 1;
+      continue;
+    }
+
     if (strcmp("-csv", argv[0]) == 0) {
       output = CSV;
       argc -= 1;
@@ -302,8 +310,11 @@ int main(int argc, char **argv) {
   initPoints();
   center = computeCenter();
 
-  for (int i = 0; i < maxgen; i++)
+  for (int i = 0; i < maxgen; i++) {
+    if (dynamic)
+      updateKparam();
     step();
+  }
 
   switch (output) {
     case HTML:
