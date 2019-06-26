@@ -157,7 +157,8 @@ static void printEnergy() {
 }
 
 static void usage() {
-  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen number ] [ -cycle number ] [ -csv ] [ -csve ]\n";
+  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] "
+  std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] [ -csv ] [ -csve ]\n";
   exit(1);
 }
 
@@ -191,15 +192,6 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
-    if (strcmp("-seed", argv[0]) == 0) {
-      if (argc < 2)
-        usage();
-      seed = std::stoi(argv[1]);
-      argc -= 2;
-      argv += 2;
-      continue;
-    }
-
     if (strcmp("-gen", argv[0]) == 0) {
       if (argc < 2)
         usage();
@@ -213,6 +205,15 @@ static void parseArgs(int argc, char **argv) {
       if (argc < 2)
         usage();
       cycle = std::stoi(argv[1]);
+      argc -= 2;
+      argv += 2;
+      continue;
+    }
+
+    if (strcmp("-seed", argv[0]) == 0) {
+      if (argc < 2)
+        usage();
+      seed = std::stoi(argv[1]);
       argc -= 2;
       argv += 2;
       continue;
