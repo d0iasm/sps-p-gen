@@ -1,4 +1,5 @@
 // This is the part of main calculation. The results of these functions depend on a boundary.
+// Calculate the distance between particles.
 
 #include <math.h>
 #include <random>

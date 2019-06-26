@@ -27,6 +27,13 @@ const BLUE = 1;
 let handle;
 let index = 0;
 
+function debugPoint(x, y) {
+  ctx.fillStyle = 'green'; 
+  ctx.beginPath();
+  ctx.arc(x, y, 0.005 * cycle, 0, 2 * Math.PI, true);
+  ctx.fill();
+}
+
 function drawGrid() {
   ctx.save();
   ctx.strokeStyle = '#aaa';
@@ -52,7 +59,7 @@ function drawPoint(p) {
   ctx.translate(-5, -5);
   ctx.fillStyle = (p.color == RED) ? 'red' : 'blue';
   ctx.beginPath();
-  ctx.arc(p.x, p.y, 0.1, 0, 2 * Math.PI, true);
+  ctx.arc(p.x, p.y, 0.005 * cycle, 0, 2 * Math.PI, true);
   ctx.fill();
   ctx.restore();
 }

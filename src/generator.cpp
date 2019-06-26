@@ -24,18 +24,6 @@ std::vector<XV> xv;
 // Global variables declared in energy.cpp.
 std::vector<std::vector<double> > energy;
 
-static void initPoints() {
-  std::default_random_engine gen;
-  gen.seed(seed);
-  std::normal_distribution<double> dist(0, 1);
-
-  for (int i = 0; i < NPOINTS; i++) {
-    points[i].x = dist(gen);
-    points[i].y = dist(gen);
-    points[i].color = (i < NPOINTS / 2) ? RED : BLUE ;
-  }
-}
-
 static double rungeKutta(double k1) {
   double k2 = k1 + k1 * 0.002 * 0.5;
   double k3 = k1 + k2 * 0.002 * 0.5;
@@ -256,7 +244,6 @@ static void html() {
   printEnergy();
   printCycle();
   importScript();
-  std::cout << "<script src=open-boundary/script.js></script>\n";
   std::cout << "<script>"
             << "document.getElementById('energy_ave').innerText="
             << energy_ave() << ";" 
