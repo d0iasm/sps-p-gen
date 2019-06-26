@@ -166,7 +166,18 @@ static void printEnergy() {
 
 static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
-  std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] [ -csv ] [ -csve ]\n";
+  std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
+  std::cerr << "[ -dynamic ] ";
+  std::cerr << "[ -csv ] [ -csve ]\n\n";
+
+  std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
+  std::cerr << "-k2        K paramters. k00=ka, k01=kp+km, k10=kp-km, and k11=kb.\n";
+  std::cerr << "-gen       The number of maximum steps.\n";
+  std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
+  std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
+  std::cerr << "-dynamic   The flag to change the K parameters dinamically. Default is off.\n";
+  std::cerr << "-csv       Output a csv file.\n";
+  std::cerr << "-csve      Output csv files for each step.\n";
   exit(1);
 }
 
