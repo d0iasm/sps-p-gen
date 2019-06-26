@@ -8,15 +8,15 @@
 
 extern double kparam[2][2];
 
-Color get_color(int i) {
+Color getColor(int i) {
   return points[i].color;
 }
 
 // Calculate an energy for a triangle based on Heider Balance theory. 
 static double heider(int i, int j, int k) {
-  int a = get_color(i);
-  int b = get_color(j);
-  int c = get_color(k);
+  int a = getColor(i);
+  int b = getColor(j);
+  int c = getColor(k);
 
   // Permutation(3) = 6 patterns p->o, o->x, p->x.
   double p1 = kparam[a][b] * kparam[b][c] * kparam[a][c];
@@ -31,10 +31,10 @@ static double heider(int i, int j, int k) {
 
 // Calculate an energy for a triangle based on Heider Balance theory.
 // K parameters are influenced from the distance between particles.
-static double heider_dist(int i, int j, int k) {
-  int a = get_color(i);
-  int b = get_color(j);
-  int c = get_color(k);
+static double heiderDist(int i, int j, int k) {
+  int a = getColor(i);
+  int b = getColor(j);
+  int c = getColor(k);
 
   Point &pi = points[i];
   Point &pj = points[j];
@@ -73,7 +73,7 @@ static double heider_dist(int i, int j, int k) {
 }
 
 // Calculate an average energy of all triangles.
-double energy_ave() {
+double energyAverage() {
   int size = 0;
   double sum = 0; 
   for (int i = 0; i < NPOINTS-2; i++) {
@@ -88,8 +88,8 @@ double energy_ave() {
 }
 
 // Calculate a variance energy of all triangles.
-double energy_var() {
-  double average = energy_ave();
+double energyVariance() {
+  double average = energyAverage();
   int size = 0;
   double sum = 0;
   double tmp = 0;
@@ -107,14 +107,14 @@ double energy_var() {
 
 // Calculate an average energy of all triangles for each step.
 // K parameters are influenced from distance between particles.
-double energy_ave_dist() {
+double energyAverageDist() {
   int size = 0;
   double sum = 0; 
   for (int i = 0; i < NPOINTS-2; i++) {
     for (int j = i+1; j < NPOINTS-1; j++) {
       for (int k = j+1; k < NPOINTS; k++) {
         size++;
-        sum += heider_dist(i, j, k);
+        sum += heiderDist(i, j, k);
       }
     }
   }
@@ -123,8 +123,8 @@ double energy_ave_dist() {
 
 // Calculate a variance energy of all triangles for each step.
 // K parameters are influenced from distance between particles.
-double energy_var_dist() {
-  double average = energy_ave();
+double energyVarianceDist() {
+  double average = energyAverage();
   int size = 0;
   double sum = 0;
   double tmp = 0;
@@ -132,7 +132,7 @@ double energy_var_dist() {
     for (int j = i+1; j < NPOINTS-1; j++) {
       for (int k = j+1; k < NPOINTS; k++) {
         size++;
-        tmp = heider_dist(i, j, k);
+        tmp = heiderDist(i, j, k);
         sum += (tmp - average) * (tmp - average);
       }
     }

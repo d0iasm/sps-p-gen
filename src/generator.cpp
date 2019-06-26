@@ -13,7 +13,7 @@
 #include "generator.h"
 
 // Global variables.
-double kparam[2][2];
+double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
 int cycle = 10;
 
@@ -49,7 +49,7 @@ static void step() {
       double dx = diff(pi.x, pj.x);
       double dy = diff(pi.y, pj.y);
       double dist = distance(pi, pj);
-      double k = kparam[pi.color][pj.color];
+      double k = kparam[pi.id][pj.id];
 
       if (dist == 0) continue;
       double plsx = (k / dist - pow(dist, -2)) * dx / dist;
@@ -71,17 +71,25 @@ static void step() {
 
   // Energies.
   std::vector<double> e(2);
-  e[0] = energy_ave_dist();
-  e[1] = energy_var_dist();
+  e[0] = energyAverageDist();
+  e[1] = energyVarianceDist();
   energy.push_back(e);
 }
 
+static double initKparam() {
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      kparam[i][j] = initial_kparam[i / (NPOINTS / 2)][j / (NPOINTS / 2)];
+    }
+  }
+}
+
 static double getP() {
-  return (kparam[0][1] + kparam[1][0]) / 2;
+  return (initial_kparam[0][1] + initial_kparam[1][0]) / 2;
 }
 
 static double getM() {
-  return kparam[0][1] -getP();
+  return initial_kparam[0][1] - getP();
 }
 
 static void printBody() {
@@ -98,16 +106,16 @@ static void printBody() {
     <br />
     <div>)END";
   std::cout << "K[00,01,10,11]: "
-            << kparam[0][0] << "," << kparam[0][1] << ","
-            << kparam[1][0] << "," << kparam[1][1];
+            << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
+            << initial_kparam[1][0] << "," << initial_kparam[1][1];
   std::cout << "</div><div>";
   std::cout << " K[a, b, p, m]: " 
-            << kparam[0][0] << "," << kparam[1][1] << ","
+            << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
   std::cout <<  R"END(</div>
     <br />
-    <div>balance energy (average): <span id=energy_ave></span></div>
-    <div>balance energy (variance): <span id=energy_var></span></div>
+    <div>balance energy (average): <span id=energyAverage></span></div>
+    <div>balance energy (variance): <span id=energyVariance></span></div>
     <br />
     <div>X-V log log plot:</div>
     <canvas id=graphXV width=250 height=250></canvas>
@@ -149,15 +157,15 @@ static void printEnergy() {
   std::cout << "<script>const energy = [\n";
   for (int i = 0; i < energy.size(); i++) {
     std::cout << "[" << i << ", "
-              << "{energy_ave:" << energy[0][i] << ", "
-              << "energy_var:" << energy[1][i] 
+              << "{energyAverage:" << energy[0][i] << ", "
+              << "energyVariance:" << energy[1][i] 
               << "},\n";
   }
   std::cout << "];</script>\n";
 }
 
 static void usage() {
-  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] "
+  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] [ -csv ] [ -csve ]\n";
   exit(1);
 }
@@ -167,10 +175,10 @@ static void parseArgs(int argc, char **argv) {
     if (strcmp("-k1", argv[0]) == 0) {
       if (argc < 5)
         usage();
-      kparam[0][0] = std::stod(argv[1]);
-      kparam[0][1] = std::stod(argv[2]);
-      kparam[1][0] = std::stod(argv[3]);
-      kparam[1][1] = std::stod(argv[4]);
+      initial_kparam[0][0] = std::stod(argv[1]);
+      initial_kparam[0][1] = std::stod(argv[2]);
+      initial_kparam[1][0] = std::stod(argv[3]);
+      initial_kparam[1][1] = std::stod(argv[4]);
       argc -= 5;
       argv += 5;
       continue;
@@ -183,10 +191,10 @@ static void parseArgs(int argc, char **argv) {
       double b = std::stod(argv[2]);
       double p = std::stod(argv[3]);
       double m = std::stod(argv[4]);
-      kparam[0][0] = a;
-      kparam[0][1] = p + m;
-      kparam[1][0] = p - m; 
-      kparam[1][1] = b; 
+      initial_kparam[0][0] = a;
+      initial_kparam[0][1] = p + m;
+      initial_kparam[1][0] = p - m; 
+      initial_kparam[1][1] = b; 
       argc -= 5;
       argv += 5;
       continue;
@@ -246,26 +254,26 @@ static void html() {
   printCycle();
   importScript();
   std::cout << "<script>"
-            << "document.getElementById('energy_ave').innerText="
-            << energy_ave() << ";" 
-            << "document.getElementById('energy_var').innerText="
-            << energy_var() << ";" 
+            << "document.getElementById('energyAverage').innerText="
+            << energyAverage() << ";" 
+            << "document.getElementById('energyVariance').innerText="
+            << energyVariance() << ";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
 
 static void csv() {
-  std::cout << kparam[0][0] << ","
-            << kparam[0][1] << ","
-            << kparam[1][0] << ","
-            << kparam[1][1] << ","
-            << kparam[0][0] << ","
-            << kparam[1][1] << ","
+  std::cout << initial_kparam[0][0] << ","
+            << initial_kparam[0][1] << ","
+            << initial_kparam[1][0] << ","
+            << initial_kparam[1][1] << ","
+            << initial_kparam[0][0] << ","
+            << initial_kparam[1][1] << ","
             << getP() << ","
             << getM() << ","
             << classify() << ","
-            << energy_ave() << ","
-            << energy_var() << ","
+            << energyAverage() << ","
+            << energyVariance() << ","
             << "\n";
 }
 
@@ -281,6 +289,8 @@ int main(int argc, char **argv) {
 
   initPoints();
   center = computeCenter();
+
+  initKparam();
 
   for (int i = 0; i < maxgen; i++)
     step();
