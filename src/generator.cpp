@@ -17,7 +17,7 @@ double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
 int cycle = 10;
 
-// Global variables declared in xv.cpp.
+// Global variables declared in xv.h.
 Point center;
 std::vector<XV> xv;
 
@@ -49,7 +49,7 @@ static void step() {
       double dx = diff(pi.x, pj.x);
       double dy = diff(pi.y, pj.y);
       double dist = distance(pi, pj);
-      double k = kparam[pi.id][pj.id];
+      double k = kparam[i][j];
 
       if (dist == 0) continue;
       double plsx = (k / dist - pow(dist, -2)) * dx / dist;
@@ -76,7 +76,7 @@ static void step() {
   energy.push_back(e);
 }
 
-static double initKparam() {
+static void initKparam() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
       kparam[i][j] = initial_kparam[i / (NPOINTS / 2)][j / (NPOINTS / 2)];
@@ -287,10 +287,9 @@ static void csve() {
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
+  initKparam();
   initPoints();
   center = computeCenter();
-
-  initKparam();
 
   for (int i = 0; i < maxgen; i++)
     step();

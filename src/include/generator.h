@@ -28,11 +28,12 @@ struct Point {
 };
 
 // Global variables.
-extern double kparam[2][2];
+extern double kparam[NPOINTS][NPOINTS];
 extern Point points[NPOINTS];
 extern int cycle;
 
 // Variables which scope is only this file. 
+static double initial_kparam[2][2];
 static int timestep = 0;
 static std::vector<std::vector<Point>> result;
 static int seed = 1;

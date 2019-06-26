@@ -6,8 +6,6 @@
 #include "generator.h"
 #include "energy.h"
 
-extern double kparam[2][2];
-
 Color getColor(int i) {
   return points[i].color;
 }
@@ -93,8 +91,8 @@ double energyVariance() {
   int size = 0;
   double sum = 0;
   double tmp = 0;
-  for (int i = 0; i < NPOINTS-2; i++) {
-    for (int j = i+1; j < NPOINTS-1; j++) {
+  for (int i = 0; i < NPOINTS - 2; i++) {
+    for (int j = i+1; j < NPOINTS - 1; j++) {
       for (int k = j+1; k < NPOINTS; k++) {
         size++;
         tmp = heider(i, j, k);
