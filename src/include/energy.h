@@ -12,7 +12,6 @@ static double heider(int pi, int pj, int pk);
 static double heiderDist(int pi, int pj, int pk);
 
 // Global functions.
-Color getColor(int i);
 double energyAverage();
 double energyAverageDist();
 double energyVariance();

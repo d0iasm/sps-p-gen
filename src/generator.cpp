@@ -61,7 +61,7 @@ static void step() {
     y = rungeKutta(y);
 
     next[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
-    dxdy[i] = {x, y};
+    dxdy[i] = {imaging(x), imaging(y)};
   }
   result.push_back(std::vector<Point>(points, points + NPOINTS));
   memcpy(points, next, sizeof(next));

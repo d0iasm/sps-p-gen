@@ -6,23 +6,15 @@
 #include "generator.h"
 #include "energy.h"
 
-Color getColor(int i) {
-  return points[i].color;
-}
-
 // Calculate an energy for a triangle based on Heider Balance theory. 
 static double heider(int i, int j, int k) {
-  int a = getColor(i);
-  int b = getColor(j);
-  int c = getColor(k);
-
   // Permutation(3) = 6 patterns p->o, o->x, p->x.
-  double p1 = kparam[a][b] * kparam[b][c] * kparam[a][c];
-  double p2 = kparam[a][c] * kparam[c][b] * kparam[a][b];
-  double p3 = kparam[b][a] * kparam[a][c] * kparam[b][c];
-  double p4 = kparam[b][c] * kparam[c][a] * kparam[b][a];
-  double p5 = kparam[c][a] * kparam[a][b] * kparam[c][b];
-  double p6 = kparam[c][b] * kparam[b][a] * kparam[c][a];
+  double p1 = kparam[i][j] * kparam[j][k] * kparam[i][k];
+  double p2 = kparam[i][k] * kparam[k][j] * kparam[i][j];
+  double p3 = kparam[j][i] * kparam[i][k] * kparam[j][k];
+  double p4 = kparam[j][k] * kparam[k][i] * kparam[j][i];
+  double p5 = kparam[k][i] * kparam[i][j] * kparam[k][j];
+  double p6 = kparam[k][j] * kparam[j][i] * kparam[k][i];
 
   return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
@@ -30,10 +22,6 @@ static double heider(int i, int j, int k) {
 // Calculate an energy for a triangle based on Heider Balance theory.
 // K parameters are influenced from the distance between particles.
 static double heiderDist(int i, int j, int k) {
-  int a = getColor(i);
-  int b = getColor(j);
-  int c = getColor(k);
-
   Point &pi = points[i];
   Point &pj = points[j];
   Point &pk = points[k];
@@ -48,24 +36,24 @@ static double heiderDist(int i, int j, int k) {
   double dist_jk = distance(pj, pk);
  
   // Permutation(3) = 6 patterns p->o, o->x, p->x.
-  double p1 = (kparam[a][b] / dist_ij)
-            * (kparam[b][c] / dist_jk)
-            * (kparam[a][c] / dist_ik);
-  double p2 = (kparam[a][c] / dist_ik)
-            * (kparam[c][b] / dist_jk)
-            * (kparam[a][b] / dist_ij);
-  double p3 = (kparam[b][a] / dist_ij)
-            * (kparam[a][c] / dist_ik)
-            * (kparam[b][c] / dist_jk);
-  double p4 = (kparam[b][c] / dist_jk)
-            * (kparam[c][a] / dist_ik)
-            * (kparam[b][a] / dist_ij);
-  double p5 = (kparam[c][a] / dist_ik)
-            * (kparam[a][b] / dist_ij)
-            * (kparam[c][b] / dist_jk);
-  double p6 = (kparam[c][b] / dist_jk)
-            * (kparam[b][a] / dist_ij)
-            * (kparam[c][a] / dist_ik);
+  double p1 = (kparam[i][j] / dist_ij)
+            * (kparam[j][k] / dist_jk)
+            * (kparam[i][k] / dist_ik);
+  double p2 = (kparam[i][k] / dist_ik)
+            * (kparam[k][j] / dist_jk)
+            * (kparam[i][j] / dist_ij);
+  double p3 = (kparam[j][i] / dist_ij)
+            * (kparam[i][k] / dist_ik)
+            * (kparam[j][k] / dist_jk);
+  double p4 = (kparam[j][k] / dist_jk)
+            * (kparam[k][i] / dist_ik)
+            * (kparam[j][i] / dist_ij);
+  double p5 = (kparam[k][i] / dist_ik)
+            * (kparam[i][j] / dist_ij)
+            * (kparam[k][j] / dist_jk);
+  double p6 = (kparam[k][j] / dist_jk)
+            * (kparam[j][i] / dist_ij)
+            * (kparam[k][i] / dist_ik);
  
   return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
