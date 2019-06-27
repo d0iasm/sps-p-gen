@@ -6,6 +6,7 @@
 #include <cstring>
 #include <random>
 #include <math.h>
+#include <map>
 #include <vector>
 #include "boundary.h"
 #include "dynamic.h"
@@ -93,6 +94,34 @@ static double getM() {
   return initial_kparam[0][1] - getP();
 }
 
+void debugKparam() {
+  std::map<double, int> m;
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      if (m.count(kparam[i][j]) == 0)
+        m.insert(std::make_pair(kparam[i][j], 1));
+      else
+        m[kparam[i][j]]++;
+    }
+  }
+  for (std::pair<double, int> e : m)
+    std::cerr << e.first << " => " << e.second << "\n";
+}
+
+void printKparam() {
+  std::map<double, int> m;
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      if (m.count(kparam[i][j]) == 0)
+        m.insert(std::make_pair(kparam[i][j], 1));
+      else
+        m[kparam[i][j]]++;
+    }
+  }
+  for (std::pair<double, int> e : m)
+    std::cout << e.first << " => " << e.second << "<br />";
+}
+
 static void printBody() {
   std::cout << R"END(<body>
 <div class=container>
@@ -106,13 +135,16 @@ static void printBody() {
     <div>timestep: <input type=text size=6 id=timestep></input></div>
     <br />
     <div>)END";
-  std::cout << "K[00,01,10,11]: "
+  std::cout << "Initial K[00,01,10,11]: "
             << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
             << initial_kparam[1][0] << "," << initial_kparam[1][1];
   std::cout << "</div><div>";
-  std::cout << " K[a, b, p, m]: " 
+  std::cout << "Initial K[a, b, p, m]: " 
             << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
+  std::cout << "</div><div>";
+  std::cout << "Kparam => The number of particles <br />";
+  printKparam();
   std::cout <<  R"END(</div>
     <br />
     <div>balance energy (average): <span id=energyAverage></span></div>
@@ -315,6 +347,10 @@ int main(int argc, char **argv) {
       updateKparam();
     step();
   }
+
+  debugKparam();
+  std::cerr << "energy average: " << energyAverage() << "\n";
+  std::cerr << "energy variance: " << energyVariance() << "\n";
 
   switch (output) {
     case HTML:
