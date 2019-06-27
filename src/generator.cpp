@@ -98,10 +98,8 @@ void debugKparam() {
   std::map<double, int> m;
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
-      if (m.count(kparam[i][j]) == 0)
-        m.insert(std::make_pair(kparam[i][j], 1));
-      else
-        m[kparam[i][j]]++;
+      auto itr = m.insert(std::pair<double, int>(kparam[i][j], 0));
+      itr.first->second++;
     }
   }
   for (std::pair<double, int> e : m)
@@ -112,7 +110,7 @@ void printKparam() {
   std::map<double, int> m;
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
-      if (m.count(kparam[i][j]) == 0)
+      if (m.find(kparam[i][j]) == m.end())
         m.insert(std::make_pair(kparam[i][j], 1));
       else
         m[kparam[i][j]]++;
@@ -142,7 +140,7 @@ static void printBody() {
   std::cout << "Initial K[a, b, p, m]: " 
             << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
-  std::cout << "</div><div>";
+  std::cout << "</div><br /><div>";
   std::cout << "Kparam => The number of particles <br />";
   printKparam();
   std::cout <<  R"END(</div>
@@ -306,9 +304,9 @@ static void html() {
   importScript();
   std::cout << "<script>"
             << "document.getElementById('energyAverage').innerText="
-            << energyAverage() << ";" 
+            << initial_energy_ave << " => " << energyAverage() << ";" 
             << "document.getElementById('energyVariance').innerText="
-            << energyVariance() << ";" 
+            << initial_energy_var << " => " << energyVariance() << ";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
@@ -342,15 +340,18 @@ int main(int argc, char **argv) {
   initPoints();
   center = computeCenter();
 
+  initial_energy_ave = energyAverage();
+  initial_energy_var = energyVariance();
+
   for (int i = 0; i < maxgen; i++) {
     if (dynamic)
       updateKparam();
     step();
   }
 
-  debugKparam();
-  std::cerr << "energy average: " << energyAverage() << "\n";
-  std::cerr << "energy variance: " << energyVariance() << "\n";
+  //debugKparam();
+  //std::cerr << "energy average: " << initial_energy_ave << " => " << energyAverage() << "\n";
+  //std::cerr << "energy variance: " << initial_energy_var << " => " << energyVariance() << "\n";
 
   switch (output) {
     case HTML:
