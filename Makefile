@@ -34,14 +34,13 @@ html: generator
 	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) '>' 'abpm=0.8,0.4,{1},{2}\&b=periodic.html' ::: $(RANGE) ::: $(RANGE)
 	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic '>' 'abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.html' ::: $(RANGE) ::: $(RANGE)
 
+index:
+	./gen_index.sh
+
 public: html
 	cp -a css $(PUBLIC)
 	cp -a js $(PUBLIC)
-	echo "<h1>SPS-P</h1><ul>" > index.html
-	for i in $(shell ls *.html) ; do \
-	  echo "<li><a href="$${i}">$${i}</a></li>" >> index.html ; \
-	done
-	echo "</ul>" >> index.html
+	./gen_index.sh
 	mv abpm* $(PUBLIC)
 
 clean:
