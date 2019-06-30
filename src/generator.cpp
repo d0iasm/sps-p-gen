@@ -123,15 +123,17 @@ void printKparam() {
 static void printBody() {
   std::cout << R"END(<body>
 <div class=container>
-  <canvas id=canvas width=650 height=650></canvas>
   <div>
+    <canvas id=canvas width=650 height=650></canvas>
     <div class=container>
       <button id=start>Stop</button>
       <button id=reset>Reset</button>
     </div>
-    <br />
+  </div>
+  <div>
     <div>timestep: <input type=text size=6 id=timestep></input></div>
     <br />
+    <h2>Static K Parameters</h2>
     <div>)END";
   std::cout << "Initial K[00,01,10,11]: "
             << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
@@ -141,14 +143,15 @@ static void printBody() {
             << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
   std::cout << "</div><br /><div>";
-  std::cout << "Kparam => The number of particles <br />";
+  std::cout << "<h2>Dynamic K Parameters</h2>";
   printKparam();
   std::cout <<  R"END(</div>
     <br />
-    <div>balance energy (average): <span id=energyAverage></span></div>
-    <div>balance energy (variance): <span id=energyVariance></span></div>
+    <h2>Global Energy</h2>
+    <div>Average: <span id=energyAverage></span></div>
+    <div>Variance: <span id=energyVariance></span></div>
     <br />
-    <div>X-V log log plot:</div>
+    <h2>X-V Log Log Plot</h2>
     <canvas id=graphXV width=250 height=250></canvas>
     <!--
     <div>Variance Energy:</div>
@@ -303,10 +306,10 @@ static void html() {
   printCycle();
   importScript();
   std::cout << "<script>"
-            << "document.getElementById('energyAverage').innerText="
-            << initial_energy_ave << " => " << energyAverage() << ";" 
-            << "document.getElementById('energyVariance').innerText="
-            << initial_energy_var << " => " << energyVariance() << ";" 
+            << "document.getElementById('energyAverage').innerText=\""
+            << initial_energy_ave << " => " << energyAverage() << "\";" 
+            << "document.getElementById('energyVariance').innerText=\""
+            << initial_energy_var << " => " << energyVariance() << "\";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }

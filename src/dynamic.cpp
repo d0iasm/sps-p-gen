@@ -15,8 +15,11 @@ void updateKparam() {
   double oldk = kparam[i][j];
   double oldEnergy = energyAverage();
   //double oldEnergy = energyAverageDist();
-  //kparam[i][j] = kparam[i][j] + fRand(-0.5, 0.5);
-  kparam[i][j] = kparam[i][j] + ((rand() % 4 - 2) * 0.1);
+
+  // Avoid a digit error.
+  int tmp = (int) (kparam[i][j] * 10);
+  tmp += rand() % 4;
+  kparam[i][j] = tmp / 10.0;
 
   if (kparam[i][j] > 2.0 || kparam[i][j] < -2.0)
     kparam[i][j] = oldk;
