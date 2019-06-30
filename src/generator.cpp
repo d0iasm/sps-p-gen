@@ -18,8 +18,8 @@
 double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
 int cycle = 10;
-double maxk;
-double mink;
+double maxk = 1.3;
+double mink = -1.3;
 
 // Global variables declared in xv.h.
 Point center;
@@ -355,7 +355,7 @@ static void csve() {
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
-  initMaxMinK();
+  //initMaxMinK();
   initKparam();
   initPoints();
   center = computeCenter();
