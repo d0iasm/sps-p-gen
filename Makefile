@@ -1,8 +1,12 @@
 SRC=src
 PUBLIC=public
 
-MAXGEN=1000
+MAXGEN=10
 RANGE=-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2
+
+json: generator
+	./src/generator-o -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -json > test-o.json
+	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -json > test-p.json
 
 o: generator
 	./src/generator-o -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 > test-o.html

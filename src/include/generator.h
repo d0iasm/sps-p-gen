@@ -14,6 +14,7 @@ enum Color {
 
 enum Output {
   HTML,
+  JSON,
   CSV,
   CSVE,
 };

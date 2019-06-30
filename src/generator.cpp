@@ -218,6 +218,7 @@ static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
   std::cerr << "[ -dynamic ] ";
+  std::cerr << "[ -json ]";
   std::cerr << "[ -csv ] [ -csve ]\n\n";
 
   std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
@@ -226,6 +227,7 @@ static void usage() {
   std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
   std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
   std::cerr << "-dynamic   The flag to change the K parameters dinamically. Default is off.\n";
+  std::cerr << "-json      Output a json file for creating images by utils.\n";
   std::cerr << "-csv       Output a csv file.\n";
   std::cerr << "-csve      Output csv files for each step.\n";
   exit(1);
@@ -295,6 +297,13 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
+    if (strcmp("-json", argv[0]) == 0) {
+      output = JSON;
+      argc -= 1;
+      argv += 1;
+      continue;
+    }
+
     if (strcmp("-csv", argv[0]) == 0) {
       output = CSV;
       argc -= 1;
@@ -328,6 +337,51 @@ static void html() {
             << initial_energy_var << " => " << energyVariance() << "\";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
+}
+
+static void json() {
+  std::cout << "["; // Start of Json.
+  for (int i = 0; i < maxgen; i++) {
+    std::cout << "{"; // Start of one step.
+    // Kparams.
+    // Initial Kparams.
+    std::cout << "\"k\":{";
+    std::cout << "\"00\":" << initial_kparam[0][0] << ",";
+    std::cout << "\"01\":" << initial_kparam[0][1] << ",";
+    std::cout << "\"10\":" << initial_kparam[1][0] << ",";
+    std::cout << "\"11\":" << initial_kparam[1][1] << ",";
+    std::cout << "\"a\":" << initial_kparam[0][0] << ",";
+    std::cout << "\"b\":" << initial_kparam[1][1] << ",";
+    std::cout << "\"p\":" << getP() << ",";
+    std::cout << "\"m\":" << getM() << ",";
+    // Dynamic Kparams. 
+    std::map<double, int> m;
+    for (int i = 0; i < NPOINTS; i++) {
+      for (int j = 0; j < NPOINTS; j++) {
+        if (m.find(kparam[i][j]) == m.end())
+          m.insert(std::make_pair(kparam[i][j], 1));
+        else
+          m[kparam[i][j]]++;
+      }
+    }
+    std::cout << "\"dynamic\":[";
+    for (std::pair<double, int> e : m)
+      std::cout << "[" << e.first << "," << e.second << "]";
+    std::cout << "]}";
+    // Energy.
+    std::cout << "\"energy\":{";
+    std::cout << "\"static\":{";
+    std::cout << "\"average\":" << energyAverage();
+    std::cout << "\"variance\":" << energyVariance();
+    std::cout << "}"; // End of static energy.
+    std::cout << "\"dynamic\":{";
+    std::cout << "\"average\":" << energyAverageDist();
+    std::cout << "\"variance\":" << energyVarianceDist();
+    std::cout << "}"; // End of dynamic energy.
+    std::cout << "}"; // End of energy.
+    std::cout << "}"; // End of one step.
+  }
+  std::cout << "]"; // End on Json.
 }
 
 static void csv() {
@@ -372,6 +426,9 @@ int main(int argc, char **argv) {
   switch (output) {
     case HTML:
       html();
+      break;
+    case JSON:
+      json();
       break;
     case CSV:
       csv();
