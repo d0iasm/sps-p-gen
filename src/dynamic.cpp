@@ -21,7 +21,7 @@ void updateKparam() {
   tmp += rand() % 4;
   kparam[i][j] = tmp / 10.0;
 
-  if (kparam[i][j] > 2.0 || kparam[i][j] < -2.0)
+  if (kparam[i][j] > maxk || kparam[i][j] < mink)
     kparam[i][j] = oldk;
 
   if (oldEnergy > energyAverage())

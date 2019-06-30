@@ -31,6 +31,8 @@ struct Point {
 extern double kparam[NPOINTS][NPOINTS];
 extern Point points[NPOINTS];
 extern int cycle;
+extern double maxk;
+extern double mink;
 
 // Variables which scope is only this file. 
 static double initial_kparam[2][2];

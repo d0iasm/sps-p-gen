@@ -18,6 +18,8 @@
 double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
 int cycle = 10;
+double maxk;
+double mink;
 
 // Global variables declared in xv.h.
 Point center;
@@ -76,6 +78,20 @@ static void step() {
   e[0] = energyAverageDist();
   e[1] = energyVarianceDist();
   energy.push_back(e);
+}
+
+static void initMaxMinK() {
+  maxk = -9999.0;
+  mink = 9999.0;
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 2; j++) {
+      std::cerr << maxk<< ", "<<mink<<", "<<initial_kparam[i][j] << "\n";
+      if (initial_kparam[i][j] > maxk)
+        maxk = initial_kparam[i][j];
+      if (initial_kparam[i][j] < mink)
+        mink = initial_kparam[i][j];
+    }
+  }
 }
 
 static void initKparam() {
@@ -339,6 +355,7 @@ static void csve() {
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
+  initMaxMinK();
   initKparam();
   initPoints();
   center = computeCenter();
@@ -354,7 +371,7 @@ int main(int argc, char **argv) {
 
   //debugKparam();
   //std::cerr << "energy average: " << initial_energy_ave << " => " << energyAverage() << "\n";
-  //std::cerr << "energy variance: " << initial_energy_var << " => " << energyVariance() << "\n";
+  //std::cerr << "energy variance: " << in, itial_energy_var << " => " << energyVariance() << "\n";
 
   switch (output) {
     case HTML:
