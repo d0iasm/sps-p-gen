@@ -39,6 +39,13 @@ generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen nu
   - usage: logplot.py [-h] -k K [K ...] -src SRC
 - composite.py: Composite class images and energy analyzed images.
 
+## Develop
+Results are hosted by firebase. `public/` is the root directory for the website.
+
+```
+$ firebase deploy
+```
+
 ### Dependencies
 #### Python libs (pip)
 matplotlib==3.0.3  
