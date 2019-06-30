@@ -27,7 +27,7 @@ def plot(d):
     # log y axis
     ax.semilogy(x, [y[1] for y in d], label='Average') 
     ax.semilogy(x, [y[2] for y in d], label='Variance') 
-    ax.set(title='Microscopic Average and Variance Energy: ' + kparam)
+    ax.set(title='Dynamic Energy (average/variance): ' + kparam)
     leg = ax.legend(loc='upper right', fancybox=True, shadow=True) 
     leg.get_frame().set_alpha(0.4)
     ax.grid()

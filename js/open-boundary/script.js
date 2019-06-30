@@ -1,4 +1,4 @@
-// Main canvas
+// Main canvas.
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext('2d');
 ctx.scale(0.65, 0.65);
@@ -9,20 +9,20 @@ const graphXV = document.getElementById("graphXV");
 const gxvCtx = graphXV.getContext('2d');
 gxvCtx.scale(250, 250);
 
-// Graph for variance energy. 
-//const graphEnergy = document.getElementById("graphEnergy");
-//const geCtx = graphEnergy.getContext('2d');
-//geCtx.scale(250, 250);
+// Graph for dynamic energy.
+const graphEnergy = document.getElementById("graphEnergy");
+const geCtx = graphEnergy.getContext('2d');
+geCtx.scale(250, 250);
 
-// HTML elements
+// HTML elements.
 const startButton = document.getElementById('start');
 const resetButton = document.getElementById('reset');
 
-// Constants
+// Constants.
 const RED = 0;
 const BLUE = 1;
 
-// Variables
+// Variables.
 let currentScale = 1;
 let handle;
 let index = 0;
@@ -148,8 +148,8 @@ function drawGraphEnergy() {
 
   geCtx.fillStyle = 'blue';
 
-  for (let i = 0; i < xv.length; i++) {
-    let e = energy[i][1].energy_var;
+  for (let i = 0; i < energy.length; i++) {
+    let e = energy[i][1].energyAverage;
     e = Math.log10(1000 * e + 1);
 
     geCtx.beginPath();
@@ -159,29 +159,30 @@ function drawGraphEnergy() {
 
   // For test. No meanings.
   let a;
+  geCtx.fillStyle = 'green';
   a = Math.log10(1000 * 0.001 + 1);
   geCtx.beginPath();
-  geCtx.arc(a, a, 0.03, 0, 2 * Math.PI, true);
+  geCtx.arc(0, a, 0.03, 0, 2 * Math.PI, true);
   geCtx.fill();
 
   a = Math.log10(1000 * 0.01 + 1);
   geCtx.beginPath();
-  geCtx.arc(a, a, 0.03, 0, 2 * Math.PI, true);
+  geCtx.arc(1, a, 0.03, 0, 2 * Math.PI, true);
   geCtx.fill();
   
   a = Math.log10(1000 * 0.1 + 1);
   geCtx.beginPath();
-  geCtx.arc(a, a, 0.03, 0, 2 * Math.PI, true);
+  geCtx.arc(10, a, 0.03, 0, 2 * Math.PI, true);
   geCtx.fill();
 
   a = Math.log10(1000 * 0.2 + 1);
   geCtx.beginPath();
-  geCtx.arc(a, a, 0.03, 0, 2 * Math.PI, true);
+  geCtx.arc(100, a, 0.03, 0, 2 * Math.PI, true);
   geCtx.fill();
 
   a = Math.log10(1000 * 0.2 + 1);
   geCtx.beginPath();
-  geCtx.arc(a, a, 0.03, 0, 2 * Math.PI, true);
+  geCtx.arc(1000, a, 0.03, 0, 2 * Math.PI, true);
   geCtx.fill();
 
   geCtx.restore();
@@ -227,8 +228,8 @@ function stop() {
 function reset() {
   drawGraphGrid(gxvCtx);
   drawGraph();
-  //drawGraphGrid(geCtx);
-  //drawGraphEnergy();
+  drawGraphGrid(geCtx);
+  drawGraphEnergy();
 
   const running = handle;
   if (running) stop();
@@ -251,13 +252,13 @@ document.getElementById('timestep').addEventListener('change', e => {
   index = parseInt(e.currentTarget.value / 100);
   drawGraphGrid(gxvCtx);
   drawGraph();
-  //drawGraphGrid(geCtx);
-  //drawGraphEnergy();
+  drawGraphGrid(geCtx);
+  drawGraphEnergy();
   redraw();
 });
 
 drawGraphGrid(gxvCtx);
 drawGraph();
-//drawGraphGrid(geCtx);
-//drawGraphEnergy();
+drawGraphGrid(geCtx);
+drawGraphEnergy();
 start();

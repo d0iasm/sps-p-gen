@@ -160,20 +160,20 @@ static void printBody() {
             << getP() << "," << getM();
   std::cout << "</div><br /><div>";
   std::cout << "<h2>Dynamic K Parameters</h2>";
+  std::cout << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />";
   printKparam();
   std::cout <<  R"END(</div>
     <br />
-    <h2>Global Energy</h2>
+    <h2>Static Energy</h2>
     <div>Average: <span id=energyAverage></span></div>
     <div>Variance: <span id=energyVariance></span></div>
     <br />
+    <h2>Dynamic Energy</h2>
+    <canvas id=graphEnergy width=250 height=250></canvas>
+    <br />
     <h2>X-V Log Log Plot</h2>
     <canvas id=graphXV width=250 height=250></canvas>
-    <!--
-    <div>Variance Energy:</div>
-    <canvas id=graphEnergy width=250 height=250></canvas>
-    -->
-  </div
+  </div>
 </div>
 )END";
 }
@@ -205,11 +205,11 @@ static void printXV() {
 
 static void printEnergy() {
   std::cout << "<script>const energy = [\n";
-  for (int i = 0; i < energy.size(); i++) {
+  for (int i = 0; i < energy.size(); i += 100) {
     std::cout << "[" << i << ", "
               << "{energyAverage:" << energy[0][i] << ", "
               << "energyVariance:" << energy[1][i] 
-              << "},\n";
+              << "}],\n";
   }
   std::cout << "];</script>\n";
 }
@@ -368,10 +368,6 @@ int main(int argc, char **argv) {
       updateKparam();
     step();
   }
-
-  //debugKparam();
-  //std::cerr << "energy average: " << initial_energy_ave << " => " << energyAverage() << "\n";
-  //std::cerr << "energy variance: " << in, itial_energy_var << " => " << energyVariance() << "\n";
 
   switch (output) {
     case HTML:

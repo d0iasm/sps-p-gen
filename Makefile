@@ -1,7 +1,7 @@
 SRC=src
 PUBLIC=public
 
-MAXGEN=200000
+MAXGEN=1000
 RANGE=-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2
 
 o: generator
@@ -10,6 +10,7 @@ o: generator
 
 p: generator
 	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 > test-p.html
+	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -dynamic > test-p-d.html
 
 p20: generator
 	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -cycle 20 > test-p-c20.html
@@ -20,6 +21,8 @@ p30: generator
 	  ./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -cycle 30 -dynamic > test-p-c30-d.html
 
 test: o p p20 p30
+
+test2: o p
 
 generator:
 	make -C src generator

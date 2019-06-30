@@ -11,9 +11,9 @@ const gxvCtx = graphXV.getContext('2d');
 gxvCtx.scale(250, 250);
 
 // Graph for variance energy. 
-// const graphEnergy = document.getElementById("graphEnergy");
-// const geCtx = graphEnergy.getContext('2d');
-// geCtx.scale(250, 250);
+const graphEnergy = document.getElementById("graphEnergy");
+const geCtx = graphEnergy.getContext('2d');
+geCtx.scale(250, 250);
 
 // HTML elements
 const startButton = document.getElementById('start');
@@ -223,8 +223,8 @@ function stop() {
 function reset() {
   drawGraphGrid(gxvCtx);
   drawGraph();
-  //drawGraphGrid(geCtx);
-  //drawGraphEnergy();
+  drawGraphGrid(geCtx);
+  drawGraphEnergy();
 
   const running = handle;
   if (running) stop();
@@ -247,8 +247,8 @@ document.getElementById('timestep').addEventListener('change', e => {
   index = parseInt(e.currentTarget.value / 100);
   drawGraphGrid(gxvCtx);
   drawGraph();
-  //drawGraphGrid(geCtx);
-  //drawGraphEnergy();
+  drawGraphGrid(geCtx);
+  drawGraphEnergy();
   redraw();
 });
 
@@ -257,6 +257,6 @@ ctx.scale(98, 98);
 
 drawGraphGrid(gxvCtx);
 drawGraph();
-//drawGraphGrid(geCtx);
-//drawGraphEnergy();
+drawGraphGrid(geCtx);
+drawGraphEnergy();
 start();
