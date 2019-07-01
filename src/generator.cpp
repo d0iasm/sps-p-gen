@@ -365,21 +365,29 @@ static void json() {
       }
     }
     std::cout << "\"dynamic\":[";
-    for (std::pair<double, int> e : m)
+    int n = m.size();
+    for (std::pair<double, int> e : m) {
       std::cout << "[" << e.first << "," << e.second << "]";
-    std::cout << "]}";
+      if (n > 1) {
+        std::cout << ",";
+        n--;
+      }
+    }
+    std::cout << "]},"; // End of Kparams.
     // Energy.
     std::cout << "\"energy\":{";
     std::cout << "\"static\":{";
-    std::cout << "\"average\":" << energyAverage();
+    std::cout << "\"average\":" << energyAverage() << ",";
     std::cout << "\"variance\":" << energyVariance();
-    std::cout << "}"; // End of static energy.
+    std::cout << "},"; // End of static energy.
     std::cout << "\"dynamic\":{";
-    std::cout << "\"average\":" << energyAverageDist();
+    std::cout << "\"average\":" << energyAverageDist() << ",";
     std::cout << "\"variance\":" << energyVarianceDist();
     std::cout << "}"; // End of dynamic energy.
     std::cout << "}"; // End of energy.
     std::cout << "}"; // End of one step.
+    if (i != maxgen - 1)
+      std::cout << ",";
   }
   std::cout << "]"; // End on Json.
 }
