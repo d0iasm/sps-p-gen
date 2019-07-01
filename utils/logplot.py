@@ -1,5 +1,7 @@
 import argparse
 import csv
+import json
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,18 +17,22 @@ def read_csv():
         next(reader)
         for row in reader:
             data.append([float(x) for x in row])
-            
     return data 
 
 
-def plot(d):
-    x = np.arange(int(d[len(d)-1][0])+1)
+def read_json():
+    with open(src) as f:
+        data = json.load(f)
+    return data
 
+
+def plot(n, e_ave, e_var):
     fig, ax = plt.subplots()
-   
+
+    x = np.arange(n)
     # log y axis
-    ax.semilogy(x, [y[1] for y in d], label='Average') 
-    ax.semilogy(x, [y[2] for y in d], label='Variance') 
+    ax.semilogy(x, e_ave, label='Average') 
+    ax.semilogy(x, e_var, label='Variance') 
     ax.set(title='Dynamic Energy (average/variance): ' + kparam)
     leg = ax.legend(loc='upper right', fancybox=True, shadow=True) 
     leg.get_frame().set_alpha(0.4)
@@ -53,6 +59,17 @@ def parse_args():
 
 if __name__ == '__main__':
     parse_args()
-    data = read_csv()
-    plot(data)
+    a = src.split('.')
+    extension = a[len(a)-1]
+    if extension == 'csv':
+        data = read_csv()
+        e_ave = [y[1] for y in data]
+        e_var = [y[2] for y in data]
+    elif extension == 'json':
+        data = read_json()
+        e_ave = [y['energy']['dynamic']['average'] for y in data] 
+        e_var = [y['energy']['dynamic']['variance'] for y in data] 
+    else:
+        sys.exit('Error: ' + extension + ' file is not supported.')
+    plot(len(data), e_ave, e_var)
 
