@@ -377,12 +377,12 @@ static void json() {
     // Energy.
     std::cout << "\"energy\":{";
     std::cout << "\"static\":{";
-    std::cout << "\"average\":" << energyAverage() << ",";
-    std::cout << "\"variance\":" << energyVariance();
+    std::cout << "\"average\":" << initial_energy_ave << ",";
+    std::cout << "\"variance\":" << initial_energy_var;
     std::cout << "},"; // End of static energy.
     std::cout << "\"dynamic\":{";
-    std::cout << "\"average\":" << energyAverageDist() << ",";
-    std::cout << "\"variance\":" << energyVarianceDist();
+    std::cout << "\"average\":" << energy[i][0] << ",";
+    std::cout << "\"variance\":" << energy[i][1];
     std::cout << "}"; // End of dynamic energy.
     std::cout << "}"; // End of energy.
     std::cout << "}"; // End of one step.
