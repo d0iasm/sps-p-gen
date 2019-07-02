@@ -1,48 +1,32 @@
 SRC=src
+JSON=json
+IMG=img
 PUBLIC=public
 
 MAXGEN=200000
-RANGE=-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2
-
-json: generator
-	./src/generator-o -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -json > test-o.json
-	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -json > test-p.json
-
-o: generator
-	./src/generator-o -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 > test-o.html
-	./src/generator-o -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -dynamic > test-o-d.html
-
-p: generator
-	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 > test-p.html
-	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -dynamic > test-p-d.html
-
-p20: generator
-	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -cycle 20 > test-p-c20.html
-	./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -cycle 20 -dynamic > test-p-c20-d.html
-
-p30: generator
-	  ./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -cycle 30 > test-p-c30.html
-	  ./src/generator-p -gen $(MAXGEN) -k2 0.8 0.4 0.4 0.4 -cycle 30 -dynamic > test-p-c30-d.html
-
-test: o p p20 p30
-
-test2: o p
+# RANGE=-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2
+RANGE = -0.8 -0.4 0.0 0.4 0.8 1.2
 
 generator:
 	make -C src generator
 
-dynamic: generator
-	parallel $(SRC)/generator-o -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic '>' 'abpm=0.8,0.4,{1},{2}\&b=open\&d=true.html' ::: $(RANGE) ::: $(RANGE)
-	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic '>' 'abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.html' ::: $(RANGE) ::: $(RANGE)
+json: generator
+	parallel $(SRC)/generator-o -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -json '>' '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=open.json' ::: $(RANGE) ::: $(RANGE)
+	parallel $(SRC)/generator-o -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic -json '>' '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=open\&d=true.json' ::: $(RANGE) ::: $(RANGE)
+	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -json '>' '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic.json' ::: $(RANGE) ::: $(RANGE)
+	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic -json '>' '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.json' ::: $(RANGE) ::: $(RANGE)
+
+image: json
+	parallel python utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=open.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
+	parallel python utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=open\&d=true.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
+	parallel python utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
+	parallel python utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
 
 html: generator
 	parallel $(SRC)/generator-o -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) '>' 'abpm=0.8,0.4,{1},{2}\&b=open.html' ::: $(RANGE) ::: $(RANGE)
 	parallel $(SRC)/generator-o -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic '>' 'abpm=0.8,0.4,{1},{2}\&b=open\&d=true.html' ::: $(RANGE) ::: $(RANGE)
 	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) '>' 'abpm=0.8,0.4,{1},{2}\&b=periodic.html' ::: $(RANGE) ::: $(RANGE)
 	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic '>' 'abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.html' ::: $(RANGE) ::: $(RANGE)
-
-index:
-	./gen_index.sh
 
 public: html
 	cp -a css $(PUBLIC)
@@ -54,17 +38,7 @@ clean:
 	make -C src clean
 	rm *.html
 
-
-# === REMOVE ? ===
-
-all: html-sh csv csve
-
-html-sh:
-	./genhtml.sh -open
-	./genhtml.sh -periodic
-	./genhtml.sh -open -dist
-	./genhtml.sh -periodic -dist
-
+# === Will remove the following functions. ===
 csv:
 	./gencsv.sh -open
 	./gencsv.sh -periodic
