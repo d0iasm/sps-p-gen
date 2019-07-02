@@ -17,10 +17,10 @@ json: generator
 	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic -json '>' '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.json' ::: $(RANGE) ::: $(RANGE)
 
 image: json
-	parallel python utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=open.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
-	parallel python utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=open\&d=true.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
-	parallel python utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
-	parallel python utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
+	parallel python3 utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=open.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
+	parallel python3 utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=open\&d=true.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
+	parallel python3 utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
+	parallel python3 utils/logploy.py -src '$(JSON)/abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.json' -k '0.8 0.4 {1} {2}' ::: $(RANGE) ::: $(RANGE)
 
 html: generator
 	parallel $(SRC)/generator-o -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) '>' 'abpm=0.8,0.4,{1},{2}\&b=open.html' ::: $(RANGE) ::: $(RANGE)
