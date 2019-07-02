@@ -33,6 +33,7 @@ public: html
 	cp -a js $(PUBLIC)
 	./gen_index.sh
 	mv abpm* $(PUBLIC)
+	mv index.html $(PUBLIC)
 
 clean:
 	make -C src clean

@@ -4,5 +4,7 @@
 .firebase
 public/**
 csv/**
+json/**
+img/**
 images/**
 test*
