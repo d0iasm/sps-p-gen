@@ -41,7 +41,7 @@ def plot(n, e_ave, e_var):
     fig.tight_layout()
     # Replace directory and extension.
     extension = src.split('.')[len(a)-1]
-    dest = 'img/' + src.split('/')[1]
+    dest = 'img/energy?' + src.split('/')[1]
     plt.savefig(dest.replace(extension, 'png'))
 
 

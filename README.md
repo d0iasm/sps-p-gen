@@ -36,7 +36,7 @@ generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen nu
 - headmap.py: Plot 2d histgram with x-axis, y-axis, and z-axis.
   - usage: heatmap.py [-h] -title TITLE [-src SRC] [-x X] [-y Y] [-z Z] [-print [PRINT]]
 - logplot.py: Logarithmic energy as y-axis and the number of step as x-axis.
-  - usage: logplot.py [-h] -k K [K ...] -src SRC
+  - usage: logplot.py [-h] -src SRC
 - composite.py: Composite class images and energy analyzed images.
 
 ## Develop
