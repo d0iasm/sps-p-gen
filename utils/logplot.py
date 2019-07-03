@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 src = ''
 kparam = ''
+dynamic = False
 
 
 def read_csv():
@@ -33,7 +34,7 @@ def plot(n, e_ave, e_var):
     # log y axis
     ax.semilogy(x, e_ave, label='Average') 
     ax.semilogy(x, e_var, label='Variance') 
-    ax.set(title='Dynamic Energy (average/variance): ' + kparam)
+    ax.set(title='Energy (average/variance): ' + kparam)
     leg = ax.legend(loc='upper right', fancybox=True, shadow=True) 
     leg.get_frame().set_alpha(0.4)
     ax.grid()
@@ -48,6 +49,7 @@ def plot(n, e_ave, e_var):
 def parse_args():
     global src
     global kparam
+    global dynamic
 
     parser = argparse.ArgumentParser(
             description='Generate an image from a csv/json file.')
@@ -55,9 +57,12 @@ def parse_args():
             help='The source file path') 
     parser.add_argument('-k', nargs='+',
             help='The K parameters')
+    parser.add_argument('-dynamic', action='store_true',
+            help='Whether dynamic energy or static energy.')
 
     args = parser.parse_args()
     src = args.src
+    dynamic = args.dynamic
     if args.k == None:
         # Ex. 'abpm=0.8,0.4,0.8,0.5&b=open&d=true.html'
         params = src.split('&')
@@ -76,8 +81,18 @@ if __name__ == '__main__':
         e_var = [y[2] for y in data]
     elif extension == 'json':
         data = read_json()
-        e_ave = [y['energy']['dynamic']['average'] for y in data] 
-        e_var = [y['energy']['dynamic']['variance'] for y in data] 
+        if dynamic:
+            e_ave = [y['energy']['dynamic']['average'] for y in data] 
+            e_var = [y['energy']['dynamic']['variance'] for y in data] 
+            print(e_ave)
+            print('')
+            print(e_var)
+        else:
+            e_ave = [y['energy']['static']['average'] for y in data] 
+            e_var = [y['energy']['static']['variance'] for y in data] 
+            print(e_ave)
+            print('')
+            print(e_var)
     else:
         sys.exit('Error: ' + extension + ' file is not supported.')
     plot(len(data), e_ave, e_var)
