@@ -96,18 +96,6 @@ static double getM() {
   return initial_kparam[0][1] - getP();
 }
 
-void debugKparam() {
-  std::map<double, int> m;
-  for (int i = 0; i < NPOINTS; i++) {
-    for (int j = 0; j < NPOINTS; j++) {
-      auto itr = m.insert(std::pair<double, int>(kparam[i][j], 0));
-      itr.first->second++;
-    }
-  }
-  for (std::pair<double, int> e : m)
-    std::cerr << e.first << " => " << e.second << "\n";
-}
-
 void printKparam() {
   std::map<double, int> m;
   for (int i = 0; i < NPOINTS; i++) {
