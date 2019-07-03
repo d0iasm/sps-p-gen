@@ -46,7 +46,7 @@ def plot(n, y):
 def reshape_k(data):
     y = []
     for step in data:
-        x = {key/10:0 for key in range(-20, 21)}
+        x = {key/10:0 for key in range(-24, 25)}
         for param_num in step['k']['dynamic']:
             x[param_num[0]] += param_num[1]
         y.append(x)
