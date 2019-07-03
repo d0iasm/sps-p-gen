@@ -7,7 +7,8 @@ ENV=MPLBACKEND=Agg
 
 MAXGEN=200
 # RANGE=-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2
-RANGE = -0.8 -0.4 0.0 0.4 0.8 1.2
+# RANGE = -0.8 -0.4 0.0 0.4 0.8 1.2
+RANGE = -0.8 0.0 0.8 1.2
 
 generator:
 	make -C src generator
@@ -39,9 +40,10 @@ html: generator
 	parallel $(SRC)/generator-p -k2 '0.8 0.4 {1} {2}' -gen $(MAXGEN) -dynamic '>' 'abpm=0.8,0.4,{1},{2}\&b=periodic\&d=true.html' ::: $(RANGE) ::: $(RANGE)
 	./gen_index.sh
 
-public: html
+public: html img
 	cp -a css $(PUBLIC)
 	cp -a js $(PUBLIC)
+	cp -a img $(PUBLIC)
 	mv abpm* $(PUBLIC)
 	mv index.html $(PUBLIC)
 

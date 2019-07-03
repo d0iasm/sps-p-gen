@@ -162,6 +162,7 @@ static void printBody() {
   std::cout << "<h2>Dynamic K Parameters</h2>";
   std::cout << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />";
   printKparam();
+  std::cout << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   std::cout <<  R"END(</div>
     <br />
     <h2>Static Energy</h2>
@@ -170,7 +171,7 @@ static void printBody() {
     <br />
     <h2>Dynamic Energy</h2>
   )END";
-    std::cout << "<div><img width=400 src=\"img/" << filename() << ".png\" /></div>";
+  std::cout << "<div><img width=350 src=\"img/energy%3F" << filename() << ".png\" /></div>";
   std::cout <<  R"END(
     <!--
     <canvas id=graphEnergy width=250 height=250></canvas>
