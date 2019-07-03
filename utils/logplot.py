@@ -80,4 +80,5 @@ if __name__ == '__main__':
         e_var = [y['energy']['dynamic']['variance'] for y in data] 
     else:
         sys.exit('Error: ' + extension + ' file is not supported.')
+    plot(len(data), e_ave, e_var)
 
