@@ -34,12 +34,12 @@ extern Point points[NPOINTS];
 extern int cycle;
 extern double maxk;
 extern double mink;
+extern std::string dynamic;
 
 // Variables which scope is only this file. 
 static double initial_kparam[2][2];
 static int timestep = 0;
 static std::vector<std::vector<Point>> result;
-static bool dynamic = false;
 static int seed = 1;
 static int maxgen = 50000;
 static Output output = HTML;

@@ -20,6 +20,7 @@ Point points[NPOINTS];
 int cycle = 10;
 double maxk = 1.3;
 double mink = -1.3;
+std::string dynamic = "";
 
 // Global variables declared in xv.h.
 Point center;
@@ -129,8 +130,9 @@ static std::string filename() {
   filename.append("&b=");
   filename.append(boundary());
   // Dynamic.
-  if (dynamic) 
-    filename.append("&d=true");
+  if (dynamic > " ") 
+    filename.append("&d=");
+    filename.append(dynamic);
   return filename;
 } 
 
@@ -226,7 +228,7 @@ static void printEnergy() {
 static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
-  std::cerr << "[ -dynamic ] ";
+  std::cerr << "[ -dynamic global/local ]";
   std::cerr << "[ -json ]";
   std::cerr << "[ -csv ] [ -csve ]\n\n";
 
@@ -235,7 +237,7 @@ static void usage() {
   std::cerr << "-gen       The number of maximum steps.\n";
   std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
   std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
-  std::cerr << "-dynamic   The flag to change the K parameters dinamically. Default is off.\n";
+  std::cerr << "-dynamic   The flag to change the K parameters dinamicallybased on static energy/dynamic energy.. Default is global optimization which means to use static energy..\n";
   std::cerr << "-json      Output a json file for creating images by utils.\n";
   std::cerr << "-csv       Output a csv file.\n";
   std::cerr << "-csve      Output csv files for each step.\n";
@@ -300,9 +302,11 @@ static void parseArgs(int argc, char **argv) {
     }
 
     if (strcmp("-dynamic", argv[0]) == 0) {
-      dynamic = true;
-      argc -= 1;
-      argv += 1;
+      if (argc < 2)
+        usage();
+      dynamic = argv[1];
+      argc -= 2;
+      argv += 2;
       continue;
     }
 
@@ -435,7 +439,7 @@ int main(int argc, char **argv) {
   initial_energy_var = energyVariance();
 
   for (int i = 0; i < maxgen; i++) {
-    if (dynamic)
+    if (dynamic > " ")
       updateKparam();
     step();
   }
