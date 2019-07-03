@@ -39,22 +39,31 @@ def plot(n, e_ave, e_var):
     ax.grid()
     
     fig.tight_layout()
-    plt.savefig(kparam + '.png')
+    # Replace directory and extension.
+    extension = src.split('.')[len(a)-1]
+    dest = 'img/' + src.split('/')[1]
+    plt.savefig(dest.replace(extension, 'png'))
 
 
 def parse_args():
     global src
     global kparam
 
-    parser = argparse.ArgumentParser(description='Customize src csv file to generate log plot for energies.')
-    parser.add_argument('-k', required=True, nargs='+',
-            help='The K parameters')
+    parser = argparse.ArgumentParser(
+            description='Generate an image from a csv/json file.')
     parser.add_argument('-src', required=True,
-            help='The source csv file.') 
+            help='The source file path') 
+    parser.add_argument('-k', nargs='+',
+            help='The K parameters')
 
     args = parser.parse_args()
-    kparam = ','.join(args.k)
     src = args.src
+    if args.k == None:
+        # Ex. 'abpm=0.8,0.4,0.8,0.5&b=open&d=true.html'
+        params = src.split('&')
+        kparam = params[0].split('=')[1]
+    else:
+        kparam = ','.join(args.k)
 
 
 if __name__ == '__main__':
@@ -71,5 +80,4 @@ if __name__ == '__main__':
         e_var = [y['energy']['dynamic']['variance'] for y in data] 
     else:
         sys.exit('Error: ' + extension + ' file is not supported.')
-    plot(len(data), e_ave, e_var)
 
