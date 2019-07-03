@@ -1,6 +1,7 @@
 #ifndef BOUNDARY_H
 #define BOUNDARY_H
 
+#include <cstring>
 #include "generator.h"
 
 void initPoints();
@@ -9,5 +10,6 @@ double diff(double a, double b);
 double imaging(double x);
 void importScript();
 void printCycle();
+std::string boundary();
 
 #endif // BOUNDARY_H

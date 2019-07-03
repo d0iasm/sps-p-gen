@@ -2,6 +2,7 @@
 // This is the part of main calculation. The results of these functions depend on a boundary.
 // Periodic boundary uses the nearest particle selection method.
 
+#include <cstring>
 #include <math.h>
 #include <random>
 #include "generator.h"
@@ -62,4 +63,8 @@ double imaging(double x) {
   if (x < 0) return rem(x, cycle) + cycle;
   if (x > cycle) return rem(x, cycle);
   return x;
+}
+
+std::string boundary() {
+  return "periodic";
 }

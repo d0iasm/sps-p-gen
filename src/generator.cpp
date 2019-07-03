@@ -26,6 +26,7 @@ Point center;
 std::vector<XV> xv;
 
 // Global variables declared in energy.cpp.
+#include <cstring>
 std::vector<std::vector<double> > energy;
 
 static double rungeKutta(double k1) {
@@ -110,6 +111,29 @@ void printKparam() {
     std::cout << e.first << " => " << e.second << "<br />";
 }
 
+static std::string trim(double x, int precision) {
+  return std::to_string(x).substr(0, std::to_string(x).find(".") + precision + 1);
+}
+
+static std::string filename() {
+  std::string filename = "abpm=";
+  // Kparams.
+  filename.append(trim(initial_kparam[0][0], 1));
+  filename.append(",");
+  filename.append(trim(initial_kparam[1][1], 1));
+  filename.append(",");
+  filename.append(trim(getP(), 1));
+  filename.append(",");
+  filename.append(trim(getM(), 1));
+  // Boundary.
+  filename.append("&b=");
+  filename.append(boundary());
+  // Dynamic.
+  if (dynamic) 
+    filename.append("&d=true");
+  return filename;
+} 
+
 static void printBody() {
   std::cout << R"END(<body>
 <div class=container>
@@ -120,7 +144,9 @@ static void printBody() {
       <button id=reset>Reset</button>
     </div>
   </div>
-  <div>
+  <div>)END";
+  std::cout << "<h1>" << filename() << "</h1>";
+  std::cout << R"END(<br />
     <div>timestep: <input type=text size=6 id=timestep></input></div>
     <br />
     <h2>Static K Parameters</h2>
@@ -143,7 +169,9 @@ static void printBody() {
     <div>Variance: <span id=energyVariance></span></div>
     <br />
     <h2>Dynamic Energy</h2>
-    <img src=
+  )END";
+    std::cout << "<div><img width=400 src=\"img/" << filename() << ".png\" /></div>";
+  std::cout <<  R"END(
     <!--
     <canvas id=graphEnergy width=250 height=250></canvas>
     -->
