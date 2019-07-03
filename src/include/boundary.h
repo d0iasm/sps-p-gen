@@ -1,7 +1,7 @@
 #ifndef BOUNDARY_H
 #define BOUNDARY_H
 
-#include <cstring>
+#include <string>
 #include "generator.h"
 
 void initPoints();

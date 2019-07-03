@@ -3,7 +3,7 @@
 // coordinate and color as a json format inside a script tag.
 
 #include <iostream>
-#include <cstring>
+#include <string>
 #include <random>
 #include <math.h>
 #include <map>
