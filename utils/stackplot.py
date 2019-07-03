@@ -20,7 +20,15 @@ def plot(n, y):
     fig, ax = plt.subplots()
 
     x = np.arange(n)
-    labels = list(y[0].keys())
+
+    # Get labels which have a value more than 0.
+    labels = [None for _ in range(len(y[0]))]
+    for step in y:
+        i = 0
+        for key, val in step.items():
+            if val > 0:
+                labels[i] = key
+            i += 1
     y = [list(step.values()) for step in y]
     # x: 1d array of dimension N.
     # y: 2d array (dimension MxN), or sequence of
@@ -38,7 +46,7 @@ def plot(n, y):
 def reshape_k(data):
     y = []
     for step in data:
-        x = {key/10:0 for key in range(-8, 13)}
+        x = {key/10:0 for key in range(-20, 21)}
         for param_num in step['k']['dynamic']:
             x[param_num[0]] += param_num[1]
         y.append(x)
@@ -75,4 +83,3 @@ if __name__ == '__main__':
     data = read_json()
     y = reshape_k(data)
     plot(len(data), y)
-
