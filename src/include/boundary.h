@@ -10,6 +10,7 @@ double diff(double a, double b);
 double imaging(double x);
 void importScript();
 void printCycle();
+double density();
 std::string boundary();
 
 #endif // BOUNDARY_H

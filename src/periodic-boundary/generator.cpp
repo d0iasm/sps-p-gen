@@ -3,8 +3,8 @@
 // Periodic boundary uses the nearest particle selection method.
 
 #include <cstring>
-#include <math.h>
 #include <random>
+#include <math.h>
 #include "generator.h"
 #include "boundary.h"
 
@@ -63,6 +63,10 @@ double imaging(double x) {
   if (x < 0) return rem(x, cycle) + cycle;
   if (x > cycle) return rem(x, cycle);
   return x;
+}
+
+double density() {
+  return (double) NPOINTS / (double) (cycle * cycle);
 }
 
 std::string boundary() {

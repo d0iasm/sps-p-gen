@@ -146,20 +146,20 @@ static void printBody() {
   </div>
   <div>)END";
   std::cout << "<h1>" << filename() << "</h1>";
-  std::cout << R"END(<br />
-    <div>timestep: <input type=text size=6 id=timestep></input></div>
-    <br />
-    <h2>Static K Parameters</h2>
-    <div>)END";
-  std::cout << "Initial K[00,01,10,11]: "
+  std::cout << "<br />\n";
+  std::cout << "<div>Timestep: <input type=text size=6 id=timestep></input></div>\n";
+  std::cout << "<div>Density: " << density() << "</div>";
+  std::cout << "<br />\n";
+  std::cout << "<h2>Static K Parameters</h2>\n";
+  std::cout << "<div>Initial K[00,01,10,11]: "
             << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
             << initial_kparam[1][0] << "," << initial_kparam[1][1];
-  std::cout << "</div><div>";
-  std::cout << "Initial K[a, b, p, m]: " 
+  std::cout << "</div>\n";
+  std::cout << "<div>Initial K[a, b, p, m]: "
             << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
-  std::cout << "</div><br /><div>";
-  std::cout << "<h2>Dynamic K Parameters</h2>";
+  std::cout << "</div>\n<br />\n<div>";
+  std::cout << "<h2>Dynamic K Parameters</h2>\n";
   std::cout << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />";
   printKparam();
   std::cout << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";

@@ -1,7 +1,7 @@
 // This is the part of main calculation. The results of these functions depend on a boundary.
 // Calculate the distance between particles.
 
-#include <cstring>
+#include <string>
 #include <math.h>
 #include <random>
 #include "generator.h"
@@ -33,6 +33,10 @@ double diff(double a, double b) {
 // Do nothing for open boundary.
 double imaging(double x) {
   return x;
+}
+
+double density() {
+  return -1;
 }
 
 std::string boundary() {
