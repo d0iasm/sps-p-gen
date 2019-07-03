@@ -80,20 +80,6 @@ static void step() {
   energy.push_back(e);
 }
 
-static void initMaxMinK() {
-  maxk = -9999.0;
-  mink = 9999.0;
-  for (int i = 0; i < 2; i++) {
-    for (int j = 0; j < 2; j++) {
-      std::cerr << maxk<< ", "<<mink<<", "<<initial_kparam[i][j] << "\n";
-      if (initial_kparam[i][j] > maxk)
-        maxk = initial_kparam[i][j];
-      if (initial_kparam[i][j] < mink)
-        mink = initial_kparam[i][j];
-    }
-  }
-}
-
 static void initKparam() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
@@ -169,7 +155,10 @@ static void printBody() {
     <div>Variance: <span id=energyVariance></span></div>
     <br />
     <h2>Dynamic Energy</h2>
+    <img src=
+    <!--
     <canvas id=graphEnergy width=250 height=250></canvas>
+    -->
     <br />
     <h2>X-V Log Log Plot</h2>
     <canvas id=graphXV width=250 height=250></canvas>
