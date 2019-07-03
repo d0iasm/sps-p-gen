@@ -168,10 +168,13 @@ static void printBody() {
     <h2>Static Energy</h2>
     <div>Average: <span id=energyAverage></span></div>
     <div>Variance: <span id=energyVariance></span></div>
+  )END";
+  std::cout << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
+  std::cout << R"END(
     <br />
     <h2>Dynamic Energy</h2>
   )END";
-  std::cout << "<div><img width=350 src=\"img/energy%3F" << filename() << ".png\" /></div>";
+  std::cout << "<div><img width=350 src=\"img/dynamic_energy%3F" << filename() << ".png\" /></div>";
   std::cout <<  R"END(
     <!--
     <canvas id=graphEnergy width=250 height=250></canvas>

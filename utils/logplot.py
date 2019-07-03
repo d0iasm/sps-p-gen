@@ -42,7 +42,8 @@ def plot(n, e_ave, e_var):
     fig.tight_layout()
     # Replace directory and extension.
     extension = src.split('.')[len(a)-1]
-    dest = 'img/energy?' + src.split('/')[1]
+    suffix = 'dynamic_' if dynamic else 'static_'
+    dest = 'img/' + suffix + 'energy?' + src.split('/')[1]
     plt.savefig(dest.replace(extension, 'png'))
 
 
@@ -84,15 +85,9 @@ if __name__ == '__main__':
         if dynamic:
             e_ave = [y['energy']['dynamic']['average'] for y in data] 
             e_var = [y['energy']['dynamic']['variance'] for y in data] 
-            print(e_ave)
-            print('')
-            print(e_var)
         else:
             e_ave = [y['energy']['static']['average'] for y in data] 
             e_var = [y['energy']['static']['variance'] for y in data] 
-            print(e_ave)
-            print('')
-            print(e_var)
     else:
         sys.exit('Error: ' + extension + ' file is not supported.')
     plot(len(data), e_ave, e_var)
