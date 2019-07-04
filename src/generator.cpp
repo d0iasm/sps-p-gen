@@ -140,9 +140,14 @@ static std::string filename() {
   filename.append("&b=");
   filename.append(boundary());
   // Dynamic.
-  if (dynamic > " ") 
+  if (dynamic != "") {
     filename.append("&d=");
     filename.append(dynamic);
+  }
+  if (boundary() == "periodic" && cycle != 10) {
+    filename.append("&c=");
+    filename.append(std::to_string(cycle));
+  }
   return filename;
 } 
 
