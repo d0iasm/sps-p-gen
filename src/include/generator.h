@@ -1,6 +1,7 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
+#include <cstring>
 #include <map>
 #include <vector>
 
