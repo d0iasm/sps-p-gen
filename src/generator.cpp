@@ -76,9 +76,11 @@ static void step() {
   xv.push_back(computeXV(dxdy));
 
   // Energies.
-  std::vector<double> e(2);
-  e[0] = energyAverageDist();
-  e[1] = energyVarianceDist();
+  std::vector<double> e(4);
+  e[0] = energyAverage();
+  e[1] = energyVariance();
+  e[2] = energyAverageDist();
+  e[3] = energyVarianceDist();
   energy.push_back(e);
 }
 
@@ -218,8 +220,8 @@ static void printEnergy() {
   std::cout << "<script>const energy = [\n";
   for (int i = 0; i < energy.size(); i += 100) {
     std::cout << "[" << i << ", "
-              << "{energyAverage:" << energy[0][i] << ", "
-              << "energyVariance:" << energy[1][i] 
+              << "{energyAverage:" << energy[i][2] << ", "
+              << "energyVariance:" << energy[i][3]
               << "}],\n";
   }
   std::cout << "];</script>\n";
@@ -267,8 +269,8 @@ static void parseArgs(int argc, char **argv) {
       double m = std::stod(argv[4]);
       initial_kparam[0][0] = a;
       initial_kparam[0][1] = p + m;
-      initial_kparam[1][0] = p - m; 
-      initial_kparam[1][1] = b; 
+      initial_kparam[1][0] = p - m;
+      initial_kparam[1][1] = b;
       argc -= 5;
       argv += 5;
       continue;
@@ -345,9 +347,9 @@ static void html() {
   importScript();
   std::cout << "<script>"
             << "document.getElementById('energyAverage').innerText=\""
-            << initial_energy_ave << " => " << energyAverage() << "\";" 
+            << energy[0][0] << " => " << energy[maxgen-1][0] << "\";" 
             << "document.getElementById('energyVariance').innerText=\""
-            << initial_energy_var << " => " << energyVariance() << "\";" 
+            << energy[0][1] << " => " << energy[maxgen-1][1] << "\";" 
             << "</script>\n";
   std::cout << "</body></html>\n";
 }
@@ -390,12 +392,12 @@ static void json() {
     // Energy.
     std::cout << "\"energy\":{";
     std::cout << "\"static\":{";
-    std::cout << "\"average\":" << initial_energy_ave << ",";
-    std::cout << "\"variance\":" << initial_energy_var;
-    std::cout << "},"; // End of static energy.
-    std::cout << "\"dynamic\":{";
     std::cout << "\"average\":" << energy[i][0] << ",";
     std::cout << "\"variance\":" << energy[i][1];
+    std::cout << "},"; // End of static energy.
+    std::cout << "\"dynamic\":{";
+    std::cout << "\"average\":" << energy[i][2] << ",";
+    std::cout << "\"variance\":" << energy[i][3];
     std::cout << "}"; // End of dynamic energy.
     std::cout << "}"; // End of energy.
     std::cout << "}"; // End of one step.
@@ -423,7 +425,7 @@ static void csv() {
 static void csve() {
   std::cout << "step,energy-average,energy-variance\n";
   for (int i = 0; i < energy.size(); i++) {
-    std::cout << i << "," << energy[i][0] << "," << energy[i][1] << "\n"; 
+    std::cout << i << "," << energy[i][2] << "," << energy[i][3] << "\n";
   }
 }
 
@@ -434,9 +436,6 @@ int main(int argc, char **argv) {
   initKparam();
   initPoints();
   center = computeCenter();
-
-  initial_energy_ave = energyAverage();
-  initial_energy_var = energyVariance();
 
   for (int i = 0; i < maxgen; i++) {
     if (dynamic > " ")

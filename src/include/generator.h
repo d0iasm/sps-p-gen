@@ -44,7 +44,4 @@ static int seed = 1;
 static int maxgen = 50000;
 static Output output = HTML;
 
-static double initial_energy_ave;
-static double initial_energy_var;
-
 #endif // GENERATOR_H
