@@ -27,7 +27,6 @@ Point center;
 std::vector<XV> xv;
 
 // Global variables declared in energy.cpp.
-#include <cstring>
 std::vector<std::vector<double> > energy;
 
 static double rungeKutta(double k1) {
@@ -36,6 +35,20 @@ static double rungeKutta(double k1) {
   double k4 = k1 + k3 * 0.002;
   return (k1 + 2 * k2 + 2 * k3 + k4) * (0.002 / 6.0);
 }
+
+static std::map<double, int> countKparam() {
+    std::map<double, int> m;
+    for (int i = 0; i < NPOINTS; i++) {
+      for (int j = 0; j < NPOINTS; j++) {
+        if (m.find(kparam[i][j]) == m.end())
+          m.insert(std::make_pair(kparam[i][j], 1));
+        else
+          m[kparam[i][j]]++;
+      }
+    }
+    return m;
+}
+
 
 static void step() {
   timestep++;
@@ -82,6 +95,9 @@ static void step() {
   e[2] = energyAverageDist();
   e[3] = energyVarianceDist();
   energy.push_back(e);
+
+  // Kparams.
+  kparam_counter.push_back(countKparam());
 }
 
 static void initKparam() {
@@ -101,15 +117,7 @@ static double getM() {
 }
 
 void printKparam() {
-  std::map<double, int> m;
-  for (int i = 0; i < NPOINTS; i++) {
-    for (int j = 0; j < NPOINTS; j++) {
-      if (m.find(kparam[i][j]) == m.end())
-        m.insert(std::make_pair(kparam[i][j], 1));
-      else
-        m[kparam[i][j]]++;
-    }
-  }
+  std::map<double, int> m = countKparam();
   for (std::pair<double, int> e : m)
     std::cout << e.first << " => " << e.second << "<br />";
 }
@@ -370,18 +378,9 @@ static void json() {
     std::cout << "\"p\":" << getP() << ",";
     std::cout << "\"m\":" << getM() << ",";
     // Dynamic Kparams. 
-    std::map<double, int> m;
-    for (int i = 0; i < NPOINTS; i++) {
-      for (int j = 0; j < NPOINTS; j++) {
-        if (m.find(kparam[i][j]) == m.end())
-          m.insert(std::make_pair(kparam[i][j], 1));
-        else
-          m[kparam[i][j]]++;
-      }
-    }
     std::cout << "\"dynamic\":[";
-    int n = m.size();
-    for (std::pair<double, int> e : m) {
+    int n = kparam_counter[i].size();
+    for (std::pair<double, int> e : kparam_counter[i]) {
       std::cout << "[" << e.first << "," << e.second << "]";
       if (n > 1) {
         std::cout << ",";

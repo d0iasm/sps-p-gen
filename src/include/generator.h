@@ -1,6 +1,7 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
+#include <map>
 #include <vector>
 
 // Constants
@@ -37,6 +38,7 @@ extern double mink;
 extern std::string dynamic;
 
 // Variables which scope is only this file. 
+static std::vector<std::map<double, int> > kparam_counter;
 static double initial_kparam[2][2];
 static int timestep = 0;
 static std::vector<std::vector<Point>> result;
