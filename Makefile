@@ -10,6 +10,18 @@ MAXGEN=100000
 RANGE = -0.8 -0.6 -0.4 -0.2 0.0 0.2 0.4 0.6 0.8 1.0 1.2
 # RANGE = -0.8 -0.4 0.0 0.4 0.8 1.2
 
+test:
+	mkdir test
+	./src/generator-o -gen $(MAXGEN) > test/init_all_zero.html
+	./src/generator-o -gen $(MAXGEN) -init random > test/init_random.html
+	./src/generator-o -gen $(MAXGEN) -init same > test/init_similar.html
+	./src/generator-o -gen $(MAXGEN) -dynamic global > test/init_all_zero_with_static_update.html
+	./src/generator-o -gen $(MAXGEN) -dynamic local > test/init_all_zero_with_dynamic_update.html
+	./src/generator-o -gen $(MAXGEN) -dynamic global -init random > test/init_random_with_static_update.html
+	./src/generator-o -gen $(MAXGEN) -dynamic local -init random > test/init_random_with_dynamic_update.html
+	./src/generator-o -gen $(MAXGEN) -dynamic dynamic -init same > test/init_similar_with_static_update.html
+	./src/generator-o -gen $(MAXGEN) -dynamic local -init same > test/init_similar_with_dynamic_update.html
+
 generator:
 	make -C src generator
 

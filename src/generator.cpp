@@ -159,7 +159,7 @@ static std::string filename() {
   } else if (init_param == RANDOM) {
     filename.append("random");
   } else if (init_param == SAME) {
-    filename,append("same");
+    filename.append("same");
   }
   // Boundary.
   filename.append("&b=");
