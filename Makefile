@@ -124,12 +124,3 @@ public: html img
 clean:
 	make -C src clean
 	rm *.html
-
-# === Will remove the following functions. ===
-csv:
-	./gencsv.sh -open
-	./gencsv.sh -periodic
-
-csve:
-	./gencsve.sh -open
-	./gencsve.sh -periodic
