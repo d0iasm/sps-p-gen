@@ -148,13 +148,19 @@ static std::string trim(double x, int precision) {
 static std::string filename() {
   std::string filename = "abpm=";
   // Kparams.
-  filename.append(trim(initial_kparam[0][0], 1));
-  filename.append(",");
-  filename.append(trim(initial_kparam[1][1], 1));
-  filename.append(",");
-  filename.append(trim(getP(), 1));
-  filename.append(",");
-  filename.append(trim(getM(), 1));
+  if (init_param == NORMAL) {
+    filename.append(trim(initial_kparam[0][0], 1));
+    filename.append(",");
+    filename.append(trim(initial_kparam[1][1], 1));
+    filename.append(",");
+    filename.append(trim(getP(), 1));
+    filename.append(",");
+    filename.append(trim(getM(), 1));
+  } else if (init_param == RANDOM) {
+    filename.append("random");
+  } else if (init_param == SAME) {
+    filename,append("same");
+  }
   // Boundary.
   filename.append("&b=");
   filename.append(boundary());
@@ -346,9 +352,9 @@ static void parseArgs(int argc, char **argv) {
     if (strcmp("-init", argv[0]) == 0) {
       if (argc < 2)
         usage();
-      if (strcmp(argv[1], "random"))
+      if (strcmp(argv[1], "random") == 0)
         init_param = RANDOM;
-      if (strcmp(argv[1], "same"))
+      if (strcmp(argv[1], "same") == 0)
         init_param = SAME;
       argc -= 2;
       argv += 2;
