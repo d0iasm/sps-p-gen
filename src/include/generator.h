@@ -43,7 +43,7 @@ extern int cycle;
 extern double maxk;
 extern double mink;
 extern std::string dynamic;
-extern Init init_state;
+extern Init init_param;
 
 // Variables which scope is only this file. 
 static std::vector<std::map<double, int> > kparam_counter;

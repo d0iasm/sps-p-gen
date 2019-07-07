@@ -21,6 +21,7 @@ int cycle = 10;
 double maxk = 1.3;
 double mink = -1.3;
 std::string dynamic = "";
+Init init_param = NORMAL;
 
 // Global variables declared in xv.h.
 Point center;
@@ -100,10 +101,28 @@ static void step() {
   kparam_counter.push_back(countKparam());
 }
 
-static void initKparam() {
+static void initKparamWithK() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
       kparam[i][j] = initial_kparam[i / (NPOINTS / 2)][j / (NPOINTS / 2)];
+    }
+  }
+}
+
+// Initialize K params with [-1.3..1.3]
+static void initKparamRandom() {
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      kparam[i][j] = (rand() % 27 - 13) / 10.0;
+    }
+  }
+}
+
+// Initialize K params with [-0.1, 0.0, 0.1]
+static void initKparamSame() {
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      kparam[i][j] = (rand() % 3 - 1) / 10.0;
     }
   }
 }
@@ -244,6 +263,7 @@ static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
   std::cerr << "[ -dynamic global/local ]";
+  std::cerr << "[ -init random/same ]";
   std::cerr << "[ -json ]\n\n";
 
   std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
@@ -252,6 +272,7 @@ static void usage() {
   std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
   std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
   std::cerr << "-dynamic   The flag to change the K parameters dinamicallybased on static energy/dynamic energy.. Default is global optimization which means to use static energy..\n";
+  std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init same indicates that all particles starts with a same (similar) K parameter.";
   std::cerr << "-json      Output a json file for creating images by utils.\n";
   exit(1);
 }
@@ -317,6 +338,18 @@ static void parseArgs(int argc, char **argv) {
       if (argc < 2)
         usage();
       dynamic = argv[1];
+      argc -= 2;
+      argv += 2;
+      continue;
+    }
+
+    if (strcmp("-init", argv[0]) == 0) {
+      if (argc < 2)
+        usage();
+      if (strcmp(argv[1], "random"))
+        init_param = RANDOM;
+      if (strcmp(argv[1], "same"))
+        init_param = SAME;
       argc -= 2;
       argv += 2;
       continue;
@@ -397,7 +430,18 @@ static void json() {
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
-  initKparam();
+  switch (init_param) {
+    case NORMAL:
+      initKparamWithK();
+      break;
+    case RANDOM:
+      initKparamRandom();
+      break;
+    case SAME:
+      initKparamSame();
+      break;
+  }
+
   initPoints();
   center = computeCenter();
 
