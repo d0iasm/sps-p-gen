@@ -11,14 +11,19 @@
 enum Color {
   RED,
   BLUE,
+  BLACK,
   NONE,
 };
 
 enum Output {
   HTML,
   JSON,
-  CSV,
-  CSVE,
+};
+
+enum Init {
+  NORMAL,
+  RANDOM,
+  SAME,
 };
 
 struct Point {
@@ -30,6 +35,7 @@ struct Point {
   Color color;
 };
 
+
 // Global variables.
 extern double kparam[NPOINTS][NPOINTS];
 extern Point points[NPOINTS];
@@ -37,6 +43,7 @@ extern int cycle;
 extern double maxk;
 extern double mink;
 extern std::string dynamic;
+extern Init init_state;
 
 // Variables which scope is only this file. 
 static std::vector<std::map<double, int> > kparam_counter;

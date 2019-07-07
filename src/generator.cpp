@@ -244,8 +244,7 @@ static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
   std::cerr << "[ -dynamic global/local ]";
-  std::cerr << "[ -json ]";
-  std::cerr << "[ -csv ] [ -csve ]\n\n";
+  std::cerr << "[ -json ]\n\n";
 
   std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
   std::cerr << "-k2        K paramters. k00=ka, k01=kp+km, k10=kp-km, and k11=kb.\n";
@@ -254,8 +253,6 @@ static void usage() {
   std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
   std::cerr << "-dynamic   The flag to change the K parameters dinamicallybased on static energy/dynamic energy.. Default is global optimization which means to use static energy..\n";
   std::cerr << "-json      Output a json file for creating images by utils.\n";
-  std::cerr << "-csv       Output a csv file.\n";
-  std::cerr << "-csve      Output csv files for each step.\n";
   exit(1);
 }
 
@@ -332,20 +329,6 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
-    if (strcmp("-csv", argv[0]) == 0) {
-      output = CSV;
-      argc -= 1;
-      argv += 1;
-      continue;
-    }
-
-    if (strcmp("-csve", argv[0]) == 0) {
-      output = CSVE;
-      argc -= 1;
-      argv += 1;
-      continue;
-    }
-
     usage();
   }
 }
@@ -411,32 +394,9 @@ static void json() {
   std::cout << "]"; // End on Json.
 }
 
-static void csv() {
-  std::cout << initial_kparam[0][0] << ","
-            << initial_kparam[0][1] << ","
-            << initial_kparam[1][0] << ","
-            << initial_kparam[1][1] << ","
-            << initial_kparam[0][0] << ","
-            << initial_kparam[1][1] << ","
-            << getP() << ","
-            << getM() << ","
-            << classify() << ","
-            << energyAverage() << ","
-            << energyVariance() << ","
-            << "\n";
-}
-
-static void csve() {
-  std::cout << "step,energy-average,energy-variance\n";
-  for (int i = 0; i < energy.size(); i++) {
-    std::cout << i << "," << energy[i][2] << "," << energy[i][3] << "\n";
-  }
-}
-
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
-  //initMaxMinK();
   initKparam();
   initPoints();
   center = computeCenter();
@@ -453,12 +413,6 @@ int main(int argc, char **argv) {
       break;
     case JSON:
       json();
-      break;
-    case CSV:
-      csv();
-      break;
-    case CSVE:
-      csve();
       break;
   }
 }

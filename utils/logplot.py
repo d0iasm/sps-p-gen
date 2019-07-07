@@ -1,5 +1,4 @@
 import argparse
-import csv
 import json
 import sys
 import numpy as np
@@ -9,16 +8,6 @@ import matplotlib.pyplot as plt
 src = ''
 kparam = ''
 dynamic = False
-
-
-def read_csv():
-    data = []
-    with open(src) as f:
-        reader = csv.reader(f, delimiter=',')
-        next(reader)
-        for row in reader:
-            data.append([float(x) for x in row])
-    return data 
 
 
 def read_json():
@@ -53,7 +42,7 @@ def parse_args():
     global dynamic
 
     parser = argparse.ArgumentParser(
-            description='Generate an image from a csv/json file.')
+            description='Generate an image from a json file.')
     parser.add_argument('-src', required=True,
             help='The source file path') 
     parser.add_argument('-k', nargs='+',
@@ -76,19 +65,13 @@ if __name__ == '__main__':
     parse_args()
     a = src.split('.')
     extension = a[len(a)-1]
-    if extension == 'csv':
-        data = read_csv()
-        e_ave = [y[1] for y in data]
-        e_var = [y[2] for y in data]
-    elif extension == 'json':
-        data = read_json()
-        if dynamic:
-            e_ave = [y['energy']['dynamic']['average'] for y in data] 
-            e_var = [y['energy']['dynamic']['variance'] for y in data] 
-        else:
-            e_ave = [y['energy']['static']['average'] for y in data] 
-            e_var = [y['energy']['static']['variance'] for y in data] 
-    else:
+    if extension != 'json':
         sys.exit('Error: ' + extension + ' file is not supported.')
+    data = read_json()
+    if dynamic:
+        e_ave = [y['energy']['dynamic']['average'] for y in data] 
+        e_var = [y['energy']['dynamic']['variance'] for y in data] 
+    else:
+        e_ave = [y['energy']['static']['average'] for y in data] 
+        e_var = [y['energy']['static']['variance'] for y in data] 
     plot(len(data), e_ave, e_var)
-
