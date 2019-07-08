@@ -11,7 +11,6 @@ RANGE = -0.8 -0.6 -0.4 -0.2 0.0 0.2 0.4 0.6 0.8 1.0 1.2
 # RANGE = -0.8 -0.4 0.0 0.4 0.8 1.2
 
 test:
-	mkdir test
 	./src/generator-o -gen $(MAXGEN) > test/init_all_zero.html
 	./src/generator-o -gen $(MAXGEN) -init random > test/init_random.html
 	./src/generator-o -gen $(MAXGEN) -init same > test/init_similar.html
@@ -21,6 +20,46 @@ test:
 	./src/generator-o -gen $(MAXGEN) -dynamic local -init random > test/init_random_with_dynamic_update.html
 	./src/generator-o -gen $(MAXGEN) -dynamic dynamic -init same > test/init_similar_with_static_update.html
 	./src/generator-o -gen $(MAXGEN) -dynamic local -init same > test/init_similar_with_dynamic_update.html
+
+test-json:
+	./src/generator-o -gen $(MAXGEN) -json > test/init_all_zero.json
+	./src/generator-o -gen $(MAXGEN) -init random -json > test/init_random.json
+	./src/generator-o -gen $(MAXGEN) -init same -json > test/init_similar.json
+	./src/generator-o -gen $(MAXGEN) -dynamic global -json > test/init_all_zero_with_static_update.json
+	./src/generator-o -gen $(MAXGEN) -dynamic local -json > test/init_all_zero_with_dynamic_update.json
+	./src/generator-o -gen $(MAXGEN) -dynamic global -init random -json > test/init_random_with_static_update.json
+	./src/generator-o -gen $(MAXGEN) -dynamic local -init random -json > test/init_random_with_dynamic_update.json
+	./src/generator-o -gen $(MAXGEN) -dynamic dynamic -init same -json > test/init_similar_with_static_update.json
+	./src/generator-o -gen $(MAXGEN) -dynamic local -init same -json > test/init_similar_with_dynamic_update.json
+
+test-img:
+	$(ENV) python3 utils/logplot.py -src test/init_all_zero.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_random.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_similar.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_all_zero_with_static_update.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_all_zero_with_dynamic_update.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_random_with_static_update.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_random_with_dynamic_update.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_similar_with_static_update.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_similar_with_dynamic_update.json -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_all_zero.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_random.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_similar.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_all_zero_with_static_update.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_all_zero_with_dynamic_update.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_random_with_static_update.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_random_with_dynamic_update.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_similar_with_static_update.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/logplot.py -src test/init_similar_with_dynamic_update.json -dynamic -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_all_zero.json -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_random.json -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_similar.json -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_all_zero_with_static_update.json -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_all_zero_with_dynamic_update.json -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_random_with_static_update.json -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_random_with_dynamic_update.json -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_similar_with_static_update.json -k 0 0 0 0
+	$(ENV) python3 utils/stackplot.py -src test/init_similar_with_dynamic_update.json -k 0 0 0 0
 
 generator:
 	make -C src generator
