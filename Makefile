@@ -2,6 +2,9 @@ SRC=src
 JSON=json
 IMG=img
 PUBLIC=public
+PUBLIC_IMG=public/img
+PUBLIC_LOCAL=../public_html
+PUBLIC_LOCAL_IMG=../public_html/img
 
 ENV=MPLBACKEND=Agg
 
@@ -10,55 +13,79 @@ MAXGEN=100000
 RANGE = -0.8 -0.6 -0.4 -0.2 0.0 0.2 0.4 0.6 0.8 1.0 1.2
 # RANGE = -0.8 -0.4 0.0 0.4 0.8 1.2
 
-test:
-	./src/generator-o -gen $(MAXGEN) > test/abpm=0.0,0.0,0.0,0.0\&b=open.html
-	./src/generator-o -gen $(MAXGEN) -init random > test/abpm=random\&b=open.html
-	./src/generator-o -gen $(MAXGEN) -init same > test/abpm=same\&b=open.html
-	./src/generator-o -gen $(MAXGEN) -dynamic global > test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.html
-	./src/generator-o -gen $(MAXGEN) -dynamic local > test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.html
-	./src/generator-o -gen $(MAXGEN) -dynamic global -init random > test/abpm=random\&b=open\&d=global.html 
-	./src/generator-o -gen $(MAXGEN) -dynamic local -init random > test/abpm=random\&b=open\&d=local.html
-	./src/generator-o -gen $(MAXGEN) -dynamic dynamic -init same > test/abpm=same\&b=open\&d=global.html 
-	./src/generator-o -gen $(MAXGEN) -dynamic local -init same > test/abpm=same\&b=open\&d=local.html
+test-same-global:
+	./src/generator-o -seed 0 -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global\&i=0.html 
+	./src/generator-o -seed 1 -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global\&i=1.html 
+	./src/generator-o -seed 2 -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global\&i=2.html 
+	./src/generator-o -seed 3 -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global\&i=3.html 
+	./src/generator-o -seed 4 -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global\&i=4.html 
+
+test-same-local:
+	./src/generator-o -seed 0 -gen $(MAXGEN) -dynamic local -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=local\&i=0.html
+	./src/generator-o -seed 1 -gen $(MAXGEN) -dynamic local -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=local\&i=1.html
+	./src/generator-o -seed 2 -gen $(MAXGEN) -dynamic local -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=local\&i=2.html
+	./src/generator-o -seed 3 -gen $(MAXGEN) -dynamic local -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=local\&i=3.html
+	./src/generator-o -seed 4 -gen $(MAXGEN) -dynamic local -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=local\&i=4.html
+
+test-same: test-same-global test-same-local
+
+test-html:
+	./src/generator-o -gen $(MAXGEN) > $(PUBLIC_LOCAL)/abpm=0.0,0.0,0.0,0.0\&b=open.html
+	./src/generator-o -gen $(MAXGEN) -init random > $(PUBLIC_LOCAL)/abpm=random\&b=open.html
+	./src/generator-o -gen $(MAXGEN) -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open.html
+	./src/generator-o -gen $(MAXGEN) -dynamic global > $(PUBLIC_LOCAL)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.html
+	./src/generator-o -gen $(MAXGEN) -dynamic local > $(PUBLIC_LOCAL)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.html
+	./src/generator-o -gen $(MAXGEN) -dynamic global -init random > $(PUBLIC_LOCAL)/abpm=random\&b=open\&d=global.html 
+	./src/generator-o -gen $(MAXGEN) -dynamic local -init random > $(PUBLIC_LOCAL)/abpm=random\&b=open\&d=local.html
+	./src/generator-o -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global.html 
+	./src/generator-o -gen $(MAXGEN) -dynamic local -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=local.html
+
+hoge:
+	./src/generator-o -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global.html 
+	./src/generator-o -json -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=global.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=global.json -dynamic
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=global.json
 
 test-json:
-	./src/generator-o -json -gen $(MAXGEN) > test/abpm=0.0,0.0,0.0,0.0\&b=open.json
-	./src/generator-o -json -gen $(MAXGEN) -init random > test/abpm=random\&b=open.json
-	./src/generator-o -json -gen $(MAXGEN) -init same > test/abpm=same\&b=open.json
-	./src/generator-o -json -gen $(MAXGEN) -dynamic global > test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.json
-	./src/generator-o -json -gen $(MAXGEN) -dynamic local > test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.json
-	./src/generator-o -json -gen $(MAXGEN) -dynamic global -init random > test/abpm=random\&b=open\&d=global.json
-	./src/generator-o -json -gen $(MAXGEN) -dynamic local -init random > test/abpm=random\&b=open\&d=local.json
-	./src/generator-o -json -gen $(MAXGEN) -dynamic dynamic -init same > test/abpm=same\&b=open\&d=global.json
-	./src/generator-o -json -gen $(MAXGEN) -dynamic local -init same > test/abpm=same\&b=open\&d=local.json
+	./src/generator-o -json -gen $(MAXGEN) > $(PUBLIC_LOCAL)/abpm=0.0,0.0,0.0,0.0\&b=open.json
+	./src/generator-o -json -gen $(MAXGEN) -init random > $(PUBLIC_LOCAL)/abpm=random\&b=open.json
+	./src/generator-o -json -gen $(MAXGEN) -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open.json
+	./src/generator-o -json -gen $(MAXGEN) -dynamic global > $(PUBLIC_LOCAL)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.json
+	./src/generator-o -json -gen $(MAXGEN) -dynamic local > $(PUBLIC_LOCAL)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.json
+	./src/generator-o -json -gen $(MAXGEN) -dynamic global -init random > $(PUBLIC_LOCAL)/abpm=random\&b=open\&d=global.json
+	./src/generator-o -json -gen $(MAXGEN) -dynamic local -init random > $(PUBLIC_LOCAL)/abpm=random\&b=open\&d=local.json
+	./src/generator-o -json -gen $(MAXGEN) -dynamic global -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=global.json
+	./src/generator-o -json -gen $(MAXGEN) -dynamic local -init same > $(PUBLIC_LOCAL)/abpm=same\&b=open\&d=local.json
+
 test-img:
-	$(ENV) python3 utils/logplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=random\&b=open.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=same\&b=open.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=random\&b=open\&d=global.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=random\&b=open\&d=local.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=same\&b=open\&d=global.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=same\&b=open\&d=local.json
-	$(ENV) python3 utils/logplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open.json -dynamic
-	$(ENV) python3 utils/logplot.py -src test/abpm=random\&b=open.json -dynamic
-	$(ENV) python3 utils/logplot.py -src test/abpm=same\&b=open.json -dynamic
-	$(ENV) python3 utils/logplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.json -dynamic
-	$(ENV) python3 utils/logplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.json -dynamic
-	$(ENV) python3 utils/logplot.py -src test/abpm=random\&b=open\&d=global.json -dynamic
-	$(ENV) python3 utils/logplot.py -src test/abpm=random\&b=open\&d=local.json -dynamic
-	$(ENV) python3 utils/logplot.py -src test/abpm=same\&b=open\&d=global.json -dynamic
-	$(ENV) python3 utils/logplot.py -src test/abpm=same\&b=open\&d=local.json -dynamic
-	$(ENV) python3 utils/stackplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open.json
-	$(ENV) python3 utils/stackplot.py -src test/abpm=random\&b=open.json
-	$(ENV) python3 utils/stackplot.py -src test/abpm=same\&b=open.json
-	$(ENV) python3 utils/stackplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.json
-	$(ENV) python3 utils/stackplot.py -src test/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.json
-	$(ENV) python3 utils/stackplot.py -src test/abpm=random\&b=open\&d=global.json
-	$(ENV) python3 utils/stackplot.py -src test/abpm=random\&b=open\&d=local.json
-	$(ENV) python3 utils/stackplot.py -src test/abpm=same\&b=open\&d=global.json
-	$(ENV) python3 utils/stackplot.py -src test/abpm=same\&b=open\&d=local.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open\&d=global.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open\&d=local.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=global.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=local.json
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open.json -dynamic
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open.json -dynamic
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open.json -dynamic
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.json -dynamic
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.json -dynamic
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open\&d=global.json -dynamic
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open\&d=local.json -dynamic
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=global.json -dynamic
+	$(ENV) python3 utils/logplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=local.json -dynamic
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open.json
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open.json
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open.json
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=global.json
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=0.0,0.0,0.0,0.0\&b=open\&d=local.json
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open\&d=global.json
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=random\&b=open\&d=local.json
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=global.json
+	$(ENV) python3 utils/stackplot.py -src $(PUBLIC_LOCAL_IMG)/abpm=same\&b=open\&d=local.json
 
 generator:
 	make -C src generator
