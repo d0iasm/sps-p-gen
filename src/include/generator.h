@@ -40,6 +40,7 @@ struct Point {
 extern double kparam[NPOINTS][NPOINTS];
 extern Point points[NPOINTS];
 extern int cycle;
+extern int seed;
 extern double maxk;
 extern double mink;
 extern std::string dynamic;
@@ -50,7 +51,6 @@ static std::vector<std::map<double, int> > kparam_counter;
 static double initial_kparam[2][2];
 static int timestep = 0;
 static std::vector<std::vector<Point>> result;
-static int seed = 1;
 static int maxgen = 50000;
 static Output output = HTML;
 

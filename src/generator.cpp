@@ -18,6 +18,7 @@
 double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
 int cycle = 10;
+int seed = 1;
 double maxk = 1.3;
 double mink = -1.3;
 std::string dynamic = "";
