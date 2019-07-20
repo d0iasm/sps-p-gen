@@ -23,7 +23,7 @@ enum Output {
 enum Init {
   NORMAL,
   RANDOM,
-  SAME,
+  ZERO,
 };
 
 struct Point {

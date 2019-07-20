@@ -18,10 +18,10 @@
 double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
 int cycle = 10;
-int seed = 1;
+int seed = 0;
 double maxk = 1.3;
 double mink = -1.3;
-std::string dynamic = "";
+std::string dynamic = "none";
 Init init_param = NORMAL;
 
 // Global variables declared in xv.h.
@@ -128,6 +128,15 @@ static void initKparamSame() {
   }
 }
 
+// Initialize K params with 0.0
+static void initKparamZero() {
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      kparam[i][j] = 0.0; 
+    }
+  }
+}
+
 static double getP() {
   return (initial_kparam[0][1] + initial_kparam[1][0]) / 2;
 }
@@ -147,34 +156,44 @@ static std::string trim(double x, int precision) {
 }
 
 static std::string filename() {
-  std::string filename = "abpm=";
-  // Kparams.
-  if (init_param == NORMAL) {
-    filename.append(trim(initial_kparam[0][0], 1));
-    filename.append(",");
-    filename.append(trim(initial_kparam[1][1], 1));
-    filename.append(",");
-    filename.append(trim(getP(), 1));
-    filename.append(",");
-    filename.append(trim(getM(), 1));
-  } else if (init_param == RANDOM) {
-    filename.append("random");
-  } else if (init_param == SAME) {
-    filename.append("same");
-  }
+  // Filename includes the infomation: boundary, cycle, dynamic, maxgen, kparam, and seed.
+  std::string fn = "sps-p";
   // Boundary.
-  filename.append("&b=");
-  filename.append(boundary());
+  fn.append("&b=");
+  fn.append(boundary());
+  // Cycle.
+  fn.append("&c=");
+  if (boundary() == "periodic") {
+    fn.append(std::to_string(cycle));
+  } else {
+    // -1 when the boundary is open because cycle doesn't have a meaning.
+    fn.append("-1");
+  }
   // Dynamic.
-  if (dynamic != "") {
-    filename.append("&d=");
-    filename.append(dynamic);
+  fn.append("&d=");
+  fn.append(dynamic);
+  // The number of generations.
+  fn.append("&g=");
+  fn.append(std::to_string(maxgen));
+  // Kparams.
+  fn.append("&k=");
+  if (init_param == NORMAL) {
+    fn.append(trim(initial_kparam[0][0], 1));
+    fn.append(",");
+    fn.append(trim(initial_kparam[1][1], 1));
+    fn.append(",");
+    fn.append(trim(getP(), 1));
+    fn.append(",");
+    fn.append(trim(getM(), 1));
+  } else if (init_param == RANDOM) {
+    fn.append("random");
+  } else if (init_param == ZERO) {
+    fn.append("zero");
   }
-  if (boundary() == "periodic" && cycle != 10) {
-    filename.append("&c=");
-    filename.append(std::to_string(cycle));
-  }
-  return filename;
+  // Seed.
+  fn.append("&s=");
+  fn.append(std::to_string(seed));
+  return fn;
 } 
 
 static void printBody() {
@@ -269,8 +288,8 @@ static void printEnergy() {
 static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
-  std::cerr << "[ -dynamic global/local ]";
-  std::cerr << "[ -init random/same ]";
+  std::cerr << "[ -dynamic static/dynamic]";
+  std::cerr << "[ -init random/zero ]";
   std::cerr << "[ -json ]\n\n";
 
   std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
@@ -278,8 +297,8 @@ static void usage() {
   std::cerr << "-gen       The number of maximum steps.\n";
   std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
   std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
-  std::cerr << "-dynamic   The flag to change the K parameters dinamicallybased on static energy/dynamic energy.. Default is global optimization which means to use static energy..\n";
-  std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init same indicates that all particles starts with a same (similar) K parameter.";
+  std::cerr << "-dynamic   The flag to change the K parameters dinamicallybased on static energy/dynamic energy. Default is static optimization which means to use static energy.\n";
+  std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.";
   std::cerr << "-json      Output a json file for creating images by utils.\n";
   exit(1);
 }
@@ -355,8 +374,8 @@ static void parseArgs(int argc, char **argv) {
         usage();
       if (strcmp(argv[1], "random") == 0)
         init_param = RANDOM;
-      if (strcmp(argv[1], "same") == 0)
-        init_param = SAME;
+      if (strcmp(argv[1], "zero") == 0)
+        init_param = ZERO;
       argc -= 2;
       argv += 2;
       continue;
@@ -444,8 +463,8 @@ int main(int argc, char **argv) {
     case RANDOM:
       initKparamRandom();
       break;
-    case SAME:
-      initKparamSame();
+    case ZERO:
+      initKparamZero();
       break;
   }
 
@@ -453,7 +472,7 @@ int main(int argc, char **argv) {
   center = computeCenter();
 
   for (int i = 0; i < maxgen; i++) {
-    if (dynamic > " ")
+    if (dynamic.compare("none") != 0)
       updateKparam();
     step();
   }

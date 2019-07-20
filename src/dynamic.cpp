@@ -14,7 +14,7 @@ void updateKparam() {
   int j = rand() % NPOINTS;
   double oldk = kparam[i][j];
   double oldEnergy = energyAverage();
-  if (dynamic == "local")
+  if (dynamic == "dynamic")
     oldEnergy = energyAverageDist();
 
   // Avoid a digit error.
