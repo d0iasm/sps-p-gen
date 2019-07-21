@@ -17,7 +17,6 @@
 // Global variables.
 double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
-int cycle = 10;
 int seed = 0;
 double maxk = 1.3;
 double mink = -1.3;
@@ -102,6 +101,25 @@ static void step() {
   kparam_counter.push_back(countKparam());
 }
 
+static void initPoints() {
+  std::default_random_engine gen;
+  gen.seed(seed);
+  // Default value of cycle:
+  // -1 when it's open boundary and result of -1/2 is 0.
+  // 10 whne it's periodic boundary.
+  std::normal_distribution<double> dist(cycle/2, 5);
+
+  for (int i = 0; i < NPOINTS; i++) {
+    points[i].x = dist(gen);
+    points[i].y = dist(gen);
+    if (init_param == NORMAL)
+      points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
+    else
+      points[i].color = BLACK;
+  }
+}
+
+
 static void initKparamWithK() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
@@ -157,18 +175,15 @@ static std::string trim(double x, int precision) {
 
 static std::string filename() {
   // Filename includes the infomation: boundary, cycle, dynamic, maxgen, kparam, and seed.
+  // Example: sps-p&b=open&c=-1&d=none&g=100000&k=zero&s=0
   std::string fn = "sps-p";
   // Boundary.
   fn.append("&b=");
   fn.append(boundary());
   // Cycle.
   fn.append("&c=");
-  if (boundary() == "periodic") {
-    fn.append(std::to_string(cycle));
-  } else {
-    // -1 when the boundary is open because cycle doesn't have a meaning.
-    fn.append("-1");
-  }
+  fn.append(std::to_string(cycle));
+  fn.append("-1");
   // Dynamic.
   fn.append("&d=");
   fn.append(dynamic);

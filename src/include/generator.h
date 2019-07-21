@@ -39,7 +39,6 @@ struct Point {
 // Global variables.
 extern double kparam[NPOINTS][NPOINTS];
 extern Point points[NPOINTS];
-extern int cycle;
 extern int seed;
 extern double maxk;
 extern double mink;

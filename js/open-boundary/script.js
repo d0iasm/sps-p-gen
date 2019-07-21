@@ -49,7 +49,16 @@ function drawGrid() {
 
 function drawPoint(p) {
   ctx.save();
-  ctx.fillStyle = (p.color == RED) ? 'red' : 'blue';
+  switch (p.color) {
+    case RED:
+      ctx.fillStyle = 'red';
+      break;
+    case BLUE:
+      ctx.fillStyle = 'blue';
+      break;
+    default:
+      ctx.fillStyle = 'black';
+  }
   ctx.beginPath();
   ctx.arc(p.x, p.y, 5 / currentScale, 0, 2 * Math.PI, true);
   ctx.fill();

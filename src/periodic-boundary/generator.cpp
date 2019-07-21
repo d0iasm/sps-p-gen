@@ -8,17 +8,8 @@
 #include "generator.h"
 #include "boundary.h"
 
-void initPoints() {
-  std::default_random_engine gen;
-  gen.seed(seed);
-  std::normal_distribution<double> dist(cycle/2, 5.0);
-
-  for (int i = 0; i < NPOINTS; i++) {
-    points[i].x = dist(gen);
-    points[i].y = dist(gen);
-    points[i].color = (i < NPOINTS / 2) ? RED : BLUE ;
-  }
-}
+// Global variable defined in boundary.h.
+int cycle = 10;
 
 static double rem(double x, long y) {
     return (long)x % y + (x - (long)x);

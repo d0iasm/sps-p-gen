@@ -22,6 +22,7 @@ const resetButton = document.getElementById('reset');
 // Constants
 const RED = 0;
 const BLUE = 1;
+const BLACK = 2;
 
 // Variables
 let handle;
@@ -57,7 +58,16 @@ function drawGrid() {
 function drawPoint(p) {
   ctx.save();
   ctx.translate(-5, -5);
-  ctx.fillStyle = (p.color == RED) ? 'red' : 'blue';
+  switch (p.color) {
+    case RED:
+      ctx.fillStyle = 'red';
+      break;
+    case BLUE:
+      ctx.fillStyle = 'blue';
+      break;
+    default:
+      ctx.fillStyle = 'black';
+  }
   ctx.beginPath();
   ctx.arc(p.x, p.y, 0.005 * cycle, 0, 2 * Math.PI, true);
   ctx.fill();
