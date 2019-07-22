@@ -456,7 +456,7 @@ static void json() {
     std::cout << "\"b\":" << initial_kparam[1][1] << ",";
     std::cout << "\"p\":" << getP() << ",";
     std::cout << "\"m\":" << getM();
-    std::cout << "},\n";
+    std::cout << "},\n"; // End of k.initial.
     // All Kparams.
     std::cout << "\"all\":[";
     for (int j = 0; j < NPOINTS; j++) {
@@ -470,7 +470,7 @@ static void json() {
       if (j != NPOINTS - 1)
         std::cout << ",\n";
     }
-    std::cout << "],\n";
+    std::cout << "],\n"; // End of k.all.
     // Counting Kparams.
     std::cout << "\"count\":[";
     int n = kparam_counter[i].size();
@@ -481,19 +481,25 @@ static void json() {
         n--;
       }
     }
-    std::cout << "]},"; // End of Kparams.
+    std::cout << "]"; // End of k.count.
+    std::cout << "},\n"; // End of k.
     // Energy.
     std::cout << "\"energy\":{";
     std::cout << "\"static\":{";
     std::cout << "\"average\":" << energy[i][0] << ",";
     std::cout << "\"variance\":" << energy[i][1];
-    std::cout << "},"; // End of static energy.
+    std::cout << "},"; // End of energy.static.
     std::cout << "\"dynamic\":{";
     std::cout << "\"average\":" << energy[i][2] << ",";
     std::cout << "\"variance\":" << energy[i][3];
-    std::cout << "}"; // End of dynamic energy.
-    std::cout << "}"; // End of energy.
-    std::cout << "}"; // End of one step.
+    std::cout << "}"; // End of energy.dynamic.
+    std::cout << "},\n"; // End of energy.
+    // XV.
+    std::cout << "\"xv\":{";
+    std::cout << "\"x\":" << xv[i].x << ",";
+    std::cout << "\"v\":" << xv[i].v;
+    std::cout << "}"; // End of xv.
+    std::cout << "}\n"; // End of one step.
     if (i != maxgen - 1)
       std::cout << ",";
   }
