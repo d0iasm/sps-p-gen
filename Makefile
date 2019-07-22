@@ -46,13 +46,13 @@ json: generator
 	parallel $(SRC)/generator-p -json -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
 	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-o -json -dynamic static -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(LOCAL)/sps-p\?b=open\&c=-1\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	  '$(JSON)/sps-p\?b=open\&c=-1\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-p -json -dynamic static -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(LOCAL)/sps-p\?b=periodic\&c=10\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-o -json -dynamic dynamic -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(LOCAL)/sps-p\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	  '$(JSON)/sps-p\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-p -json -dynamic dynamic -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(LOCAL)/sps-p\?b=periodic\&c=10\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
 
 img-energy: json
 	parallel $(ENV) python3 $(UTIL_ENERGY) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
