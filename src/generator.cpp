@@ -175,14 +175,13 @@ static std::string trim(double x, int precision) {
 static std::string filename() {
   // Filename includes the infomation: boundary, cycle, dynamic, maxgen, kparam, and seed.
   // Example: sps-p&b=open&c=-1&d=none&g=100000&k=zero&s=0
-  std::string fn = "sps-p";
+  std::string fn = "";
   // Boundary.
-  fn.append("&b=");
+  fn.append("b=");
   fn.append(boundary());
   // Cycle.
   fn.append("&c=");
   fn.append(std::to_string(cycle));
-  fn.append("-1");
   // Dynamic.
   fn.append("&d=");
   fn.append(dynamic);

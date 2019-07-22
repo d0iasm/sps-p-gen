@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 src = ''
-kparam = ''
+out = ''
 dynamic = False
 
 
@@ -23,42 +23,33 @@ def plot(n, e_ave, e_var):
     # log y axis
     ax.semilogy(x, e_ave, label='Average') 
     ax.semilogy(x, e_var, label='Variance') 
-    ax.set(title='Energy (average/variance): ' + kparam)
+    ax.set(title='Energy (average/variance): ' + src)
     leg = ax.legend(loc='upper right', fancybox=True, shadow=True) 
     leg.get_frame().set_alpha(0.4)
     ax.grid()
     
     fig.tight_layout()
-    # Replace directory and extension.
-    extension = src.split('.')[len(a)-1]
-    suffix = 'dynamic_' if dynamic else 'static_'
-    dest = 'img/' + suffix + 'energy?' + src.split('/')[1]
-    plt.savefig(dest.replace(extension, 'png'))
+    plt.savefig(out)
 
 
 def parse_args():
     global src
-    global kparam
+    global out
     global dynamic
 
     parser = argparse.ArgumentParser(
             description='Generate an image from a json file.')
     parser.add_argument('-src', required=True,
             help='The source file path') 
-    parser.add_argument('-k', nargs='+',
-            help='The K parameters')
+    parser.add_argument('-out', required=True,
+            help='The output image path') 
     parser.add_argument('-dynamic', action='store_true',
             help='Whether dynamic energy or static energy.')
 
     args = parser.parse_args()
     src = args.src
+    out = args.out
     dynamic = args.dynamic
-    if args.k == None:
-        # Ex. 'abpm=0.8,0.4,0.8,0.5&b=open&d=true.html'
-        params = src.split('&')
-        kparam = params[0].split('=')[1]
-    else:
-        kparam = ','.join(args.k)
 
 
 if __name__ == '__main__':
