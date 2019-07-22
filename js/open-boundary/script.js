@@ -22,6 +22,9 @@ const resetButton = document.getElementById('reset');
 const RED = 0;
 const BLUE = 1;
 
+const MAX = 1.3;
+const MIN = -1.3;
+
 // Variables.
 let currentScale = 1;
 let handle;
@@ -63,6 +66,35 @@ function drawPoint(p) {
   ctx.arc(p.x, p.y, 5 / currentScale, 0, 2 * Math.PI, true);
   ctx.fill();
   ctx.restore();
+}
+
+function drawKparam(kparam) {
+  ctx.save();
+  ctx.lineWidth = 0.01;
+  for (let i = 1; i < points[index].length; i++) {
+    const k = kparam[0][i-1]; // Kparam of 0 to an other particle.
+    // Normalize to [0..255];
+    // TODO: positive relashionship represents red and negative one do blue.
+    // The value around 0 shows around white.
+    const r = ((k - MIN) / (MAX - MIN)) * (255 - 0) + 0;
+    ctx.strokeStyle = 'rgb(' + r + ', 0, 0)';
+    ctx.moveTo(points[index][i].x, points[index][i].y);
+    ctx.lineTo(points[index][1].x, points[index][1].y);
+  }
+  ctx.stroke();
+  ctx.restore();
+  /**
+  ctx.save();
+  for (let i = 0; i < kparam.length; i++) {
+    for (let j = 0; j < kparam[0].length; j++) {
+      ctx.fillStyle = 'rgb(255, 0, 0)';
+      ctx.moveTo(points[index][i].x, points[index][i].y);
+      ctx.lineTo(points[index][j].x, points[index][j].y)
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+  */
 }
 
 function scaleout() {
@@ -206,16 +238,15 @@ function redraw() {
   scaleout();
   drawGrid();
 
-  // i starts 0 because points[index][0] represents the number of steps.
+  // i starts 1 because points[index][0] represents the number of steps.
   for (let i = 1; i < points[index].length; i++) {
     drawPoint(points[index][i]);
   }
 
-  // i and j start 0 because points[index][0] represents the number of steps.
-  for (let i = 1; i < points[index].length; i++) {
-    for (let j = 1; j < points[index].length; j++) {
-
-    }
+  // kparam[index].step represents the number of steps.
+  // kparam[index].k represents 2d array kparams.
+  for (let i = 0; i < kparam[index].k.length; i++) {
+    drawKparam(kparam[index].k);
   }
 
   document.getElementById('timestep').value = points[index][0];
@@ -232,7 +263,7 @@ function step() {
 }
 
 function start() {
-  handle = window.setInterval(step, 0);
+  handle = window.setInterval(step, 50);
   startButton.innerText = 'Stop';
 }
 
