@@ -53,8 +53,10 @@ img-kparam: json
 img-xv: json
 	parallel $(ENV) python3 $(UTIL_XV) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(LOCAL_IMG)/xv\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
+	parallel $(ENV) python3 $(UTIL_XV) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
+	  -out '$(LOCAL_IMG)/xv\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 
-img: img-energy img-kparam
+img: img-energy img-kparam img-xv
 
 public: html img
 	cp -a css $(PUBLIC)

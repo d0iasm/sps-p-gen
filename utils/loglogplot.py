@@ -3,6 +3,9 @@ import json
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+from cycler import cycler
+from matplotlib.colors import Normalize
+from matplotlib.colorbar import ColorbarBase
 
 
 src = ''
@@ -14,19 +17,33 @@ def read_json():
         data = json.load(f)
     return data
 
+def func():
+    return 'r'
 
-def plot(n, e_ave, e_var):
-    fig, ax = plt.subplots()
 
-    x = np.arange(n)
-    # log y axis
-    ax.semilogy(x, e_ave, label='Average') 
-    ax.semilogy(x, e_var, label='Variance') 
-    ax.set(title='Energy (average/variance): ' + src)
-    leg = ax.legend(loc='upper right', fancybox=True, shadow=True) 
-    leg.get_frame().set_alpha(0.4)
-    ax.grid()
-    
+def plot(n, x, v):
+    fig, (ax, colorbar) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [10, 1]})
+    ax.set(title='XV: ' + src)
+    ax.grid(True)
+    ax.set_xlabel('X')
+    ax.set_ylabel('V')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+
+    # Choose a color map, loop through the colors, and assign them to the color 
+    # cycle. You need n-1 colors, because you'll plot that many lines 
+    # between pairs. In other words, your line is not cyclic, so there's 
+    # no line from end to beginning.
+    # Colormaps: https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
+    cm = plt.get_cmap('Spectral')
+    cycle = cycler(color=[cm(1.*i/(n-1)) for i in range(n-1)])
+    ax.set_prop_cycle(cycle)
+    for i in range(n-1):
+        ax.plot(x[i:i+2], v[i:i+2])
+
+    norm = Normalize(vmin=0, vmax=n)
+    ColorbarBase(colorbar, cmap='Spectral', norm=norm)
+    colorbar.set_xlabel('step')
     fig.tight_layout()
     plt.savefig(out)
 
@@ -54,6 +71,6 @@ if __name__ == '__main__':
     if extension != 'json':
         sys.exit('Error: ' + extension + ' file is not supported.')
     data = read_json()
-    e_ave = [y['energy']['dynamic']['average'] for y in data] 
-    e_var = [y['energy']['dynamic']['variance'] for y in data] 
-    plot(len(data), e_ave, e_var)
+    x = [d['xv']['x'] for d in data] 
+    v = [d['xv']['v'] for d in data] 
+    plot(len(data), x, v)
