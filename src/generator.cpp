@@ -107,7 +107,7 @@ static void initPoints() {
   // Default value of cycle:
   // -1 when it's open boundary and result of -1/2 is 0.
   // 10 whne it's periodic boundary.
-  std::normal_distribution<double> dist(cycle/2, 5);
+  std::normal_distribution<double> dist(cycle/2, 2);
 
   for (int i = 0; i < NPOINTS; i++) {
     points[i].x = dist(gen);
