@@ -1,5 +1,4 @@
 import argparse
-import csv
 import json
 import sys
 import numpy as np
@@ -16,39 +15,20 @@ def read_json():
     return data
 
 
-def plot(n, y):
+def plot(n, e_ave, e_var):
     fig, ax = plt.subplots()
 
     x = np.arange(n)
-
-    # Get labels which have a value more than 0.
-    labels = [None for _ in range(len(y[0]))]
-    for step in y:
-        i = 0
-        for key, val in step.items():
-            if val > 0:
-                labels[i] = key
-            i += 1
-    y = [list(step.values()) for step in y]
-    # x: 1d array of dimension N.
-    # y: 2d array (dimension MxN), or sequence of
-    #    1d arrays (each dimension 1xN)
-    ax.stackplot(x, list(zip(*y)), labels=labels)
-    leg = ax.legend(loc='upper right')
+    # log y axis
+    ax.semilogy(x, e_ave, label='Average') 
+    ax.semilogy(x, e_var, label='Variance') 
+    ax.set(title='Energy (average/variance): ' + src)
+    leg = ax.legend(loc='upper right', fancybox=True, shadow=True) 
     leg.get_frame().set_alpha(0.4)
-
+    ax.grid()
+    
     fig.tight_layout()
     plt.savefig(out)
-
-
-def reshape_k(data):
-    y = []
-    for step in data:
-        x = {key/10:0 for key in range(-24, 25)}
-        for param_num in step['k']['count']:
-            x[param_num[0]] += param_num[1]
-        y.append(x)
-    return y
 
 
 def parse_args():
@@ -74,5 +54,6 @@ if __name__ == '__main__':
     if extension != 'json':
         sys.exit('Error: ' + extension + ' file is not supported.')
     data = read_json()
-    y = reshape_k(data)
-    plot(len(data), y)
+    e_ave = [y['energy']['dynamic']['average'] for y in data] 
+    e_var = [y['energy']['dynamic']['variance'] for y in data] 
+    plot(len(data), e_ave, e_var)

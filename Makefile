@@ -32,7 +32,7 @@ html: generator
 	parallel $(SRC)/generator-p -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
 	  '$(LOCAL)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
 
-json:
+json: generator
 	parallel $(SRC)/generator-o -json -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
 	  '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-p -json -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
@@ -54,7 +54,7 @@ img-xv: json
 	parallel $(ENV) python3 $(UTIL_XV) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(LOCAL_IMG)/xv\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 
-img: img-static-energy img-dynamic-energy
+img: img-energy img-kparam
 
 public: html img
 	cp -a css $(PUBLIC)

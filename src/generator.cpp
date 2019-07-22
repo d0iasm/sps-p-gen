@@ -447,6 +447,7 @@ static void json() {
     // Kparams.
     // Initial Kparams.
     std::cout << "\"k\":{";
+    std::cout << "\"initial\":{";
     std::cout << "\"00\":" << initial_kparam[0][0] << ",";
     std::cout << "\"01\":" << initial_kparam[0][1] << ",";
     std::cout << "\"10\":" << initial_kparam[1][0] << ",";
@@ -454,9 +455,24 @@ static void json() {
     std::cout << "\"a\":" << initial_kparam[0][0] << ",";
     std::cout << "\"b\":" << initial_kparam[1][1] << ",";
     std::cout << "\"p\":" << getP() << ",";
-    std::cout << "\"m\":" << getM() << ",";
-    // Dynamic Kparams. 
-    std::cout << "\"dynamic\":[";
+    std::cout << "\"m\":" << getM();
+    std::cout << "},\n";
+    // All Kparams.
+    std::cout << "\"all\":[";
+    for (int j = 0; j < NPOINTS; j++) {
+      std::cout << "[";
+      for (int k = 0; k < NPOINTS; k++) {
+        std::cout << kparam_result[i][j][k];
+        if (k != NPOINTS - 1)
+          std::cout << ",";
+        }
+      std::cout << "]";
+      if (j != NPOINTS - 1)
+        std::cout << ",\n";
+    }
+    std::cout << "],\n";
+    // Counting Kparams.
+    std::cout << "\"count\":[";
     int n = kparam_counter[i].size();
     for (std::pair<double, int> e : kparam_counter[i]) {
       std::cout << "[" << e.first << "," << e.second << "]";
