@@ -228,8 +228,8 @@ static void printBody() {
   std::cout << "<h2>Static K Parameters</h2>\n";
   std::cout << "<div>Initial K[00,01,10,11]: "
             << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
-            << initial_kparam[1][0] << "," << initial_kparam[1][1];
-  std::cout << "</div>\n";
+            << initial_kparam[1][0] << "," << initial_kparam[1][1]
+            << "</div>\n";
   std::cout << "<div>Initial K[a, b, p, m]: "
             << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
@@ -238,28 +238,19 @@ static void printBody() {
   std::cout << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />";
   printCountedKparam();
   std::cout << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
-  std::cout <<  R"END(</div>
-    <br />
-    <h2>Static Energy</h2>
-    <div>Average: <span id=energyAverage></span></div>
-    <div>Variance: <span id=energyVariance></span></div>
-  )END";
-  std::cout << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
-  std::cout << R"END(
-    <br />
-    <h2>Dynamic Energy</h2>
-  )END";
-  std::cout << "<div><img width=350 src=\"img/dynamic_energy%3F" << filename() << ".png\" /></div>";
-  std::cout <<  R"END(
-    <!--
-    <canvas id=graphEnergy width=250 height=250></canvas>
-    -->
-    <br />
-    <h2>X-V Log Log Plot</h2>
-    <canvas id=graphXV width=250 height=250></canvas>
-  </div>
-</div>
-)END";
+  std::cout << "</div>";
+  std::cout << "<br />";
+  std::cout << "<h2>Static Energy</h2>"
+            << "Average: " << energy[0][0] << " => " << energy[maxgen-1][0]
+            << "Variance: " << energy[0][1] << " => " << energy[maxgen-1][1]
+            << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
+  std::cout << "<br />";
+  std::cout << "<h2>Dynamic Energy</h2>"
+            << "<div><img width=350 src=\"img/dynamic_energy%3F" << filename() << ".png\" /></div>";
+  std::cout << "<br />";
+  std::cout << "<h2>X-V Log Log Plot</h2>"
+            << "<div><img width=350 src=\"img/xv%3F" << filename() << ".png\" /></div>";
+  std::cout << "</div></div>";
 }
 
 static void printPoints() {
@@ -431,12 +422,6 @@ static void html() {
   printEnergy();
   printCycle();
   importScript();
-  std::cout << "<script>"
-            << "document.getElementById('energyAverage').innerText=\""
-            << energy[0][0] << " => " << energy[maxgen-1][0] << "\";" 
-            << "document.getElementById('energyVariance').innerText=\""
-            << energy[0][1] << " => " << energy[maxgen-1][1] << "\";" 
-            << "</script>\n";
   std::cout << "</body></html>\n";
 }
 
