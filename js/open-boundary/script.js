@@ -56,13 +56,27 @@ function drawPoint(p) {
   ctx.beginPath();
   ctx.arc(p.x, p.y, 5 / currentScale, 0, 2 * Math.PI, true);
   ctx.fill();
+
+  // Draw Kparam.
+  ctx.lineWidth = 0.01;
+  for (let i = 0; i < p.k.length; i++) {
+    // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
+    // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
+    const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
+    if (rb > 200 || rb < -255) {
+      console.log(rb);
+    }
+    ctx.strokeStyle = 'rgb(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ')';
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(points[index][i].x, points[index][i].y);
+  }
+  ctx.stroke();
   ctx.restore();
 }
 
 function drawKparam(kparam) {
   ctx.save();
   ctx.lineWidth = 0.01;
-
   for (let i = 1; i < points[index].length; i++) {
     const k = kparam[0][i-1]; // Kparam of 0 to an other particle.
     // Normalize to [0..255];
@@ -74,9 +88,10 @@ function drawKparam(kparam) {
     ctx.lineTo(points[index][1].x, points[index][1].y);
   }
   ctx.stroke();
+  /*
   ctx.restore();
-  /**
   ctx.save();
+  ctx.lineWidth = 0.01;
   for (let i = 0; i < kparam.length; i++) {
     for (let j = 0; j < kparam[0].length; j++) {
       ctx.fillStyle = 'rgb(255, 0, 0)';
@@ -85,8 +100,8 @@ function drawKparam(kparam) {
       ctx.stroke();
     }
   }
-  ctx.restore();
   */
+  ctx.restore();
 }
 
 function scaleout() {
@@ -114,9 +129,9 @@ function redraw() {
 
   // kparam[index].step represents the number of steps.
   // kparam[index].k represents 2d array kparams.
-  for (let i = 0; i < kparam[index].k.length; i++) {
-    drawKparam(kparam[index].k);
-  }
+  //for (let i = 0; i < kparam[index].k.length; i++) {
+    //drawKparam(kparam[index].k);
+  //}
 
   document.getElementById('timestep').value = points[index][0];
   ctx.restore();

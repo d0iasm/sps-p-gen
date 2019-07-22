@@ -257,11 +257,17 @@ static void printPoints() {
   std::cout << "<script>const points = [\n";
   for (int i = 0; i < result.size(); i += 100) {
     std::cout << "  [" << i << ",";
-    for (Point &p : result[i])
+    for (int j = 0; j < result[i].size(); j++) {
+      Point &p = result[i][j];
       std::cout << "{x:" << p.x
                 << ",y:" << p.y
-                << ",color:" << p.color
-                << "},";
+                << ",color:" << p.color;
+      std::cout << ",k:[";
+      for (int k = 0; k < NPOINTS; k++) {
+        std::cout << kparam_result[i][j][k] << ",";
+      }
+      std::cout << "]},";
+    }
     std::cout << "],\n";
   }
   std::cout << "];</script>\n";
@@ -417,7 +423,8 @@ static void html() {
   std::cout << "<head><link rel=stylesheet href='css/style.css'></head>";
   printBody();
   printPoints();
-  printKparam();
+  // Maybe too heavy.
+  // printKparam();
   printXV();
   printEnergy();
   printCycle();
