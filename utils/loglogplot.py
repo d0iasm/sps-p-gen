@@ -23,7 +23,6 @@ def func():
 
 def plot(n, x, v):
     fig, (ax, colorbar) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [10, 1]})
-    ax.set(title='XV: ' + src)
     ax.grid(True)
     ax.set_xlabel('X')
     ax.set_ylabel('V')

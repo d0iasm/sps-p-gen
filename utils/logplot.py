@@ -23,7 +23,6 @@ def plot(n, e_ave, e_var, is_dynamic):
     # log y axis
     ax.semilogy(x, e_ave, label='Average') 
     ax.semilogy(x, e_var, label='Variance') 
-    ax.set(title='Energy (average/variance): ' + src)
     leg = ax.legend(loc='upper right', fancybox=True, shadow=True) 
     leg.get_frame().set_alpha(0.4)
     ax.grid()
