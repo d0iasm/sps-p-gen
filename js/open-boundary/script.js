@@ -206,8 +206,16 @@ function redraw() {
   scaleout();
   drawGrid();
 
+  // i starts 0 because points[index][0] represents the number of steps.
   for (let i = 1; i < points[index].length; i++) {
     drawPoint(points[index][i]);
+  }
+
+  // i and j start 0 because points[index][0] represents the number of steps.
+  for (let i = 1; i < points[index].length; i++) {
+    for (let j = 1; j < points[index].length; j++) {
+
+    }
   }
 
   document.getElementById('timestep').value = points[index][0];

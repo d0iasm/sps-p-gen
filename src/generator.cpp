@@ -119,7 +119,6 @@ static void initPoints() {
   }
 }
 
-
 static void initKparamWithK() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
@@ -163,7 +162,7 @@ static double getM() {
   return initial_kparam[0][1] - getP();
 }
 
-void printKparam() {
+void printCountedKparam() {
   std::map<double, int> m = countKparam();
   for (std::pair<double, int> e : m)
     std::cout << e.first << " => " << e.second << "<br />";
@@ -238,7 +237,7 @@ static void printBody() {
   std::cout << "</div>\n<br />\n<div>";
   std::cout << "<h2>Dynamic K Parameters</h2>\n";
   std::cout << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />";
-  printKparam();
+  printCountedKparam();
   std::cout << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   std::cout <<  R"END(</div>
     <br />
@@ -274,6 +273,23 @@ static void printPoints() {
                 << ",color:" << p.color
                 << "},";
     std::cout << "],\n";
+  }
+  std::cout << "];</script>\n";
+}
+
+static void printKparam() {
+  std::cout << "<script>const kparam = [\n";
+  for (int i = 0; i < kparam_result.size(); i += 100) {
+    std::cout << "{step: " << i;
+    std::cout << ",k:[";
+    for (int j = 0; j < kparam_result[i].size(); j++) {
+      std::cout << "[";
+      for (int k = 0; k < kparam_result[i][j].size(); k++) {
+        std::cout << trim(kparam_result[i][j][k], 1) << ",";
+      }
+      std::cout << "],\n";
+    }
+    std::cout << "]},\n";
   }
   std::cout << "];</script>\n";
 }
@@ -411,6 +427,7 @@ static void html() {
   std::cout << "<head><link rel=stylesheet href='css/style.css'></head>";
   printBody();
   printPoints();
+  printKparam();
   printXV();
   printEnergy();
   printCycle();
@@ -468,6 +485,16 @@ static void json() {
   std::cout << "]"; // End on Json.
 }
 
+static void storeKparam() {
+  std::vector<std::vector<double> > k(NPOINTS);
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      k[i].push_back(kparam[i][j]);
+    }
+  }
+  kparam_result.push_back(k);
+}
+
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
@@ -487,6 +514,8 @@ int main(int argc, char **argv) {
   center = computeCenter();
 
   for (int i = 0; i < maxgen; i++) {
+    // Store the current Kparam before update it.
+    storeKparam();
     if (dynamic.compare("none") != 0)
       updateKparam();
     step();

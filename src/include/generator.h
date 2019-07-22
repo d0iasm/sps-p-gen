@@ -46,10 +46,11 @@ extern std::string dynamic;
 extern Init init_param;
 
 // Variables which scope is only this file. 
-static std::vector<std::map<double, int> > kparam_counter;
 static double initial_kparam[2][2];
 static int timestep = 0;
 static std::vector<std::vector<Point>> result;
+static std::vector<std::vector<std::vector<double> > > kparam_result;
+static std::vector<std::map<double, int> > kparam_counter;
 static int maxgen = 50000;
 static Output output = HTML;
 
