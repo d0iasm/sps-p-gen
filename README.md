@@ -28,16 +28,22 @@ generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -seed number ] [ -gen nu
 -seed: Used when generate random positions for an initialization. A default seed is 1. The same result comes with the same seed value.
 -gen: The number of max steps.
 -cycle: The length of 1 cycle for periodic boundary condition. It is useless for open boundary condition.
--csv: Output csv data instead of a HTML file.
--csve: Output csv data for each step.
+-seed: The seed number to be used for generating random number. Default value is 1.
+-dynamic: The flag to change the K parameters dinamicallybased on static energy/dynamic energy. Default is static optimization which means to use static energy.
+-init: The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.
+-json: Output a json file for creating images by utils.
 ```
 
 ## Utils
+- stackplot.py: Generate an image from a json file. It is used for K parameters. 
+  - usage: stackplot.py [-h] -src SRC -out OUT
+- logplot.py: Generate an image from a json file. It is used for static energy and dynamic energy.
+  - usage: logplot.py [-h] -src SRC -out OUT
+- loglogplot.py: Generate an image from a json file. It is used for X and V.
+  - usage: loglogplot.py [-h] -src SRC -out OUT
 - headmap.py: Plot 2d histgram with x-axis, y-axis, and z-axis.
   - usage: heatmap.py [-h] -title TITLE [-src SRC] [-x X] [-y Y] [-z Z] [-print [PRINT]]
-- logplot.py: Logarithmic energy as y-axis and the number of step as x-axis.
-  - usage: logplot.py [-h] -src SRC
-- composite.py: Composite class images and energy analyzed images.
+
 
 ## Develop
 Results are hosted by firebase. `public/` is the root directory for the website.
@@ -47,13 +53,7 @@ $ firebase deploy
 ```
 
 ### Dependencies
-#### Python libs (pip)
-matplotlib==3.0.3  
-numpy==1.16.3  
-PyQt5==5.12.1  
-PyQt5-sip==4.19.15  
-Pillow==6.0.0
-
-#### Others
-npm
-firebase-tools
+- matplotlib
+- numpy
+- npm
+- firebase-tools
