@@ -16,7 +16,7 @@ def read_json():
     return data
 
 
-def plot(n, e_ave, e_var):
+def plot(n, e_ave, e_var, is_dynamic):
     fig, ax = plt.subplots()
 
     x = np.arange(n)
@@ -29,13 +29,13 @@ def plot(n, e_ave, e_var):
     ax.grid()
     
     fig.tight_layout()
-    plt.savefig(out)
+    fn = out.replace("energy", "dynamic_energy" if is_dynamic else "static_energy", 1)
+    plt.savefig(fn)
 
 
 def parse_args():
     global src
     global out
-    global dynamic
 
     parser = argparse.ArgumentParser(
             description='Generate an image from a json file.')
@@ -43,13 +43,10 @@ def parse_args():
             help='The source file path') 
     parser.add_argument('-out', required=True,
             help='The output image path') 
-    parser.add_argument('-dynamic', action='store_true',
-            help='Whether dynamic energy or static energy.')
 
     args = parser.parse_args()
     src = args.src
     out = args.out
-    dynamic = args.dynamic
 
 
 if __name__ == '__main__':
@@ -59,10 +56,12 @@ if __name__ == '__main__':
     if extension != 'json':
         sys.exit('Error: ' + extension + ' file is not supported.')
     data = read_json()
-    if dynamic:
-        e_ave = [y['energy']['dynamic']['average'] for y in data] 
-        e_var = [y['energy']['dynamic']['variance'] for y in data] 
-    else:
-        e_ave = [y['energy']['static']['average'] for y in data] 
-        e_var = [y['energy']['static']['variance'] for y in data] 
-    plot(len(data), e_ave, e_var)
+    # Save an image for static energy.
+    e_ave = [y['energy']['static']['average'] for y in data] 
+    e_var = [y['energy']['static']['variance'] for y in data] 
+    plot(len(data), e_ave, e_var, False)
+
+    # Save an image for dynamic image.
+    e_ave = [y['energy']['dynamic']['average'] for y in data] 
+    e_var = [y['energy']['dynamic']['variance'] for y in data] 
+    plot(len(data), e_ave, e_var, True)
