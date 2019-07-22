@@ -38,16 +38,22 @@ json:
 	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' ::: $(INITS) ::: $(SEEDS)
 
 img-static-energy: json
-	parallel $(ENV) python3 utils/logplot.py -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
+	parallel $(ENV) python3 $(UTIL_ENERGY) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(LOCAL_IMG)/static_energy\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
-	parallel $(ENV) python3 utils/logplot.py -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
+	parallel $(ENV) python3 $(UTIL_ENERGY) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(LOCAL_IMG)/static_energy\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 
 img-dynamic-energy: json
-	parallel $(ENV) python3 utils/logplot.py -dynamic -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
+	parallel $(ENV) python3 $(UTIL_ENERGY) -dynamic -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(LOCAL_IMG)/dynamic_energy\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
-	parallel $(ENV) python3 utils/logplot.py -dynamic -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
+	parallel $(ENV) python3 $(UTIL_ENERGY) -dynamic -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(LOCAL_IMG)/dynamic_energy\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
+
+img-kparam: json
+	parallel $(ENV) python3 $(UTIL_K) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
+	  -out '$(LOCAL_IMG)/kparam\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
+	parallel $(ENV) python3 $(UTIL_K) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
+	  -out '$(LOCAL_IMG)/kparam\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 
 img: img-static-energy img-dynamic-energy
 
@@ -55,7 +61,8 @@ public: html img
 	cp -a css $(PUBLIC)
 	cp -a js $(PUBLIC)
 	cp -a img $(PUBLIC)
-	mv abpm* $(PUBLIC)
+	./gen_index.sh
+	mv sps-p\?* $(PUBLIC)
 	mv index.html $(PUBLIC)
 
 clean:

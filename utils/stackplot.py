@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 src = ''
-kparam = ''
+out = ''
 
 
 def read_json():
@@ -38,9 +38,7 @@ def plot(n, y):
     leg.get_frame().set_alpha(0.4)
 
     fig.tight_layout()
-    # Replace directory and extension.
-    dest = 'img/kparam?' + src.split('/')[1]
-    plt.savefig(dest.replace('json', 'png'))
+    plt.savefig(out)
 
 
 def reshape_k(data):
@@ -55,23 +53,18 @@ def reshape_k(data):
 
 def parse_args():
     global src
-    global kparam
+    global out
 
     parser = argparse.ArgumentParser(
             description='Generate an image from a json file.')
     parser.add_argument('-src', required=True,
             help='The source file path') 
-    parser.add_argument('-k', nargs='+',
-            help='The K parameters')
+    parser.add_argument('-out', required=True,
+            help='The output image path') 
 
     args = parser.parse_args()
     src = args.src
-    if args.k == None:
-        # Ex. 'abpm=0.8,0.4,0.8,0.5&b=open&d=true.html'
-        params = src.split('&')
-        kparam = params[0].split('=')[1]
-    else:
-        kparam = ','.join(args.k)
+    out = args.out
 
 
 if __name__ == '__main__':
