@@ -8,6 +8,7 @@ ctx.translate(500, 500);
 // HTML elements
 const startButton = document.getElementById('start');
 const resetButton = document.getElementById('reset');
+const relationButton = document.getElementById('relation');
 
 // Constants
 const RED = 0;
@@ -20,6 +21,7 @@ const MIN = -1.3;
 // Variables
 let handle;
 let index = 0;
+let relationOn = true;
 
 function drawGrid() {
   ctx.save();
@@ -59,19 +61,18 @@ function drawPoint(p) {
   ctx.fill();
 
   // Draw Kparam.
-  ctx.lineWidth = 0.01;
-  for (let i = 0; i < p.k.length; i++) {
-    // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
-    // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
-    const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
-    if (rb > 200 || rb < -255) {
-      console.log(rb);
+  if (relationOn) {
+    ctx.lineWidth = 0.01;
+    for (let i = 0; i < p.k.length; i++) {
+      // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
+      // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
+      const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
+      ctx.strokeStyle = 'rgb(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ')';
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(points[index][i].x, points[index][i].y);
     }
-    ctx.strokeStyle = 'rgb(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ')';
-    ctx.moveTo(p.x, p.y);
-    ctx.lineTo(points[index][i].x, points[index][i].y);
+    ctx.stroke();
   }
-  ctx.stroke();
   ctx.restore();
 }
 
@@ -117,6 +118,26 @@ function reset() {
   if (running) start();
 }
 
+function on() {
+  relationOn = true;
+  relationButton.innerText = 'ON';
+  relationButton.style.backgroundColor = "#333";
+  relationButton.style.color = "white";
+  if (!handle) {
+    redraw();
+  }
+}
+
+function off() {
+  relationOn = false;
+  relationButton.innerText = 'OFF';
+  relationButton.style.backgroundColor = "white";
+  relationButton.style.color = "#333";
+  if (!handle) {
+    redraw();
+  }
+}
+
 startButton.addEventListener('click', function() {
   if (handle) {
     stop();
@@ -126,6 +147,14 @@ startButton.addEventListener('click', function() {
 });
 
 resetButton.addEventListener('click', reset);
+
+relationButton.addEventListener('click', function() {
+  if (relationOn) {
+    off();
+  } else {
+    on();
+  }
+});
 
 document.getElementById('timestep').addEventListener('change', e => {
   index = parseInt(e.currentTarget.value / 100);

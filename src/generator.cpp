@@ -217,6 +217,7 @@ static void printBody() {
     <div class=container>
       <button id=start>Stop</button>
       <button id=reset>Reset</button>
+      <button id=relation>ON</button>
     </div>
   </div>
   <div>)END";
