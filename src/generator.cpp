@@ -291,28 +291,6 @@ static void printKparam() {
   std::cout << "];</script>\n";
 }
 
-static void printXV() {
-  std::cout << "<script>const xv = [\n";
-  for (int i = 0; i < xv.size(); i += 100) {
-    std::cout << "  [" << i << ", "
-              << "{x:" << xv[i].x 
-              << ",v:" <<xv[i].v
-              << "}],\n";
-  }
-  std::cout << "];</script>\n";
-}
-
-static void printEnergy() {
-  std::cout << "<script>const energy = [\n";
-  for (int i = 0; i < energy.size(); i += 100) {
-    std::cout << "[" << i << ", "
-              << "{energyAverage:" << energy[i][2] << ", "
-              << "energyVariance:" << energy[i][3]
-              << "}],\n";
-  }
-  std::cout << "];</script>\n";
-}
-
 static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
@@ -426,8 +404,6 @@ static void html() {
   printPoints();
   // Maybe too heavy.
   // printKparam();
-  printXV();
-  printEnergy();
   printCycle();
   importScript();
   std::cout << "</body></html>\n";
