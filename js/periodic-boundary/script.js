@@ -57,6 +57,21 @@ function drawPoint(p) {
   ctx.beginPath();
   ctx.arc(p.x, p.y, 0.005 * cycle, 0, 2 * Math.PI, true);
   ctx.fill();
+
+  // Draw Kparam.
+  ctx.lineWidth = 0.01;
+  for (let i = 0; i < p.k.length; i++) {
+    // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
+    // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
+    const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
+    if (rb > 200 || rb < -255) {
+      console.log(rb);
+    }
+    ctx.strokeStyle = 'rgb(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ')';
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(points[index][i].x, points[index][i].y);
+  }
+  ctx.stroke();
   ctx.restore();
 }
 
