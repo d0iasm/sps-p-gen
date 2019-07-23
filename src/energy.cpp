@@ -70,7 +70,7 @@ double energyAverage() {
       }
     }
   }
-  return sum / size;
+  return - (sum / size);
 }
 
 // Calculate a variance energy of all triangles.
@@ -104,7 +104,7 @@ double energyAverageDist() {
       }
     }
   }
-  return sum / size;
+  return - (sum / size);
 }
 
 // Calculate a variance energy of all triangles for each step.

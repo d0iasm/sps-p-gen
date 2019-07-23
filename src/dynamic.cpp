@@ -19,12 +19,13 @@ void updateKparam() {
 
   // Avoid a digit error.
   int tmp = (int) (kparam[i][j] * 10);
-  tmp += rand() % 4;
+  // Add a random number from -2 to 2.
+  tmp += (rand() % 5 - 2);
   kparam[i][j] = tmp / 10.0;
 
   if (kparam[i][j] > maxk || kparam[i][j] < mink)
     kparam[i][j] = oldk;
 
-  if (oldEnergy > energyAverage())
+  if (oldEnergy < energyAverage())
     kparam[i][j] = oldk;
 }
