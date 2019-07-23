@@ -14,13 +14,13 @@ UTIL_XV=$(UTIL)/loglogplot.py
 
 ENV=MPLBACKEND=Agg
 
-MAXGEN=100000
+MAXGEN=50000
 # RANGE=-0.8 -0.7 -0.6 -0.5 -0.4 -0.3 -0.2 -0.1 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2
 RANGE = -0.8 -0.6 -0.4 -0.2 0.0 0.2 0.4 0.6 0.8 1.0 1.2
-INITS = zero random
-# INITS = random
-SEEDS = 0 1 2 3 4
-# SEEDS = 0 
+# INITS = zero random
+INITS = zero
+# SEEDS = 0 1 2 3 4
+SEEDS = 0 
 EXE=generator-o generator-p
 
 generator:
@@ -46,13 +46,13 @@ json: generator
 	parallel $(SRC)/generator-p -json -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
 	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-o -json -dynamic static -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(JSON)/sps-p\?b=open\&c=-1\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	  '$(JSON)/sps-p\?b=open\&c=-1\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.json' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-p -json -dynamic static -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.json' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-o -json -dynamic dynamic -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(JSON)/sps-p\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	  '$(JSON)/sps-p\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.json' ::: $(INITS) ::: $(SEEDS)
 	parallel $(SRC)/generator-p -json -dynamic dynamic -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	  '$(JSON)/sps-p\?b=periodic\&c=10\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.json' ::: $(INITS) ::: $(SEEDS)
 
 img-energy: json
 	parallel $(ENV) python3 $(UTIL_ENERGY) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
