@@ -162,6 +162,27 @@ static double getM() {
   return initial_kparam[0][1] - getP();
 }
 
+double kAverage() {
+  double sum = 0.0;
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      sum += kparam[i][j];
+    }
+  }
+  return sum / (NPOINTS * NPOINTS);
+}
+
+double kVariance() {
+  double ave = kAverage();
+  double sum = 0.0;
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      sum += (kparam[i][j] - ave) * (kparam[i][j] - ave);
+    }
+  }
+  return sum / (NPOINTS * NPOINTS);
+}
+
 void printCountedKparam() {
   std::map<double, int> m = countKparam();
   for (std::pair<double, int> e : m)
@@ -235,14 +256,15 @@ static void printBody() {
             << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
   std::cout << "</div>\n<br />\n<div>";
-  std::cout << "<h2>Dynamic K Parameters</h2>\n";
-  std::cout << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />";
-  printCountedKparam();
+  std::cout << "<h2>Dynamic K Parameters</h2>\n"
+	    << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
+	    << "Average: " << kAverage() << "<br />" 
+	    << "Variance: " << kVariance();
   std::cout << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   std::cout << "</div>";
   std::cout << "<br />";
   std::cout << "<h2>Static Energy</h2>"
-            << "Average: " << energy[0][0] << " => " << energy[maxgen-1][0]
+            << "Average: " << energy[0][0] << " => " << energy[maxgen-1][0] << "<br />"
             << "Variance: " << energy[0][1] << " => " << energy[maxgen-1][1]
             << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
   std::cout << "<br />";

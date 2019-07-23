@@ -24,8 +24,8 @@ def func():
 def plot(n, x, v):
     fig, (ax, colorbar) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [10, 1]})
     ax.grid(True)
-    ax.set_xlabel('X')
-    ax.set_ylabel('V')
+    ax.set_xlabel('X (condensation)')
+    ax.set_ylabel('V (deformation)')
     ax.set_xscale('log')
     ax.set_yscale('log')
 
@@ -40,8 +40,8 @@ def plot(n, x, v):
     for i in range(n-1):
         ax.plot(x[i:i+2], v[i:i+2])
 
-    norm = Normalize(vmin=0, vmax=n)
-    ColorbarBase(colorbar, cmap='Spectral', norm=norm)
+    norm = Normalize(vmin=0, vmax=int(n))
+    ColorbarBase(colorbar, cmap=cm, norm=norm)
     colorbar.set_xlabel('step')
     fig.tight_layout()
     plt.savefig(out)
