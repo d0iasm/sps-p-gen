@@ -172,6 +172,9 @@ function on() {
   relationButton.style.backgroundColor = "#333";
   relationButton.style.color = "white";
   if (!handle) {
+    if (index >= points.length) {
+      index = points.length - 1;
+    }
     redraw();
   }
 }
@@ -182,6 +185,9 @@ function off() {
   relationButton.style.backgroundColor = "white";
   relationButton.style.color = "#333";
   if (!handle) {
+    if (index >= points.length) {
+      index = points.length - 1;
+    }
     redraw();
   }
 }
