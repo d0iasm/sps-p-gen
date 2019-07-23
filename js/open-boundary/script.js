@@ -61,12 +61,12 @@ function drawPoint(p) {
 
   // Draw Kparam.
   if (relationOn) {
-    ctx.lineWidth = 0.01;
+    ctx.lineWidth = 0.05;
     for (let i = 0; i < p.k.length; i++) {
       // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
       // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
       const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
-      ctx.strokeStyle = 'rgb(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ')';
+      ctx.strokeStyle = 'rgba(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ', 0.4)';
       ctx.moveTo(p.x, p.y);
       ctx.lineTo(points[index][i].x, points[index][i].y);
     }
