@@ -20,7 +20,7 @@ RANGE = -0.8 -0.6 -0.4 -0.2 0.0 0.2 0.4 0.6 0.8 1.0 1.2
 INITS = zero random
 # INITS = zero
 # SEEDS = 0 1 2 3 4
-SEEDS = 0 
+SEEDS = 0
 EXE=generator-o generator-p
 
 generator:
@@ -112,7 +112,6 @@ img-p: img-energy-p img-kparam-p img-xv-p
 dev: html img
 	cp -r css $(DEV)
 	cp -r js $(DEV)
-	cp -r img $(DEV)
 
 public: html img
 	cp -r css $(PUBLIC)

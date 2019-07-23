@@ -18,8 +18,8 @@
 double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
 int seed = 0;
-double maxk = 1.3;
-double mink = -1.3;
+double maxk = 1.2;
+double mink = -1.2;
 std::string dynamic = "none";
 Init init_param = NORMAL;
 
