@@ -40,7 +40,7 @@ def plot(n, x, v):
     for i in range(n-1):
         ax.plot(x[i:i+2], v[i:i+2])
 
-    norm = Normalize(vmin=0, vmax=int(n))
+    norm = Normalize(vmin=0, vmax=n)
     ColorbarBase(colorbar, cmap=cm, norm=norm)
     colorbar.set_xlabel('step')
     fig.tight_layout()

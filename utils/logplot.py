@@ -20,9 +20,8 @@ def plot(n, e_ave, e_var, is_dynamic):
     fig, ax = plt.subplots()
 
     x = np.arange(n)
-    # log y axis
-    ax.semilogy(x, e_ave, label='Average') 
-    ax.semilogy(x, e_var, label='Variance') 
+    ax.plot(x, e_ave, label='Average') 
+    ax.plot(x, e_var, label='Variance')
     leg = ax.legend(loc='upper right', fancybox=True, shadow=True) 
     leg.get_frame().set_alpha(0.4)
     ax.grid()
