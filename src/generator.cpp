@@ -528,8 +528,11 @@ int main(int argc, char **argv) {
   for (int i = 0; i < maxgen; i++) {
     // Store the current Kparam before update it.
     storeKparam();
-    if (dynamic.compare("none") != 0)
-      updateKparam();
+    if (dynamic.compare("none") != 0) {
+      for (int i = 0; i < 100; i++) {
+        updateKparam();
+      }
+    }
     step();
   }
 

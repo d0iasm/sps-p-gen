@@ -66,7 +66,7 @@ img-energy: json
 	parallel $(ENV) python3 $(UTIL_ENERGY) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(DEV_IMG)/energy\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 
-img-energy-p: json
+img-energy-p: json-p
 	parallel $(ENV) python3 $(UTIL_ENERGY) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(DEV_IMG)/energy\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 	parallel $(ENV) python3 $(UTIL_ENERGY) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
@@ -82,7 +82,7 @@ img-kparam: json
 	parallel $(ENV) python3 $(UTIL_K) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(DEV_IMG)/kparam\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 
-img-kparam-p: json
+img-kparam-p: json-p
 	parallel $(ENV) python3 $(UTIL_K) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(DEV_IMG)/kparam\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 	parallel $(ENV) python3 $(UTIL_K) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
@@ -98,7 +98,7 @@ img-xv: json
 	parallel $(ENV) python3 $(UTIL_XV) -src '$(JSON)/sps-p\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(DEV_IMG)/xv\?b=open\&c=-1\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 
-img-xv-p: json
+img-xv-p: json-p
 	parallel $(ENV) python3 $(UTIL_XV) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
 	  -out '$(DEV_IMG)/xv\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.png' ::: $(INITS) ::: $(SEEDS)
 	parallel $(ENV) python3 $(UTIL_XV) -src '$(JSON)/sps-p\?b=periodic\&c=10\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.json' \
