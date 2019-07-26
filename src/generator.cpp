@@ -72,6 +72,7 @@ static void step() {
       double k = kparam[i][j];
 
       if (dist == 0) continue;
+      // TODO: remove  -pow(dist, -2)
       double plsx = (k / dist - pow(dist, -2)) * dx / dist;
       double plsy = (k / dist - pow(dist, -2)) * dy / dist;
       x += plsx;
