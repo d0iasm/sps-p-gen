@@ -71,6 +71,8 @@ static void step() {
       double dist = distance(pi, pj);
       double k = kparam[i][j];
 
+      if (dist > 0 && dist < 0.1)
+        std::cerr << "dist: " << dist << "\n";
       if (dist == 0) continue;
       // TODO: remove  -pow(dist, -2)
       double plsx = (k / dist - pow(dist, -2)) * dx / dist;
@@ -113,8 +115,18 @@ static void initPoints() {
   for (int i = 0; i < NPOINTS; i++) {
     //points[i].x = dist(gen);
     //points[i].y = dist(gen);
-    points[i].x = (i < NPOINTS / 2) ? 10 : -10;
-    points[i].y = 0;
+    // regular triangle
+    // A(0, -2x√3 / 3), B(-x, x√3 / 3), C(x, x√3 / 3);
+    if (i % 3 == 0) {
+      points[i].x = 0; 
+      points[i].y = -2 * 3 * sqrt(3) / 3; 
+    } else if (i % 3 == 1) {
+      points[i].x = -3; 
+      points[i].y = 3 * sqrt(3) / 3; 
+    } else {
+      points[i].x = 3; 
+      points[i].y = 3 * sqrt(3) / 3;
+    }
     if (init_param == NORMAL)
       points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
     else
@@ -528,12 +540,18 @@ int main(int argc, char **argv) {
   initPoints();
   center = computeCenter();
 
+  if (dynamic.compare("none") != 0) {
+    for (int i=0; i<1000; i++) {
+        updateKparam();
+    }
+  }
+
   for (int i = 0; i < maxgen; i++) {
     // Store the current Kparam before update it.
     storeKparam();
-    if (dynamic.compare("none") != 0) {
-        updateKparam();
-    }
+    //if (dynamic.compare("none") != 0) {
+        //updateKparam();
+    //}
     step();
   }
 
