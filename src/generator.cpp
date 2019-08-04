@@ -111,8 +111,10 @@ static void initPoints() {
   std::normal_distribution<double> dist(cycle/2, 2);
 
   for (int i = 0; i < NPOINTS; i++) {
-    points[i].x = dist(gen);
-    points[i].y = dist(gen);
+    //points[i].x = dist(gen);
+    //points[i].y = dist(gen);
+    points[i].x = (i < NPOINTS / 2) ? 10 : -10;
+    points[i].y = 0;
     if (init_param == NORMAL)
       points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
     else
@@ -530,7 +532,6 @@ int main(int argc, char **argv) {
     // Store the current Kparam before update it.
     storeKparam();
     if (dynamic.compare("none") != 0) {
-      if (i % 100 == 0)
         updateKparam();
     }
     step();
