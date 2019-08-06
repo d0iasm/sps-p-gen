@@ -6,7 +6,7 @@
 #include <vector>
 
 // Constants
-#define NPOINTS 3
+#define NPOINTS 50
 
 enum Color {
   RED,

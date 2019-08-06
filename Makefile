@@ -115,6 +115,8 @@ dev: html img
 
 dev-p: html-p img-p
 
+dev-all: dev dev-p
+
 public: html img
 	cp -r css $(PUBLIC)
 	cp -r js $(PUBLIC)
