@@ -18,7 +18,7 @@ MAXGEN=200000
 INITS=zero random
 # SEEDS=0 1 2 3 4
 SEEDS=0
-DYNAMICS=none static dynamic local
+DYNAMICS=none e-static e-dynamic e-local local
 
 generator:
 	make -C src generator
