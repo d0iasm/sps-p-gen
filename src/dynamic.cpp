@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include "boundary.h"
 #include "energy.h"
 #include "dynamic.h"
 
@@ -89,12 +90,39 @@ static void updateKparamLocal() {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
 
-  double sum = 1.0;
+  double sum = 0.0;
   for (int x=0; x < NPOINTS; x++) {
     if (x == p || x == o)
       continue;
 
     sum += (kparam[p][x] * kparam[o][x]);
+  }
+  kparam[p][o] += (sum / (NPOINTS - 2));
+
+  if (kparam[p][o] > maxk) {
+    kparam[p][o] = maxk;
+  }
+  if (kparam[p][o] < mink) {
+    kparam[p][o] = mink;
+  }
+}
+
+// Update a K param based on K params influenced from the distance between paraticles
+// in a local network. This doesn't use the energy.
+static void updateKparamLocalDist() {
+  int p = rand() % NPOINTS;
+  int o = rand() % NPOINTS;
+
+  Point &pp = points[p];
+  Point &po = points[o];
+
+  double sum = 0.0;
+  for (int x=0; x < NPOINTS; x++) {
+    if (x == p || x == o)
+      continue;
+
+    Point &px = points[x];
+    sum += (kparam[p][x] / distance(pp, px) * kparam[o][x] / distance(po, px));
   }
   kparam[p][o] += (sum / (NPOINTS - 2));
 
@@ -113,19 +141,28 @@ void updateKparam() {
     return;
   }
   if (dynamic == "e-static") {
+    // global static energy
     updateKparamStatic();
     return;
   }
   if (dynamic == "e-dynamic") {
+    // global dynamic energy
     updateKparamDynamic();
     return;
   }
   if (dynamic == "e-local") {
+    // local static energy
     updateKparamLocalEnergy();
     return;
   }
   if (dynamic == "local") {
+    // local Kparams
     updateKparamLocal();
+    return;
+  }
+  if (dynamic == "d-local") {
+    // local dynamic Kparams
+    updateKparamLocalDist();
     return;
   }
 }
