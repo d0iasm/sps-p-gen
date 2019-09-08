@@ -45,7 +45,7 @@ extern double mink;
 extern std::string dynamic;
 extern Init init_param;
 
-// Variables which scope is only this file. 
+// Variables which scope is only this file.
 static double initial_kparam[2][2];
 static int timestep = 0;
 static std::vector<std::vector<Point>> result;

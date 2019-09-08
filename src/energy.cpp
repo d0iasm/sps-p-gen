@@ -6,7 +6,13 @@
 #include "generator.h"
 #include "energy.h"
 
-// Calculate an energy for a triangle based on Heider Balance theory. 
+// Calculate an energy for a triangle using Heider Balance theory.
+// p->o * o->x * p->x
+static double heiderPrimitive(int p, int o, int x) {
+  return kparam[p][o] * kparam[o][x] * kparam[p][x];
+}
+
+// Calculate an energy for a triangle based on Heider Balance theory.
 static double heider(int i, int j, int k) {
   // Permutation(3) = 6 patterns p->o, o->x, p->x.
   double p1 = kparam[i][j] * kparam[j][k] * kparam[i][k];
@@ -34,7 +40,7 @@ static double heiderDist(int i, int j, int k) {
 
   // Distance between b and c.
   double dist_jk = distance(pj, pk);
- 
+
   // Permutation(3) = 6 patterns p->o, o->x, p->x.
   double p1 = (kparam[i][j] / dist_ij)
             * (kparam[j][k] / dist_jk)
@@ -54,14 +60,14 @@ static double heiderDist(int i, int j, int k) {
   double p6 = (kparam[k][j] / dist_jk)
             * (kparam[j][i] / dist_ij)
             * (kparam[k][i] / dist_ik);
- 
+
   return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
 
 // Calculate an average energy of all triangles.
 double energyAverage() {
   int size = 0;
-  double sum = 0; 
+  double sum = 0;
   for (int i = 0; i < NPOINTS-2; i++) {
     for (int j = i+1; j < NPOINTS-1; j++) {
       for (int k = j+1; k < NPOINTS; k++) {
@@ -95,7 +101,7 @@ double energyVariance() {
 // K parameters are influenced from distance between particles.
 double energyAverageDist() {
   int size = 0;
-  double sum = 0; 
+  double sum = 0;
   for (int i = 0; i < NPOINTS-2; i++) {
     for (int j = i+1; j < NPOINTS-1; j++) {
       for (int k = j+1; k < NPOINTS; k++) {
@@ -126,3 +132,15 @@ double energyVarianceDist() {
   return sum / size;
 }
 
+// Calculate a local energy that could affect the relationship
+// between P and O particles.
+double energyLocal(int p, int o) {
+  double sum = 0;
+  for (int x=0; x < NPOINTS; x++) {
+    if (x == p || x == o)
+      continue;
+
+    sum += heiderPrimitive(p, o, x);
+	}
+  return -sum;
+}

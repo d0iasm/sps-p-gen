@@ -117,13 +117,13 @@ static void initPoints() {
     // A(0, -2x√3 / 3), B(-x, x√3 / 3), C(x, x√3 / 3);
     /*
     if (i % 3 == 0) {
-      points[i].x = 0; 
-      points[i].y = -2 * 3 * sqrt(3) / 3; 
+      points[i].x = 0;
+      points[i].y = -2 * 3 * sqrt(3) / 3;
     } else if (i % 3 == 1) {
-      points[i].x = -3; 
-      points[i].y = 3 * sqrt(3) / 3; 
+      points[i].x = -3;
+      points[i].y = 3 * sqrt(3) / 3;
     } else {
-      points[i].x = 3; 
+      points[i].x = 3;
       points[i].y = 3 * sqrt(3) / 3;
     }
     */
@@ -164,7 +164,7 @@ static void initKparamSame() {
 static void initKparamZero() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
-      kparam[i][j] = 0.0; 
+      kparam[i][j] = 0.0;
     }
   }
 }
@@ -243,7 +243,7 @@ static std::string filename() {
   fn.append("&s=");
   fn.append(std::to_string(seed));
   return fn;
-} 
+}
 
 static void printBody() {
   std::cout << R"END(<body>
@@ -273,8 +273,9 @@ static void printBody() {
   std::cout << "</div>\n<br />\n<div>";
   std::cout << "<h2>Dynamic K Parameters</h2>\n"
 	    << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
-	    << "Average: " << kAverage() << "<br />" 
+	    << "Average: " << kAverage() << "<br />"
 	    << "Variance: " << kVariance();
+  printCountedKparam();
   std::cout << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   std::cout << "</div>";
   std::cout << "<br />";
@@ -331,7 +332,7 @@ static void printKparam() {
 static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
-  std::cerr << "[ -dynamic static/dynamic]";
+  std::cerr << "[ -dynamic static/dynamic/local]";
   std::cerr << "[ -init random/zero ]";
   std::cerr << "[ -json ]\n\n";
 
@@ -340,7 +341,7 @@ static void usage() {
   std::cerr << "-gen       The number of maximum steps.\n";
   std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
   std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
-  std::cerr << "-dynamic   The flag to change the K parameters dinamicallybased on static energy/dynamic energy. Default is static optimization which means to use static energy.\n";
+  std::cerr << "-dynamic   The flag to change the K parameters dinamicallybased on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.\n";
   std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.";
   std::cerr << "-json      Output a json file for creating images by utils.\n";
   exit(1);
