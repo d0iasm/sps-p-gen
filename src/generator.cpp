@@ -274,7 +274,7 @@ static void printBody() {
   std::cout << "<h2>Dynamic K Parameters</h2>\n"
 	    << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
 	    << "Average: " << kAverage() << "<br />"
-	    << "Variance: " << kVariance();
+	    << "Variance: " << kVariance() << "<br />";
   printCountedKparam();
   std::cout << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   std::cout << "</div>";
