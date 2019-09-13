@@ -67,6 +67,7 @@ static void updateLocalStaticDiscrete() {
   int o = rand() % NPOINTS;
   double oldk = kparam[p][o];
   double oldEnergy = energyLocal(p, o);
+  //double oldEnergy = energyLocal(p, o) + 0.001 * cost(p);
 
   // Avoid a digit error.
   int tmp = (int) (kparam[p][o] * 10);
@@ -84,6 +85,7 @@ static void updateLocalStaticDiscrete() {
 
   // Restore an old K param because the old energy is more stable (= low energy).
   if (oldEnergy < energyLocal(p, o)) {
+  //if (oldEnergy < energyLocal(p, o) + 0.001 * cost(p)) {
     kparam[p][o] = oldk;
   }
 }
@@ -95,6 +97,7 @@ static void updateLocalDynamicDiscrete() {
   int o = rand() % NPOINTS;
   double oldk = kparam[p][o];
   double oldEnergy = energyLocalDist(p, o);
+  //double oldEnergy = energyLocalDist(p, o) + 0.001 * cost(p);
 
   // Avoid a digit error.
   int tmp = (int) (kparam[p][o] * 10);
@@ -112,6 +115,7 @@ static void updateLocalDynamicDiscrete() {
 
   // Restore an old K param because the old energy is more stable (= low energy).
   if (oldEnergy < energyLocalDist(p, o)) {
+  //if (oldEnergy < energyLocalDist(p, o) + 0.001 * cost(p)) {
     kparam[p][o] = oldk;
   }
 }
@@ -169,7 +173,7 @@ static void updateLocalDynamicContinuous() {
   kparam[p][o] += (sum / (NPOINTS - 2));
 
   if (kparam[p][o] > maxk) {
-    kparam[p][o] = maxk;
+    //kparam[p][o] = maxk;
   }
   if (kparam[p][o] < mink) {
     kparam[p][o] = mink;
@@ -177,10 +181,7 @@ static void updateLocalDynamicContinuous() {
 
   // Restore an old K param because the old energy is more stable (= low energy).
   if (oldEnergy < energyLocalDist(p, o)) {
-    std::cerr << "restore kparam! oldk: " << oldk << ", newk: " << kparam[p][o] << ", oldene: " << oldEnergy << ", newene: " << energyLocalDist(p,o) << "\n";
     kparam[p][o] = oldk;
-  } else {
-    std::cerr << "!update kparam! oldk: " << oldk << ", newk: " << kparam[p][o] << ", oldene: " << oldEnergy << ", newene: " << energyLocalDist(p,o) << "\n";
   }
 }
 

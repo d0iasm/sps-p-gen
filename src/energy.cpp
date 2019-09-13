@@ -169,3 +169,24 @@ double energyLocalDist(int p, int o) {
 	}
   return -sum / (NPOINTS - 2);
 }
+
+// Reduce K param's diversity.
+double cost(int i) {
+  Point &pi = points[i];
+  double average = 0.0;
+  double sum = 0.0;
+
+  for (int j=0; j < NPOINTS; j++) {
+    if (i == j)
+      continue;
+    average += kparam[i][j];
+  }
+  average /= (NPOINTS - 1);
+
+  for (int j=0; j < NPOINTS; j++) {
+    if (i == j)
+      continue;
+    sum += (kparam[i][j] - average) * (kparam[i][j] - average);
+  }
+  return sum / (NPOINTS-1);
+}
