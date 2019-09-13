@@ -121,6 +121,8 @@ static void updateLocalDynamicDiscrete() {
 static void updateLocalStaticContinuous() {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
+  double oldk = kparam[p][o];
+  double oldEnergy = energyLocal(p, o);
 
   double sum = 0.0;
   for (int x=0; x < NPOINTS; x++) {
@@ -137,6 +139,11 @@ static void updateLocalStaticContinuous() {
   if (kparam[p][o] < mink) {
     kparam[p][o] = mink;
   }
+
+  // Restore an old K param because the old energy is more stable (= low energy).
+  if (oldEnergy < energyLocal(p, o)) {
+    kparam[p][o] = oldk;
+  }
 }
 
 // Update a K param based on K params influenced from the distance between paraticles
@@ -145,6 +152,8 @@ static void updateLocalStaticContinuous() {
 static void updateLocalDynamicContinuous() {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
+  double oldk = kparam[p][o];
+  double oldEnergy = energyLocalDist(p, o);
 
   Point &pp = points[p];
   Point &po = points[o];
@@ -164,6 +173,14 @@ static void updateLocalDynamicContinuous() {
   }
   if (kparam[p][o] < mink) {
     kparam[p][o] = mink;
+  }
+
+  // Restore an old K param because the old energy is more stable (= low energy).
+  if (oldEnergy < energyLocalDist(p, o)) {
+    std::cerr << "restore kparam! oldk: " << oldk << ", newk: " << kparam[p][o] << ", oldene: " << oldEnergy << ", newene: " << energyLocalDist(p,o) << "\n";
+    kparam[p][o] = oldk;
+  } else {
+    std::cerr << "!update kparam! oldk: " << oldk << ", newk: " << kparam[p][o] << ", oldene: " << oldEnergy << ", newene: " << energyLocalDist(p,o) << "\n";
   }
 }
 

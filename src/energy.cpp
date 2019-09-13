@@ -22,7 +22,8 @@ static double heiderSpaceLocality(int p, int o, int x) {
   double dist_ij = distance(pi, pj);
   double dist_ik = distance(pi, pk);
   double dist_jk = distance(pj, pk);
-  double dist = dist_ij * dist_ik * dist_jk;
+  // Avoid the dividion by 0.
+  double dist = std::max(dist_ij, 0.01) * std::max(dist_ik, 0.01) * std::max(dist_jk, 0.01);
 
   return kparam[p][o] * kparam[o][x] * kparam[p][x] / dist;
 }
@@ -56,7 +57,8 @@ static double heiderUndirectedSpaceLocality(int i, int j, int k) {
   // Distance between b and c.
   double dist_jk = distance(pj, pk);
 
-  double dist = dist_ij * dist_ik * dist_jk;
+  // Avoid the dividion by 0.
+  double dist = std::max(dist_ij, 0.01) * std::max(dist_ik, 0.01) * std::max(dist_jk, 0.01);
 
   // Permutation(3) = 6 patterns p->o, o->x, p->x.
   // k(i->j)/distance(i,j) * k(i->k)/distance(i,k) * k(j->k)/distance(j,k)
