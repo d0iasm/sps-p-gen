@@ -15,8 +15,8 @@ const RED = 0;
 const BLUE = 1;
 const BLACK = 2;
 
-const MAX = 1.3;
-const MIN = -1.3;
+const MAX = 1.2;
+const MIN = -1.2;
 
 // Variables
 let handle;
@@ -62,7 +62,7 @@ function drawPoint(p) {
 
   // Draw Kparam.
   if (relationOn) {
-    ctx.lineWidth = 0.002 * scale;
+    ctx.lineWidth = 0.008 * scale;
     for (let i = 0; i < p.k.length; i++) {
       // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
       // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
