@@ -11,7 +11,8 @@ static double fRand(double min, double max) {
 }
 
 // Update a K param based on the energy of a `whole` network.
-static void updateKparamStatic() {
+// K param can take only 0.1 step values (discrete model).
+static void updateGlobalStaticDiscrete() {
   int i = rand() % NPOINTS;
   int j = rand() % NPOINTS;
   double oldk = kparam[i][j];
@@ -35,7 +36,8 @@ static void updateKparamStatic() {
 }
 
 // Update a K param based on the energy of a `whole` network.
-static void updateKparamDynamic() {
+// K param can take only 0.1 step values (discrete model).
+static void updateGlobalDynamicDiscrete() {
   int i = rand() % NPOINTS;
   int j = rand() % NPOINTS;
   double oldk = kparam[i][j];
@@ -59,7 +61,8 @@ static void updateKparamDynamic() {
 }
 
 // Update a K param based on the energy of a `local` network.
-static void updateKparamLocalEnergy() {
+// K param can take only 0.1 step values (discrete model).
+static void updateLocalStaticDiscrete() {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
   double oldk = kparam[p][o];
@@ -85,8 +88,37 @@ static void updateKparamLocalEnergy() {
   }
 }
 
+// Update a K param based on the energy of a `local` network.
+// K param can take only 0.1 step values (discrete model).
+static void updateLocalDynamicDiscrete() {
+  int p = rand() % NPOINTS;
+  int o = rand() % NPOINTS;
+  double oldk = kparam[p][o];
+  double oldEnergy = energyLocalDist(p, o);
+
+  // Avoid a digit error.
+  int tmp = (int) (kparam[p][o] * 10);
+  int diff = 0;
+  while (diff == 0) {
+    // Get a number -1 or 1.
+    diff = rand() % 3 - 1;
+  }
+  tmp += diff;
+  kparam[p][o] = tmp / 10.0;
+
+  // Restore an old K param because new one exceeds min/max value.
+  if (kparam[p][o] > maxk || kparam[p][o] < mink)
+    kparam[p][o] = oldk;
+
+  // Restore an old K param because the old energy is more stable (= low energy).
+  if (oldEnergy < energyLocalDist(p, o)) {
+    kparam[p][o] = oldk;
+  }
+}
+
 // Update a K param based on K params in a local network. This doesn't use the energy.
-static void updateKparamLocal() {
+// K param can take any values as long as ranging from MIN to MAX (continuous model).
+static void updateLocalStaticContinuous() {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
 
@@ -109,7 +141,8 @@ static void updateKparamLocal() {
 
 // Update a K param based on K params influenced from the distance between paraticles
 // in a local network. This doesn't use the energy.
-static void updateKparamLocalDist() {
+// K param can take any values as long as ranging from MIN to MAX (continuous model).
+static void updateLocalDynamicContinuous() {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
 
@@ -134,35 +167,39 @@ static void updateKparamLocalDist() {
   }
 }
 
-
 // Dispatcher for how to update K params based on `dynamic` variable.
 void updateKparam() {
   if (dynamic == "none") {
     return;
   }
-  if (dynamic == "e-static") {
+  if (dynamic == "global-static-discrete") {
     // global static energy
-    updateKparamStatic();
+    updateGlobalStaticDiscrete();
     return;
   }
-  if (dynamic == "e-dynamic") {
+  if (dynamic == "global-dynamic-discrete") {
     // global dynamic energy
-    updateKparamDynamic();
+    updateGlobalDynamicDiscrete();
     return;
   }
-  if (dynamic == "e-local") {
+  if (dynamic == "local-static-discrete") {
     // local static energy
-    updateKparamLocalEnergy();
+    updateLocalStaticDiscrete();
     return;
   }
-  if (dynamic == "local") {
+  if (dynamic == "local-dynamic-discrete") {
+    // local static energy
+    updateLocalDynamicDiscrete();
+    return;
+  }
+  if (dynamic == "local-static-continuous") {
     // local Kparams
-    updateKparamLocal();
+    updateLocalStaticContinuous();
     return;
   }
-  if (dynamic == "d-local") {
+  if (dynamic == "local-dynamic-continuous") {
     // local dynamic Kparams
-    updateKparamLocalDist();
+    updateLocalDynamicContinuous();
     return;
   }
 }

@@ -8,9 +8,23 @@
 
 // Calculate an energy for a triangle using Heider Balance theory.
 // The triangle has directed, p->o, o->x, and p->x, edges.
-// Note: Energy takes a negative value!
 static double heider(int p, int o, int x) {
-  return - (kparam[p][o] * kparam[o][x] * kparam[p][x]);
+  return kparam[p][o] * kparam[o][x] * kparam[p][x];
+}
+
+// Calculate an energy for a triangle using Heider Balance theory.
+// The triangle has directed, p->o, o->x, and p->x, edges.
+static double heiderSpaceLocality(int p, int o, int x) {
+  Point &pi = points[p];
+  Point &pj = points[o];
+  Point &pk = points[x];
+
+  double dist_ij = distance(pi, pj);
+  double dist_ik = distance(pi, pk);
+  double dist_jk = distance(pj, pk);
+  double dist = dist_ij * dist_ik * dist_jk;
+
+  return kparam[p][o] * kparam[o][x] * kparam[p][x] / dist;
 }
 
 // Calculate an energy for a triangle based on Heider Balance theory.
@@ -56,6 +70,7 @@ static double heiderUndirectedSpaceLocality(int i, int j, int k) {
 }
 
 // Calculate an average energy of all triangles.
+// Note: Energy takes a negative value!
 double energyAverage() {
   int size = 0;
   double sum = 0;
@@ -67,7 +82,7 @@ double energyAverage() {
       }
     }
   }
-  return sum / size;
+  return -sum / size;
 }
 
 // Calculate a variance energy of all triangles.
@@ -90,6 +105,7 @@ double energyVariance() {
 
 // Calculate an average energy of all triangles for each step.
 // K parameters are influenced from distance between particles.
+// Note: Energy takes a negative value!
 double energyAverageDist() {
   int size = 0;
   double sum = 0;
@@ -101,7 +117,7 @@ double energyAverageDist() {
       }
     }
   }
-  return - (sum / size);
+  return -sum / size;
 }
 
 // Calculate a variance energy of all triangles for each step.
@@ -125,6 +141,7 @@ double energyVarianceDist() {
 
 // Calculate a local energy that could affect the relationship
 // between P and O particles.
+// Note: Energy takes a negative value!
 double energyLocal(int p, int o) {
   double sum = 0;
   for (int x=0; x < NPOINTS; x++) {
@@ -133,5 +150,20 @@ double energyLocal(int p, int o) {
 
     sum += heider(p, o, x);
 	}
-  return sum;
+  return -sum / (NPOINTS - 2);
+}
+
+// Calculate a local energy that could affect the relationship
+// between P and O particles. K parameters are influenced from
+// the distance between particles.
+// Note: Energy takes a negative value!
+double energyLocalDist(int p, int o) {
+  double sum = 0;
+  for (int x=0; x < NPOINTS; x++) {
+    if (x == p || x == o)
+      continue;
+
+    sum += heiderSpaceLocality(p, o, x);
+	}
+  return -sum / (NPOINTS - 2);
 }

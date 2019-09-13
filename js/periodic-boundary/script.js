@@ -79,7 +79,7 @@ function drawPoint(p) {
 function redraw() {
   ctx.save();
   ctx.clearRect(-50000, -50000, 100000, 100000);
- 
+
   drawGrid();
 
   for (let i = 1; i < points[index].length; i++) {
@@ -100,7 +100,7 @@ function step() {
 }
 
 function start() {
-  handle = window.setInterval(step, 25);
+  handle = window.setInterval(step, 50);
   startButton.innerText = 'Stop';
 }
 

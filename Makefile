@@ -18,22 +18,24 @@ MAXGEN=200000
 INITS=zero random
 # SEEDS=0 1 2 3 4
 SEEDS=0
-DYNAMICS=none e-static e-dynamic e-local local d-local
+DYNAMICS=none global-static-discrete global-dynamic-discrete local-static-discrete local-dynamic-discrete local-static-continuous local-dynamic-continuous
 
 generator:
 	make -C src generator
+
+kano: generator
+	parallel $(SRC)/generator-o -dynamic '{1}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 '>' \
+		'$(DEV)/sps-p\?b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k=0.8,0.4,0.6,-0.6\&s=0.html' ::: $(DYNAMICS)
+	parallel $(SRC)/generator-p -dynamic '{1}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 -cycle 30 '>' \
+		'$(DEV)/sps-p\?b=periodic\&c=30\&d={1}\&g=$(MAXGEN)\&k=0.8,0.4,0.6,-0.6\&s=0.html' ::: $(DYNAMICS)
 
 html: generator
 	parallel $(SRC)/generator-o -dynamic '{1}' -init '{2}' -gen $(MAXGEN) -seed '{3}' '>' \
 		'$(DEV)/sps-p\?b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.html' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 html-p: generator
-	parallel $(SRC)/generator-p -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(DEV)/sps-p\?b=periodic\&c=10\&d=none\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
-	parallel $(SRC)/generator-p -dynamic static -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(DEV)/sps-p\?b=periodic\&c=10\&d=static\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
-	parallel $(SRC)/generator-p -dynamic dynamic -init '{1}' -gen $(MAXGEN) -seed '{2}' '>' \
-	  '$(DEV)/sps-p\?b=periodic\&c=10\&d=dynamic\&g=$(MAXGEN)\&k={1}\&s={2}.html' ::: $(INITS) ::: $(SEEDS)
+	parallel $(SRC)/generator-p -dynamic '{1}' -init '{2}' -gen $(MAXGEN) -seed '{3}' -cycle 100 '>' \
+		'$(DEV)/sps-p\?b=periodic\&c=100\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.html' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 json: generator
 	parallel $(SRC)/generator-o -json -dynamic '{1}' -init '{2}' -gen $(MAXGEN) -seed '{3}' '>' \

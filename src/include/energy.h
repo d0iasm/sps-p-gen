@@ -18,5 +18,6 @@ double energyVariance();
 double energyVarianceDist();
 
 double energyLocal(int p, int o);
+double energyLocalDist(int p, int o);
 
 #endif // ENERGY_H
