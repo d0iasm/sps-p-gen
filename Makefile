@@ -15,10 +15,10 @@ UTIL_XV=$(UTIL)/loglogplot.py
 ENV=MPLBACKEND=Agg
 
 MAXGEN=200000
-CYCLE=10
+CYCLE=20
 INITS=zero random
-# SEEDS=0 1 2 3 4
-SEEDS=0
+SEEDS=0 1 2 3 4
+# SEEDS=0
 DYNAMICS=none global-static-discrete global-dynamic-discrete local-static-discrete local-dynamic-discrete local-static-continuous local-dynamic-continuous
 
 generator:
