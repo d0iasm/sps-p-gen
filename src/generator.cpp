@@ -426,7 +426,7 @@ static void html() {
 
 static void json() {
   std::cout << "["; // Start of Json.
-  for (int i = 0; i < maxgen; i++) {
+  for (int i = 0; i < maxgen; i+=100) {
     std::cout << "{"; // Start of one step.
     // Kparams.
     // Initial Kparams.
