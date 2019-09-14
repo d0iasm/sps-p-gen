@@ -26,7 +26,7 @@ let relationOn = true;
 function drawGrid() {
   ctx.save();
   ctx.strokeStyle = '#aaa';
-  ctx.lineWidth = 0.004 * cycle;
+  ctx.lineWidth = 0.002 * cycle;
 
   const len = 5000;
   for (let x = -len; x < len; x += 10) {
@@ -43,8 +43,6 @@ function drawGrid() {
   ctx.restore();
 }
 
-let idx = 0;
-let colors = ['red', 'blue', 'green', 'orange', 'black'];
 function drawPoint(p) {
   ctx.save();
   ctx.translate(-5, -5);
@@ -59,18 +57,13 @@ function drawPoint(p) {
       ctx.fillStyle = 'black';
   }
 
-  ctx.fillStyle = colors[idx];
-  idx++;
-  if (idx >= 3) {
-    idx = 0;
-  }
   ctx.beginPath();
   ctx.arc(p.x, p.y, 0.005 * cycle, 0, 2 * Math.PI, true);
   ctx.fill();
 
   // Draw Kparam.
   if (relationOn) {
-    ctx.lineWidth = 0.008 * cycle;
+    ctx.lineWidth = 0.004 * cycle;
     // Index i is the target point.
     for (let i = 0; i < p.k.length; i++) {
       // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
