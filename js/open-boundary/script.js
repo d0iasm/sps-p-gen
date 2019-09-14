@@ -67,11 +67,13 @@ function drawPoint(p) {
       // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
       const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
       ctx.strokeStyle = 'rgba(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ', 0.4)';
+
+      ctx.beginPath();
       ctx.moveTo(p.x, p.y);
       ctx.lineTo(points[index][i].x, points[index][i].y);
+      ctx.stroke();
     }
-    ctx.stroke();
-    }
+  }
   ctx.restore();
 }
 

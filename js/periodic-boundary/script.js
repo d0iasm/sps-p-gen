@@ -43,6 +43,8 @@ function drawGrid() {
   ctx.restore();
 }
 
+let idx = 0;
+let colors = ['red', 'blue', 'green', 'orange', 'black'];
 function drawPoint(p) {
   ctx.save();
   ctx.translate(-5, -5);
@@ -56,22 +58,31 @@ function drawPoint(p) {
     default:
       ctx.fillStyle = 'black';
   }
+
+  ctx.fillStyle = colors[idx];
+  idx++;
+  if (idx >= 3) {
+    idx = 0;
+  }
   ctx.beginPath();
   ctx.arc(p.x, p.y, 0.005 * cycle, 0, 2 * Math.PI, true);
   ctx.fill();
 
   // Draw Kparam.
   if (relationOn) {
-    ctx.lineWidth = 0.008 * scale;
+    ctx.lineWidth = 0.008 * cycle;
+    // Index i is the target point.
     for (let i = 0; i < p.k.length; i++) {
       // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
       // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
       const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
-      ctx.strokeStyle = 'rgb(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ')';
+      ctx.strokeStyle = 'rgba(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ', 0.4)';
+
+      ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      ctx.lineTo(points[index][i].x, points[index][i].y);
+      ctx.lineTo(points[index][i+1].x, points[index][i+1].y);
+      ctx.stroke();
     }
-    ctx.stroke();
   }
   ctx.restore();
 }
