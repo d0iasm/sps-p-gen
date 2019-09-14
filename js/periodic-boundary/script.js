@@ -73,6 +73,7 @@ function drawPoint(p) {
 
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
+      // Note: the target starts from index 1.
       ctx.lineTo(points[index][i+1].x, points[index][i+1].y);
       ctx.stroke();
     }
@@ -104,7 +105,7 @@ function step() {
 }
 
 function start() {
-  handle = window.setInterval(step, 50);
+  handle = window.setInterval(step, 10);
   startButton.innerText = 'Stop';
 }
 
