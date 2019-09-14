@@ -79,9 +79,13 @@ static void updateLocalStaticDiscrete() {
   tmp += diff;
   kparam[p][o] = tmp / 10.0;
 
-  // Restore an old K param because new one exceeds min/max value.
-  if (kparam[p][o] > maxk || kparam[p][o] < mink)
-    kparam[p][o] = oldk;
+  // Align kapram with a min/max value.
+  if (kparam[p][o] > maxk) {
+    kparam[p][o] = maxk;
+  }
+  if (kparam[p][o] < mink) {
+    kparam[p][o] = mink;
+  }
 
   // Restore an old K param because the old energy is more stable (= low energy).
   if (oldEnergy < energyLocal(p, o)) {
@@ -109,9 +113,13 @@ static void updateLocalDynamicDiscrete() {
   tmp += diff;
   kparam[p][o] = tmp / 10.0;
 
-  // Restore an old K param because new one exceeds min/max value.
-  if (kparam[p][o] > maxk || kparam[p][o] < mink)
-    kparam[p][o] = oldk;
+  // Align kapram with a min/max value.
+  if (kparam[p][o] > maxk) {
+    kparam[p][o] = maxk;
+  }
+  if (kparam[p][o] < mink) {
+    kparam[p][o] = mink;
+  }
 
   // Restore an old K param because the old energy is more stable (= low energy).
   if (oldEnergy < energyLocalDist(p, o)) {

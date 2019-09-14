@@ -69,14 +69,14 @@ static std::vector<std::vector<double> > normalize() {
 }
 
 int classify() {
-  std::vector<std::vector<double>> n = normalize(); 
+  std::vector<std::vector<double>> n = normalize();
 
   // Calculate center.
   //double sumx = std::accumulate(n[0].begin(), n[0].end(), 0);
   //double sumv = std::accumulate(n[1].begin(), n[1].end(), 0);
   //double gx = sumx / n.size();
   //double gv = sumv / n.size();
-  double g = 0.5; 
+  double g = 0.5;
 
   // Calculate variance.
   double sumx = 0;
@@ -88,21 +88,21 @@ int classify() {
   int l = n[0].size();
   double varx = sumx / l;
   double varv = sumv / l;
-  
+
   //std::cerr << "\n------------\n";
   //std::cerr << "start (x, v) " << n[0][0] << ", " << n[1][0] << "\n";
   //std::cerr << "mid   (x, v) " << n[0][l/2] << ", " << n[1][l/2] << "\n";
   //std::cerr << "end   (x, v) " << n[0][l-1] << ", " << n[1][l-1] << "\n";
-  //std::cerr << "sumx, sumv: " << sumx << ", " << sumv << "\n"; 
-  //std::cerr << "vx, vv: " << varx << ", " << varv << "\n"; 
+  //std::cerr << "sumx, sumv: " << sumx << ", " << sumv << "\n";
+  //std::cerr << "vx, vv: " << varx << ", " << varv << "\n";
   //std::cerr << "------------\n";
 
   if ((varx + varv) / 2 < 0.22) {
     return 5;
   } else if (varx > 0.5 && varv > 0.5) {
-    return 6; 
+    return 6;
   } else if (n[0][l-1] == 0 && n[1][l-1] == 0) {
-    return 1; 
+    return 1;
   } else if (n[1][l-1] == 0) {
     return 2;
   } else if (n[0][l-1] == 0) {
@@ -111,5 +111,5 @@ int classify() {
     return 4;
   }
 
-  return 0; 
+  return 0;
 }

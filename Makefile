@@ -15,7 +15,7 @@ UTIL_XV=$(UTIL)/loglogplot.py
 ENV=MPLBACKEND=Agg
 
 MAXGEN=200000
-CYCLE=50
+CYCLE=10
 INITS=zero random
 # SEEDS=0 1 2 3 4
 SEEDS=0
@@ -35,16 +35,16 @@ html: generator
 		'$(DEV)/sps-p\?b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.html' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 html-p: generator
-	parallel $(SRC)/generator-p -dynamic '{1}' -init '{2}' -gen $(MAXGEN) -seed '{3}' -cycle 50 '>' \
-		'$(DEV)/sps-p\?b=periodic\&c=50\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.html' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+	parallel $(SRC)/generator-p -dynamic '{1}' -init '{2}' -gen $(MAXGEN) -seed '{3}' -cycle $(CYCLE) '>' \
+		'$(DEV)/sps-p\?b=periodic\&c=$(CYCLE)\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.html' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 json: generator
 	parallel $(SRC)/generator-o -json -dynamic '{1}' -init '{2}' -gen $(MAXGEN) -seed '{3}' '>' \
-		'$(DEV)/sps-p\?b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+		'$(JSON)/sps-p\?b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 json-p: generator
 	parallel $(SRC)/generator-p -json -dynamic '{1}' -init '{2}' -gen $(MAXGEN) -seed '{3}' -cycle $(CYCLE) '>' \
-		'$(DEV)/sps-p\?b=periodic\&c=$(CYCLE)\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+		'$(JSON)/sps-p\?b=periodic\&c=$(CYCLE)\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 img-energy: json
 	parallel $(ENV) python3 $(UTIL_ENERGY) -src '$(JSON)/sps-p\?b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' \

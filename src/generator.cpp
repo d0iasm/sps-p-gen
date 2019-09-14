@@ -113,20 +113,6 @@ static void initPoints() {
   for (int i = 0; i < NPOINTS; i++) {
     points[i].x = dist(gen);
     points[i].y = dist(gen);
-    // regular triangle
-    // A(0, -2x√3 / 3), B(-x, x√3 / 3), C(x, x√3 / 3);
-    /*
-    if (i % 3 == 0) {
-      points[i].x = 0;
-      points[i].y = -2 * 3 * sqrt(3) / 3;
-    } else if (i % 3 == 1) {
-      points[i].x = -3;
-      points[i].y = 3 * sqrt(3) / 3;
-    } else {
-      points[i].x = 3;
-      points[i].y = 3 * sqrt(3) / 3;
-    }
-    */
     if (init_param == NORMAL)
       points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
     else
@@ -147,15 +133,6 @@ static void initKparamRandom() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
       kparam[i][j] = (rand() % 27 - 13) / 10.0;
-    }
-  }
-}
-
-// Initialize K params with [-0.1, 0.0, 0.1]
-static void initKparamSame() {
-  for (int i = 0; i < NPOINTS; i++) {
-    for (int j = 0; j < NPOINTS; j++) {
-      kparam[i][j] = (rand() % 3 - 1) / 10.0;
     }
   }
 }
