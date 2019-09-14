@@ -29,9 +29,9 @@ def plot(n, x, v):
     ax.set_xscale('log')
     ax.set_yscale('log')
 
-    # Choose a color map, loop through the colors, and assign them to the color 
-    # cycle. You need n-1 colors, because you'll plot that many lines 
-    # between pairs. In other words, your line is not cyclic, so there's 
+    # Choose a color map, loop through the colors, and assign them to the color
+    # cycle. You need n-1 colors, because you'll plot that many lines
+    # between pairs. In other words, your line is not cyclic, so there's
     # no line from end to beginning.
     # Colormaps: https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
     cm = plt.get_cmap('Spectral')
@@ -54,9 +54,9 @@ def parse_args():
     parser = argparse.ArgumentParser(
             description='Generate an image from a json file.')
     parser.add_argument('-src', required=True,
-            help='The source file path') 
+            help='The source file path')
     parser.add_argument('-out', required=True,
-            help='The output image path') 
+            help='The output image path')
 
     args = parser.parse_args()
     src = args.src
@@ -70,6 +70,6 @@ if __name__ == '__main__':
     if extension != 'json':
         sys.exit('Error: ' + extension + ' file is not supported.')
     data = read_json()
-    x = [d['xv']['x'] for d in data] 
-    v = [d['xv']['v'] for d in data] 
+    x = [d['xv']['x'] for d in data]
+    v = [d['xv']['v'] for d in data]
     plot(len(data), x, v)

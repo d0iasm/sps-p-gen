@@ -484,7 +484,7 @@ static void json() {
     std::cout << "\"v\":" << xv[i].v;
     std::cout << "}"; // End of xv.
     std::cout << "}\n"; // End of one step.
-    if (i != maxgen - 1)
+    if (i < maxgen - 100)
       std::cout << ",";
   }
   std::cout << "]"; // End on Json.

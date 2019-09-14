@@ -19,7 +19,8 @@ def read_json():
 def plot(n, y):
     fig, ax = plt.subplots()
 
-    x = np.arange(n)
+    #x = np.arange(n)
+    x = np.arange(0, 100*n, 100)
 
     # Get labels which have a value more than 0.
     labels = [None for _ in range(len(y[0]))]
@@ -58,9 +59,9 @@ def parse_args():
     parser = argparse.ArgumentParser(
             description='Generate an image from a json file.')
     parser.add_argument('-src', required=True,
-            help='The source file path') 
+            help='The source file path')
     parser.add_argument('-out', required=True,
-            help='The output image path') 
+            help='The output image path')
 
     args = parser.parse_args()
     src = args.src
