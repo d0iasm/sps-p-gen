@@ -128,11 +128,11 @@ static void initKparamWithK() {
   }
 }
 
-// Initialize K params with [-1.3..1.3]
+// Initialize K params with [-1.2..1.2]
 static void initKparamRandom() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
-      kparam[i][j] = (rand() % 27 - 13) / 10.0;
+      kparam[i][j] = (rand() % 25 - 12) / 10.0;
     }
   }
 }

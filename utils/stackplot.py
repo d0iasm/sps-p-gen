@@ -30,15 +30,15 @@ def plot(n, y):
             if val > 0:
                 labels[i] = key
             i += 1
+
     y = [list(step.values()) for step in y]
     # x: 1d array of dimension N.
     # y: 2d array (dimension MxN), or sequence of
     #    1d arrays (each dimension 1xN)
     ax.stackplot(x, list(zip(*y)), labels=labels)
-    leg = ax.legend(loc='upper right')
+    leg = ax.legend(loc='upper right', prop={'size': 6})
     leg.get_frame().set_alpha(0.4)
 
-    fig.tight_layout()
     plt.savefig(out)
 
 
