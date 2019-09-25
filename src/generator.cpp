@@ -21,7 +21,6 @@ int seed = 0;
 double maxk = 1.2;
 double mink = -1.2;
 std::string dynamic = "none";
-Init init_param = NORMAL;
 
 // Global variables declared in xv.h.
 Point center;
@@ -209,7 +208,7 @@ double kVariance() {
 void printCountedKparam() {
   std::map<double, int> m = countKparam();
   for (std::pair<double, int> e : m)
-    std::cout << e.first << " => " << e.second << "<br />";
+    outfile << e.first << " => " << e.second << "<br />";
 }
 
 static std::string trim(double x, int precision) {
@@ -222,7 +221,7 @@ static std::string filename() {
   std::string fn = "";
   // Boundary.
   fn.append("b=");
-  fn.append(boundary());
+  fn.append(getBoundary());
   // Cycle.
   fn.append("&c=");
   fn.append(std::to_string(cycle));
@@ -254,7 +253,7 @@ static std::string filename() {
 }
 
 static void printBody() {
-  std::cout << R"END(<body>
+  outfile << R"END(<body>
 <div class=container>
   <div>
     <canvas id=canvas width=650 height=650></canvas>
@@ -265,78 +264,78 @@ static void printBody() {
     </div>
   </div>
   <div>)END";
-  std::cout << "<h1>" << filename() << "</h1>";
-  std::cout << "<br />\n";
-  std::cout << "<div>Timestep: <input type=text size=6 id=timestep></input></div>\n";
-  std::cout << "<div>Density: " << density() << "</div>";
-  std::cout << "<div>Balanced triangles: " << countBalance() << "</div>";
-  std::cout << "<div>Unbalanced triangles: " << countUnbalance() << "</div>";
-  std::cout << "<br />\n";
-  std::cout << "<h2>Static K Parameters</h2>\n";
-  std::cout << "<div>Initial K[00,01,10,11]: "
+  outfile << "<h1>" << filename() << "</h1>";
+  outfile << "<br />\n";
+  outfile << "<div>Timestep: <input type=text size=6 id=timestep></input></div>\n";
+  outfile << "<div>Density: " << getDensity() << "</div>";
+  outfile << "<div>Balanced triangles: " << countBalance() << "</div>";
+  outfile << "<div>Unbalanced triangles: " << countUnbalance() << "</div>";
+  outfile << "<br />\n";
+  outfile << "<h2>Static K Parameters</h2>\n";
+  outfile << "<div>Initial K[00,01,10,11]: "
             << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
             << initial_kparam[1][0] << "," << initial_kparam[1][1]
             << "</div>\n";
-  std::cout << "<div>Initial K[a, b, p, m]: "
+  outfile << "<div>Initial K[a, b, p, m]: "
             << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
-  std::cout << "</div>\n<br />\n<div>";
-  std::cout << "<h2>Dynamic K Parameters</h2>\n"
+  outfile << "</div>\n<br />\n<div>";
+  outfile << "<h2>Dynamic K Parameters</h2>\n"
 	    << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
 	    << "Average: " << kAverage() << "<br />"
 	    << "Variance: " << kVariance() << "<br />";
   printCountedKparam();
-  std::cout << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
-  std::cout << "</div>";
-  std::cout << "<br />";
-  std::cout << "<h2>Static Energy</h2>"
+  outfile << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
+  outfile << "</div>";
+  outfile << "<br />";
+  outfile << "<h2>Static Energy</h2>"
             << "Average: " << energy[0][0] << " => " << energy[maxgen-1][0] << "<br />"
             << "Variance: " << energy[0][1] << " => " << energy[maxgen-1][1]
             << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
-  std::cout << "<br />";
-  std::cout << "<h2>Dynamic Energy</h2>"
+  outfile << "<br />";
+  outfile << "<h2>Dynamic Energy</h2>"
             << "<div><img width=350 src=\"img/dynamic_energy%3F" << filename() << ".png\" /></div>";
-  std::cout << "<br />";
-  std::cout << "<h2>X-V Log Log Plot</h2>"
+  outfile << "<br />";
+  outfile << "<h2>X-V Log Log Plot</h2>"
             << "<div><img width=350 src=\"img/xv%3F" << filename() << ".png\" /></div>";
-  std::cout << "</div></div>";
+  outfile << "</div></div>";
 }
 
 static void printPoints() {
-  std::cout << "<script>const points = [\n";
+  outfile << "<script>const points = [\n";
   for (int i = 0; i < result.size(); i += 100) {
-    std::cout << "  [" << i << ",";
+    outfile << "  [" << i << ",";
     for (int j = 0; j < result[i].size(); j++) {
       Point &p = result[i][j];
-      std::cout << "{x:" << p.x
+      outfile << "{x:" << p.x
                 << ",y:" << p.y
                 << ",color:" << p.color;
-      std::cout << ",k:[";
+      outfile << ",k:[";
       for (int k = 0; k < NPOINTS; k++) {
-        std::cout << kparam_result[i][j][k] << ",";
+        outfile << kparam_result[i][j][k] << ",";
       }
-      std::cout << "]},";
+      outfile << "]},";
     }
-    std::cout << "],\n";
+    outfile << "],\n";
   }
-  std::cout << "];</script>\n";
+  outfile << "];</script>\n";
 }
 
 static void printKparam() {
-  std::cout << "<script>const kparam = [\n";
+  outfile << "<script>const kparam = [\n";
   for (int i = 0; i < kparam_result.size(); i += 100) {
-    std::cout << "{step: " << i;
-    std::cout << ",k:[";
+    outfile << "{step: " << i;
+    outfile << ",k:[";
     for (int j = 0; j < kparam_result[i].size(); j++) {
-      std::cout << "[";
+      outfile << "[";
       for (int k = 0; k < kparam_result[i][j].size(); k++) {
-        std::cout << trim(kparam_result[i][j][k], 1) << ",";
+        outfile << trim(kparam_result[i][j][k], 1) << ",";
       }
-      std::cout << "],\n";
+      outfile << "],\n";
     }
-    std::cout << "]},\n";
+    outfile << "]},\n";
   }
-  std::cout << "];</script>\n";
+  outfile << "];</script>\n";
 }
 
 static void usage() {
@@ -442,85 +441,87 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
+    if (strcmp("-head"), argv[0] == 0) {
+      // TODO: implement for getting a filename header.
+    }
+
     usage();
   }
 }
 
 static void html() {
-  std::cout << "<head><link rel=stylesheet href='css/style.css'></head>";
+  outfile << "<head><link rel=stylesheet href='css/style.css'></head>";
   printBody();
   printPoints();
-  // Maybe too heavy.
-  // printKparam();
-  printCycle();
-  importScript();
-  std::cout << "</body></html>\n";
+  outfile << "<script>const cycle=" << getCycle() << "</script>\n";
+  outfile << getScript() << "\n";
+  outfile << "</body></html>\n";
 }
 
 static void json() {
-  std::cout << "["; // Start of Json.
+  outfile << "["; // Start of Json.
   for (int i = 0; i < maxgen; i+=100) {
-    std::cout << "{"; // Start of one step.
+    outfile << "{"; // Start of one step.
     // Kparams.
     // Initial Kparams.
-    std::cout << "\"k\":{";
-    std::cout << "\"initial\":{";
-    std::cout << "\"00\":" << initial_kparam[0][0] << ",";
-    std::cout << "\"01\":" << initial_kparam[0][1] << ",";
-    std::cout << "\"10\":" << initial_kparam[1][0] << ",";
-    std::cout << "\"11\":" << initial_kparam[1][1] << ",";
-    std::cout << "\"a\":" << initial_kparam[0][0] << ",";
-    std::cout << "\"b\":" << initial_kparam[1][1] << ",";
-    std::cout << "\"p\":" << getP() << ",";
-    std::cout << "\"m\":" << getM();
-    std::cout << "},\n"; // End of k.initial.
+    outfile << "\"k\":{";
+    outfile << "\"initial\":{";
+    outfile << "\"00\":" << initial_kparam[0][0] << ",";
+    outfile << "\"01\":" << initial_kparam[0][1] << ",";
+    outfile << "\"10\":" << initial_kparam[1][0] << ",";
+    outfile << "\"11\":" << initial_kparam[1][1] << ",";
+    outfile << "\"a\":" << initial_kparam[0][0] << ",";
+    outfile << "\"b\":" << initial_kparam[1][1] << ",";
+    outfile << "\"p\":" << getP() << ",";
+    outfile << "\"m\":" << getM();
+    outfile << "},\n"; // End of k.initial.
     // All Kparams.
-    std::cout << "\"all\":[";
+    outfile << "\"all\":[";
     for (int j = 0; j < NPOINTS; j++) {
-      std::cout << "[";
+      outfile << "[";
       for (int k = 0; k < NPOINTS; k++) {
-        std::cout << kparam_result[i][j][k];
+        outfile << kparam_result[i][j][k];
         if (k != NPOINTS - 1)
-          std::cout << ",";
+          outfile << ",";
         }
-      std::cout << "]";
+      outfile << "]";
       if (j != NPOINTS - 1)
-        std::cout << ",\n";
+        outfile << ",\n";
     }
-    std::cout << "],\n"; // End of k.all.
+    outfile << "],\n"; // End of k.all.
     // Counting Kparams.
-    std::cout << "\"count\":[";
+    outfile << "\"count\":[";
     int n = kparam_counter[i].size();
     for (std::pair<double, int> e : kparam_counter[i]) {
-      std::cout << "[" << e.first << "," << e.second << "]";
+      outfile << "[" << e.first << "," << e.second << "]";
       if (n > 1) {
-        std::cout << ",";
+        outfile << ",";
         n--;
       }
     }
-    std::cout << "]"; // End of k.count.
-    std::cout << "},\n"; // End of k.
+    outfile << "]"; // End of k.count.
+    outfile << "},\n"; // End of k.
     // Energy.
-    std::cout << "\"energy\":{";
-    std::cout << "\"static\":{";
-    std::cout << "\"average\":" << energy[i][0] << ",";
-    std::cout << "\"variance\":" << energy[i][1];
-    std::cout << "},"; // End of energy.static.
-    std::cout << "\"dynamic\":{";
-    std::cout << "\"average\":" << energy[i][2] << ",";
-    std::cout << "\"variance\":" << energy[i][3];
-    std::cout << "}"; // End of energy.dynamic.
-    std::cout << "},\n"; // End of energy.
+    outfile << "\"energy\":{";
+    outfile << "\"static\":{";
+    outfile << "\"average\":" << energy[i][0] << ",";
+    outfile << "\"variance\":" << energy[i][1];
+    outfile << "},"; // End of energy.static.
+    outfile << "\"dynamic\":{";
+    outfile << "\"average\":" << energy[i][2] << ",";
+    outfile << "\"variance\":" << energy[i][3];
+    outfile << "}"; // End of energy.dynamic.
+    outfile << "},\n"; // End of energy.
     // XV.
-    std::cout << "\"xv\":{";
-    std::cout << "\"x\":" << xv[i].x << ",";
-    std::cout << "\"v\":" << xv[i].v;
-    std::cout << "}"; // End of xv.
-    std::cout << "}\n"; // End of one step.
+    outfile << "\"xv\":{";
+    outfile << "\"x\":" << xv[i].x << ",";
+    outfile << "\"v\":" << xv[i].v;
+    outfile << "}"; // End of xv.
+    outfile << "}\n"; // End of one step.
     if (i < maxgen - 100)
-      std::cout << ",";
+      outfile << ",";
   }
-  std::cout << "]"; // End on Json.
+  outfile << "]"; // End on Json.
 }
 
 static void storeKparam() {
@@ -535,6 +536,14 @@ static void storeKparam() {
 
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
+  switch (output) {
+    case HTML:
+      outfile.open(filename() + ".html");
+      break;
+    case JSON:
+      outfile.open(filename() + ".json");
+      break;
+  }
 
   switch (init_param) {
     case NORMAL:
@@ -568,4 +577,5 @@ int main(int argc, char **argv) {
       json();
       break;
   }
+  outfile.close();
 }

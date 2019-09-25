@@ -2,6 +2,7 @@
 #define GENERATOR_H
 
 #include <cstring>
+#include <fstream>
 #include <map>
 #include <vector>
 
@@ -43,7 +44,6 @@ extern int seed;
 extern double maxk;
 extern double mink;
 extern std::string dynamic;
-extern Init init_param;
 
 // Variables which scope is only this file.
 static double initial_kparam[2][2];
@@ -53,5 +53,7 @@ static std::vector<std::vector<std::vector<double> > > kparam_result;
 static std::vector<std::map<double, int> > kparam_counter;
 static int maxgen = 50000;
 static Output output = HTML;
+static Init init_param = NORMAL;
+static std::ofstream outfile;
 
 #endif // GENERATOR_H

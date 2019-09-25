@@ -7,10 +7,11 @@
 double distance(Point p, Point q);
 double diff(double a, double b);
 double imaging(double x);
-void importScript();
-void printCycle();
-double density();
-std::string boundary();
+
+std::string getBoundary();
+int getCycle();
+double getDensity();
+std::string getScript();
 
 // Global variable.
 extern int cycle;

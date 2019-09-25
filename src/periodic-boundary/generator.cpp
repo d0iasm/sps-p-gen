@@ -49,17 +49,25 @@ double diff(double a, double b) {
   return closest;
 }
 
-// Adjust the posision from -|cycle/2| to |cycle/2|. 
+// Adjust the posision from -|cycle/2| to |cycle/2|.
 double imaging(double x) {
   if (x < 0) return rem(x, cycle) + cycle;
   if (x > cycle) return rem(x, cycle);
   return x;
 }
 
-double density() {
+std::string getBoundary() {
+  return "periodic";
+}
+
+int getCycle() {
+  return cycle;
+}
+
+double getDensity() {
   return (double) NPOINTS / (double) (cycle * cycle);
 }
 
-std::string boundary() {
-  return "periodic";
+std::string getScript() {
+  return "<script src=js/periodic-boundary/script.js></script>";
 }

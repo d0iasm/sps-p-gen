@@ -26,10 +26,18 @@ double imaging(double x) {
   return x;
 }
 
-double density() {
+std::string getBoundary() {
+  return "open";
+}
+
+int getCycle() {
   return -1;
 }
 
-std::string boundary() {
-  return "open";
+double getDensity() {
+  return -1;
+}
+
+std::string getScript() {
+  return "<script src=js/open-boundary/script.js></script>";
 }
