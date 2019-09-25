@@ -38,18 +38,49 @@ static double rungeKutta(double k1) {
 }
 
 static std::map<double, int> countKparam() {
-    std::map<double, int> m;
-    for (int i = 0; i < NPOINTS; i++) {
-      for (int j = 0; j < NPOINTS; j++) {
-        if (m.find(kparam[i][j]) == m.end())
-          m.insert(std::make_pair(kparam[i][j], 1));
-        else
-          m[kparam[i][j]]++;
-      }
+  std::map<double, int> m;
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
+      if (m.find(kparam[i][j]) == m.end())
+        m.insert(std::make_pair(kparam[i][j], 1));
+      else
+        m[kparam[i][j]]++;
     }
-    return m;
+  }
+  return m;
 }
 
+static int countBalance() {
+  int count = 0;
+  for (int i = 0; i < NPOINTS-2; i++) {
+    for (int j = i+1; j < NPOINTS-1; j++) {
+      for (int k = j+1; k < NPOINTS; k++) {
+        if (kparam[i][j] * kparam[j][i] *
+          kparam[i][k] * kparam[k][i] *
+          kparam[j][k] * kparam[k][j] >= 0) {
+            count++;
+        }
+      }
+    }
+  }
+  return count;
+}
+
+static int countUnbalance() {
+  int count = 0;
+  for (int i = 0; i < NPOINTS-2; i++) {
+    for (int j = i+1; j < NPOINTS-1; j++) {
+      for (int k = j+1; k < NPOINTS; k++) {
+        if (kparam[i][j] * kparam[j][i] *
+          kparam[i][k] * kparam[k][i] *
+          kparam[j][k] * kparam[k][j] < 0 ) {
+          count++;
+        }
+      }
+    }
+  }
+  return count;
+}
 
 static void step() {
   timestep++;
@@ -238,6 +269,8 @@ static void printBody() {
   std::cout << "<br />\n";
   std::cout << "<div>Timestep: <input type=text size=6 id=timestep></input></div>\n";
   std::cout << "<div>Density: " << density() << "</div>";
+  std::cout << "<div>Balanced triangles: " << countBalance() << "</div>";
+  std::cout << "<div>Unbalanced triangles: " << countUnbalance() << "</div>";
   std::cout << "<br />\n";
   std::cout << "<h2>Static K Parameters</h2>\n";
   std::cout << "<div>Initial K[00,01,10,11]: "
