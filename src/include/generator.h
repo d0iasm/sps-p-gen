@@ -55,5 +55,6 @@ static int maxgen = 50000;
 static Output output = HTML;
 static Init init_param = NORMAL;
 static std::ofstream outfile;
+static std::string path;
 
 #endif // GENERATOR_H

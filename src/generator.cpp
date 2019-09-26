@@ -341,8 +341,9 @@ static void printKparam() {
 static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
-  std::cerr << "[ -dynamic static/dynamic/local]";
+  std::cerr << "[ -dynamic none/global-static-discrete/global-dynamic-discrete/local-static-discrete/local-dynamic-discrete/local-static-continuous/local-dynamic-continuous]";
   std::cerr << "[ -init random/zero ]";
+  std::cerr << "[ -path path directory for the output file name ]";
   std::cerr << "[ -json ]\n\n";
 
   std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
@@ -350,8 +351,9 @@ static void usage() {
   std::cerr << "-gen       The number of maximum steps.\n";
   std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
   std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
-  std::cerr << "-dynamic   The flag to change the K parameters dinamicallybased on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.\n";
+  std::cerr << "-dynamic   The flag to change the K parameters dinamically based on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.\n";
   std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.";
+  std::cerr << "-path      The path directory for the output file name.\n";
   std::cerr << "-json      Output a json file for creating images by utils.\n";
   exit(1);
 }
@@ -441,10 +443,14 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
-    if (strcmp("-head"), argv[0] == 0) {
-      // TODO: implement for getting a filename header.
+    if (strcmp("-path", argv[0]) == 0) {
+      if (argc < 2)
+        usage();
+      path = argv[1];
+      argc -= 2;
+      argv += 2;
+      continue;
     }
-
     usage();
   }
 }
@@ -538,10 +544,10 @@ int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
   switch (output) {
     case HTML:
-      outfile.open(filename() + ".html");
+      outfile.open(path + "/sps-p?" + filename() + ".html");
       break;
     case JSON:
-      outfile.open(filename() + ".json");
+      outfile.open(path + "/sps-p?" + filename() + ".json");
       break;
   }
 
