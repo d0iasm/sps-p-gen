@@ -17,7 +17,6 @@
 // Global variables.
 double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
-int seed = 0;
 double maxk = 1.2;
 double mink = -1.2;
 std::string dynamic = "none";
@@ -133,16 +132,9 @@ static void step() {
 }
 
 static void initPoints() {
-  std::default_random_engine gen;
-  gen.seed(seed);
-  // Default value of cycle:
-  // -1 when it's open boundary and result of -1/2 is 0.
-  // 10 whne it's periodic boundary.
-  std::normal_distribution<double> dist(cycle/2, 2);
-
   for (int i = 0; i < NPOINTS; i++) {
-    points[i].x = dist(gen);
-    points[i].y = dist(gen);
+    points[i].x = rand() % std::max(10, cycle);
+    points[i].y = rand() % std::max(10, cycle);
     if (init_param == NORMAL)
       points[i].color = (i < NPOINTS / 2) ? RED : BLUE;
     else
@@ -550,6 +542,8 @@ int main(int argc, char **argv) {
       outfile.open(path + "/sps-p?" + filename() + ".json");
       break;
   }
+
+  srand(seed);
 
   switch (init_param) {
     case NORMAL:

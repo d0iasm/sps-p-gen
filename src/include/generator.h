@@ -36,11 +36,9 @@ struct Point {
   Color color;
 };
 
-
 // Global variables.
 extern double kparam[NPOINTS][NPOINTS];
 extern Point points[NPOINTS];
-extern int seed;
 extern double maxk;
 extern double mink;
 extern std::string dynamic;
@@ -51,6 +49,7 @@ static int timestep = 0;
 static std::vector<std::vector<Point>> result;
 static std::vector<std::vector<std::vector<double> > > kparam_result;
 static std::vector<std::map<double, int> > kparam_counter;
+static int seed = 0;
 static int maxgen = 50000;
 static Output output = HTML;
 static Init init_param = NORMAL;

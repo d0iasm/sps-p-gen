@@ -26,7 +26,7 @@ let relationOn = true;
 function drawGrid() {
   ctx.save();
   ctx.strokeStyle = '#aaa';
-  ctx.lineWidth = 1 / currentScale;
+  ctx.lineWidth = 2 / currentScale;
 
   const len = 5000;
   for (let x = -len; x < len; x += 10) {
@@ -61,7 +61,7 @@ function drawPoint(p) {
 
   // Draw Kparam.
   if (relationOn) {
-    ctx.lineWidth = 2 / currentScale;
+    ctx.lineWidth = 4 / currentScale;
     for (let i = 0; i < p.k.length; i++) {
       // Normalize K to -255 to 255 via Y=((X−xmin)/(xmax−xmin)) * (M−m)+m
       // X=K, xmin=MIN (-13), xmax=MAX (-13), M=255, and m=-255.
