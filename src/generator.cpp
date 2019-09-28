@@ -101,11 +101,17 @@ static void step() {
       double k = kparam[i][j];
 
       if (dist == 0) continue;
-      // TODO: remove  -pow(dist, -2)
       double plsx = (k / dist - pow(dist, -2)) * dx / dist;
       double plsy = (k / dist - pow(dist, -2)) * dy / dist;
       x += plsx;
       y += plsy;
+      /**
+      // Noise for a position from -3 to 3 with 1% probability.
+      if ((rand() % 100) < 1) {
+        x += rand() % 11 - 5;
+        y += rand() % 11 - 5;
+      }
+      **/
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
@@ -121,9 +127,9 @@ static void step() {
 
   // Energies.
   std::vector<double> e(4);
-  e[0] = energyAverage();
+  e[0] = energyAverage(0, 0);
   e[1] = energyVariance();
-  e[2] = energyAverageDist();
+  e[2] = energyAverageDist(0, 0);
   e[3] = energyVarianceDist();
   energy.push_back(e);
 
@@ -534,6 +540,8 @@ static void storeKparam() {
 
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
+
+  // Setup the output file.
   switch (output) {
     case HTML:
       outfile.open(path + "/sps-p?" + filename() + ".html");
@@ -545,6 +553,7 @@ int main(int argc, char **argv) {
 
   srand(seed);
 
+  // Initialize particle's positions.
   switch (init_param) {
     case NORMAL:
       initKparamWithK();
@@ -560,12 +569,14 @@ int main(int argc, char **argv) {
   initPoints();
   center = computeCenter();
 
+  // Main loop.
   for (int i = 0; i < maxgen; i++) {
     // Store the current Kparam before update it.
+    // Update K parameters based on the Energy.
     storeKparam();
-    if (dynamic.compare("none") != 0) {
-        updateKparam();
-    }
+    updateKparam();
+
+    // Update particle's positions based on Kano's model.
     step();
   }
 

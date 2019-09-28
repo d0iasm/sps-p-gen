@@ -73,7 +73,7 @@ static double heiderUndirectedSpaceLocality(int i, int j, int k) {
 
 // Calculate an average energy of all triangles.
 // Note: Energy takes a negative value!
-double energyAverage() {
+double energyAverage(int p, int o) {
   int size = 0;
   double sum = 0;
   for (int i = 0; i < NPOINTS-2; i++) {
@@ -89,7 +89,7 @@ double energyAverage() {
 
 // Calculate a variance energy of all triangles.
 double energyVariance() {
-  double average = energyAverage();
+  double average = energyAverage(0, 0);
   int size = 0;
   double sum = 0;
   double tmp = 0;
@@ -108,7 +108,7 @@ double energyVariance() {
 // Calculate an average energy of all triangles for each step.
 // K parameters are influenced from distance between particles.
 // Note: Energy takes a negative value!
-double energyAverageDist() {
+double energyAverageDist(int p, int o) {
   int size = 0;
   double sum = 0;
   for (int i = 0; i < NPOINTS-2; i++) {
@@ -125,7 +125,7 @@ double energyAverageDist() {
 // Calculate a variance energy of all triangles for each step.
 // K parameters are influenced from distance between particles.
 double energyVarianceDist() {
-  double average = energyAverage();
+  double average = energyAverage(0, 0);
   int size = 0;
   double sum = 0;
   double tmp = 0;
