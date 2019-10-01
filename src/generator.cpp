@@ -82,25 +82,27 @@ static int countUnbalance() {
   return count;
 }
 
-// Noise for a position from -5 to 5 with p2 % probability.
+// Noise for a position from -cycle/10 to cycle/10 (or from -3 to 3 in open boundary) with p2 % probability.
 // Minimum probability is 0.001%.
-static void noise() {
-  int i = rand() % NPOINTS;
-  double x = points[i].x;
-  double y = points[i].y;
+static Point noise() {
+  double x = 0;
+  double y = 0;
   int base = (cycle == -1) ? 3 : (cycle * 2 / 10 + 1) ;
 
   if ((rand() % 100000) < std::stod(p2) * 1000) { // p2 * 100000 / 100 because of p2 %.
-    x += (rand() % base) - (base / 2);
-    y += (rand() % base) - (base / 2);
-    points[i] = {imaging(x), imaging(y), points[i].color};
+    x = (rand() % base) - (base / 2);
+    y = (rand() % base) - (base / 2);
   }
+  return {x, y, NONE};
 }
 
+// Inject noise to 1 particle per a step.
 static void step() {
   timestep++;
   Point next[NPOINTS];
   Point dxdy[NPOINTS];
+  // Target for noise injection.
+  int target = rand() % NPOINTS;
 
   for (int i = 0; i < NPOINTS; i++) {
     Point &pi = points[i];
@@ -123,14 +125,20 @@ static void step() {
       x += plsx;
       y += plsy;
     }
+
+    // Noise for a target particle.
+    if (i == target) {
+      Point pls = noise();
+      x += pls.x;
+      y += pls.y;
+    }
+
     x = rungeKutta(x);
     y = rungeKutta(y);
-
     next[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     dxdy[i] = {imaging(x), imaging(y)};
   }
 
-  noise();
   result.push_back(std::vector<Point>(points, points + NPOINTS));
   memcpy(points, next, sizeof(next));
 
@@ -506,18 +514,7 @@ static void json() {
   for (int i = 0; i < maxgen; i+=100) {
     outfile << "{"; // Start of one step.
     // Kparams.
-    // Initial Kparams.
     outfile << "\"k\":{";
-    outfile << "\"initial\":{";
-    outfile << "\"00\":" << initial_kparam[0][0] << ",";
-    outfile << "\"01\":" << initial_kparam[0][1] << ",";
-    outfile << "\"10\":" << initial_kparam[1][0] << ",";
-    outfile << "\"11\":" << initial_kparam[1][1] << ",";
-    outfile << "\"a\":" << initial_kparam[0][0] << ",";
-    outfile << "\"b\":" << initial_kparam[1][1] << ",";
-    outfile << "\"p\":" << getP() << ",";
-    outfile << "\"m\":" << getM();
-    outfile << "},\n"; // End of k.initial.
     // All Kparams.
     outfile << "\"all\":[";
     for (int j = 0; j < NPOINTS; j++) {
