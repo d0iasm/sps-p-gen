@@ -2,6 +2,7 @@
 **/generator-*
 **/*.log
 **/*.html
+**/__pycache__
 .firebase
 public/**
 csv/**

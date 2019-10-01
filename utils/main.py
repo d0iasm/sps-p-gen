@@ -1,12 +1,12 @@
 import argparse
 import json
-import sys
-import numpy as np
-import matplotlib.pyplot as plt
+
+import stackplot
+import logplot
+import loglogplot
 
 
 src = ''
-out = ''
 
 
 def read_json():
@@ -15,26 +15,8 @@ def read_json():
     return data
 
 
-def plot(n, e_ave, e_var, is_dynamic):
-    fig, ax = plt.subplots()
-
-    #x = np.arange(n)
-    x = np.arange(0, 100*n, 100)
-
-    ax.plot(x, e_ave, label='Average')
-    ax.plot(x, e_var, label='Variance')
-    leg = ax.legend(loc='upper right', fancybox=True, shadow=True)
-    leg.get_frame().set_alpha(0.4)
-    ax.grid()
-
-    fig.tight_layout()
-    fn = out.replace("energy", "dynamic_energy" if is_dynamic else "static_energy", 1)
-    plt.savefig(fn)
-
-
 def parse_args():
     global src
-    global out
 
     parser = argparse.ArgumentParser(
             description='Generate an image from a json file.')
@@ -47,6 +29,15 @@ def parse_args():
     src = args.src
     out = args.out
 
+    stackplot.src = args.src
+    stackplot.out = out.replace("b=", "kparam?b=", 1)
+
+    logplot.src = args.src
+    logplot.out = out.replace("b=", "energy?b=", 1)
+
+    loglogplot.src = args.src
+    loglogplot.out = out.replace("b=", "xv?b=", 1)
+
 
 if __name__ == '__main__':
     parse_args()
@@ -55,12 +46,22 @@ if __name__ == '__main__':
     if extension != 'json':
         sys.exit('Error: ' + extension + ' file is not supported.')
     data = read_json()
-    # Save an image for static energy.
+
+    # Plot for K param.
+    k_data = stackplot.reshape_k(data)
+    stackplot.plot(len(data), k_data)
+
+    # Plot for static energy.
     e_ave = [y['energy']['static']['average'] for y in data]
     e_var = [y['energy']['static']['variance'] for y in data]
-    plot(len(data), e_ave, e_var, False)
+    logplot.plot(len(data), e_ave, e_var, False)
 
-    # Save an image for dynamic energy.
+    # Plot for dynamic energy.
     e_ave = [y['energy']['dynamic']['average'] for y in data]
     e_var = [y['energy']['dynamic']['variance'] for y in data]
-    plot(len(data), e_ave, e_var, True)
+    logplot.plot(len(data), e_ave, e_var, True)
+
+    # Plot for XV.
+    x_data = [d['xv']['x'] for d in data]
+    v_data = [d['xv']['v'] for d in data]
+    loglogplot.plot(len(data), x_data, v_data)

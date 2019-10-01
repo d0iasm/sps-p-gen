@@ -17,9 +17,6 @@ def read_json():
         data = json.load(f)
     return data
 
-def func():
-    return 'r'
-
 
 def plot(n, x, v):
     fig, (ax, colorbar) = plt.subplots(1, 2, gridspec_kw={'width_ratios': [10, 1]})
