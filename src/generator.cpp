@@ -20,6 +20,8 @@ Point points[NPOINTS];
 double maxk = 1.2;
 double mink = -1.2;
 std::string dynamic = "none";
+std::string p1 = "0";
+std::string p2 = "0";
 
 // Global variables declared in xv.h.
 Point center;
@@ -80,6 +82,20 @@ static int countUnbalance() {
   return count;
 }
 
+// Noise for a position from -5 to 5 with p2 % probability.
+// Minimum probability is 0.001%.
+static void noise() {
+  int i = rand() % NPOINTS;
+  double x = points[i].x;
+  double y = points[i].y;
+
+  if ((rand() % 100000) < std::stod(p2) * 1000) { // p2 * 100000 / 100 because of p2 %.
+    x += rand() % 11 - 5;
+    y += rand() % 11 - 5;
+    points[i] = {imaging(x), imaging(y), points[i].color};
+  }
+}
+
 static void step() {
   timestep++;
   Point next[NPOINTS];
@@ -105,13 +121,6 @@ static void step() {
       double plsy = (k / dist - pow(dist, -2)) * dy / dist;
       x += plsx;
       y += plsy;
-      /**
-      // Noise for a position from -3 to 3 with 1% probability.
-      if ((rand() % 100) < 1) {
-        x += rand() % 11 - 5;
-        y += rand() % 11 - 5;
-      }
-      **/
     }
     x = rungeKutta(x);
     y = rungeKutta(y);
@@ -119,6 +128,8 @@ static void step() {
     next[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     dxdy[i] = {imaging(x), imaging(y)};
   }
+
+  noise();
   result.push_back(std::vector<Point>(points, points + NPOINTS));
   memcpy(points, next, sizeof(next));
 
@@ -244,6 +255,11 @@ static std::string filename() {
   } else if (init_param == ZERO) {
     fn.append("zero");
   }
+  // Probabilities.
+  fn.append("&p1=");
+  fn.append(p1);
+  fn.append("&p2=");
+  fn.append(p2);
   // Seed.
   fn.append("&s=");
   fn.append(std::to_string(seed));
@@ -252,7 +268,7 @@ static std::string filename() {
 
 static void printBody() {
   outfile << R"END(<body>
-<div class=container>
+  <div class=container>
   <div>
     <canvas id=canvas width=650 height=650></canvas>
     <div class=container>
@@ -283,6 +299,7 @@ static void printBody() {
 	    << "Average: " << kAverage() << "<br />"
 	    << "Variance: " << kVariance() << "<br />";
   printCountedKparam();
+  outfile << "</div><div><h2>Figures</h2>\n<h2>K params</h2>";
   outfile << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   outfile << "</div>";
   outfile << "<br />";
@@ -339,9 +356,10 @@ static void printKparam() {
 static void usage() {
   std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
-  std::cerr << "[ -dynamic none/global-static-discrete/global-dynamic-discrete/local-static-discrete/local-dynamic-discrete/local-static-continuous/local-dynamic-continuous]";
-  std::cerr << "[ -init random/zero ]";
-  std::cerr << "[ -path path directory for the output file name ]";
+  std::cerr << "[ -dynamic none/global-static-discrete/global-dynamic-discrete/local-static-discrete/local-dynamic-discrete/local-static-continuous/local-dynamic-continuous] ";
+  std::cerr << "[ -init random/zero ] ";
+  std::cerr << "[ -path string ] ";
+  std::cerr << "[ -p1 double ] [ -p2 double ]";
   std::cerr << "[ -json ]\n\n";
 
   std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
@@ -352,6 +370,8 @@ static void usage() {
   std::cerr << "-dynamic   The flag to change the K parameters dinamically based on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.\n";
   std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.";
   std::cerr << "-path      The path directory for the output file name.\n";
+  std::cerr << "-p1        The probability of noise for updateing K params.\n";
+  std::cerr << "-p2        The probability of noise for updateing paricle's positions.\n";
   std::cerr << "-json      Output a json file for creating images by utils.\n";
   exit(1);
 }
@@ -449,6 +469,25 @@ static void parseArgs(int argc, char **argv) {
       argv += 2;
       continue;
     }
+
+    if (strcmp("-p1", argv[0]) == 0) {
+      if (argc < 2)
+        usage();
+      p1 = argv[1];
+      argc -= 2;
+      argv += 2;
+      continue;
+    }
+
+    if (strcmp("-p2", argv[0]) == 0) {
+      if (argc < 2)
+        usage();
+      p2 = argv[1];
+      argc -= 2;
+      argv += 2;
+      continue;
+    }
+
     usage();
   }
 }
@@ -588,5 +627,6 @@ int main(int argc, char **argv) {
       json();
       break;
   }
+  std::cerr << "genarated: " << filename() << "\n";
   outfile.close();
 }

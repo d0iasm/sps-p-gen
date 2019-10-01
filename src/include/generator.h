@@ -42,6 +42,8 @@ extern Point points[NPOINTS];
 extern double maxk;
 extern double mink;
 extern std::string dynamic;
+extern std::string p1;
+extern std::string p2;
 
 // Variables which scope is only this file.
 static double initial_kparam[2][2];

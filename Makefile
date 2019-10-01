@@ -18,15 +18,18 @@ IMG_PATH=$(DEV_IMG)
 
 ENV=MPLBACKEND=Agg
 
-MAXGEN=400000
+MAXGEN=200000
 #CYCLES=10 20 50 100
 CYCLES=20
-INITS=zero random
-#SEEDS=0
-SEEDS=0 1 2 3 4 5 6 7
 #DYNAMICS=none global-static-discrete global-dynamic-discrete local-static-discrete local-dynamic-discrete local-static-continuous local-dynamic-continuous
 #DYNAMICS=none global-static-discrete global-dynamic-discrete local-static-discrete local-dynamic-discrete
 DYNAMICS=local-dynamic-discrete
+#INITS=zero random
+INITS=random
+PROB=0 0.1 1 5 10 50
+#PROB=0
+SEEDS=0
+#SEEDS=0 1 2 3 4 5
 
 generator:
 	make -C src generator
@@ -35,21 +38,22 @@ kano: generator
 	parallel $(SRC)/generator-o -path $(HTML_PATH) -dynamic '{1}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 ::: $(DYNAMICS)
 	parallel $(SRC)/generator-p -path $(HTML_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 ::: $(CYCLES) ::: $(DYNAMICS)
 
+#TODO: add probabilities p1 and p2.
 html: generator
 	parallel $(SRC)/generator-o -path $(HTML_PATH) -dynamic '{1}' -gen $(MAXGEN) -init '{2}' -seed '{3}' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 html-p: generator
-	parallel $(SRC)/generator-p -path $(HTML_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -seed '{4}' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+	parallel $(SRC)/generator-p -path $(HTML_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
 
 json: generator
 	parallel $(SRC)/generator-o -json -path $(JSON_PATH) -dynamic '{1}' -gen $(MAXGEN) -init '{2}' -seed '{3}' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 json-p: generator
-	parallel $(SRC)/generator-p -json -path $(JSON_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -seed '{4}' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+	parallel $(SRC)/generator-p -json -path $(JSON_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
 
 img-energy: json
 	parallel $(ENV) python3 $(UTIL_ENERGY) \
@@ -59,9 +63,9 @@ img-energy: json
 
 img-energy-p: json-p
 	parallel $(ENV) python3 $(UTIL_ENERGY) \
-		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&s={4}.json' \
-		-out '$(IMG_PATH)/energy\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&s={4}.png' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-out '$(IMG_PATH)/energy\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
 
 img-kparam: json
 	parallel $(ENV) python3 $(UTIL_K) \
@@ -71,9 +75,9 @@ img-kparam: json
 
 img-kparam-p: json-p
 	parallel $(ENV) python3 $(UTIL_K) \
-		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&s={4}.json' \
-		-out '$(IMG_PATH)/kparam\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&s={4}.png' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-out '$(IMG_PATH)/kparam\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
 
 img-xv: json
 	parallel $(ENV) python3 $(UTIL_XV) \
@@ -83,9 +87,9 @@ img-xv: json
 
 img-xv-p: json-p
 	parallel $(ENV) python3 $(UTIL_XV) \
-		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&s={4}.json' \
-		-out '$(IMG_PATH)/xv\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&s={4}.png' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-out '$(IMG_PATH)/xv\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
 
 img: img-energy img-kparam img-xv
 img-p: img-energy-p img-kparam-p img-xv-p
