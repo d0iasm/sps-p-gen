@@ -88,10 +88,11 @@ static void noise() {
   int i = rand() % NPOINTS;
   double x = points[i].x;
   double y = points[i].y;
+  int base = (cycle == -1) ? 3 : (cycle * 2 / 10 + 1) ;
 
   if ((rand() % 100000) < std::stod(p2) * 1000) { // p2 * 100000 / 100 because of p2 %.
-    x += rand() % 11 - 5;
-    y += rand() % 11 - 5;
+    x += (rand() % base) - (base / 2);
+    y += (rand() % base) - (base / 2);
     points[i] = {imaging(x), imaging(y), points[i].color};
   }
 }
@@ -299,9 +300,8 @@ static void printBody() {
 	    << "Average: " << kAverage() << "<br />"
 	    << "Variance: " << kVariance() << "<br />";
   printCountedKparam();
-  outfile << "</div><div><h2>Figures</h2>\n<h2>K params</h2>";
+  outfile << "</div></div><div><h1>Figures</h1>\n<h2>K params</h2>";
   outfile << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
-  outfile << "</div>";
   outfile << "<br />";
   outfile << "<h2>Static Energy</h2>"
             << "Average: " << energy[0][0] << " => " << energy[maxgen-1][0] << "<br />"
@@ -313,7 +313,7 @@ static void printBody() {
   outfile << "<br />";
   outfile << "<h2>X-V Log Log Plot</h2>"
             << "<div><img width=350 src=\"img/xv%3F" << filename() << ".png\" /></div>";
-  outfile << "</div></div>";
+  outfile << "</div></div></div>";
 }
 
 static void printPoints() {
