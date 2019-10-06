@@ -6,14 +6,10 @@
 #include "energy.h"
 #include "dynamic.h"
 
-static double fRand(double min, double max) {
-  return min + ((double) rand() / (double) RAND_MAX) * (max - min);
-}
-
 typedef double EnergyFn(int, int);
 
- // Noise for K param with p1 % probability.
- // Minimum probability is 0.001%.
+// Noise for K param with p1 % probability.
+// Minimum probability is 0.001%.
 static bool noise() {
   if ((rand() % 100000) < std::stod(p1) * 1000) { // p1 * 100000 / 100 because of p1 %.
     return true;
@@ -25,6 +21,13 @@ static void updateDiscrete(EnergyFn *energy) {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
   double oldk = kparam[p][o];
+
+  // Reverse a K param regardless of the energy.
+  //if (noise()) {
+    //kparam[p][o] = -oldk;
+    //return;
+  //}
+
   double oldEnergy = energy(p, o);
 
   // Avoid a digit error.
@@ -45,10 +48,6 @@ static void updateDiscrete(EnergyFn *energy) {
     kparam[p][o] = mink;
   }
 
-  // Update a K param regardless of the energy.
-  if (noise())
-    return;
-
   // Restore an old K param because the old energy is more stable (= low energy).
   if (oldEnergy < energy(p, o))
     kparam[p][o] = oldk;
@@ -60,6 +59,13 @@ static void updateContinuous(EnergyFn *energy) {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
   double oldk = kparam[p][o];
+
+  // Reverse a K param regardless of the energy.
+  //if (noise()) {
+    //kparam[p][o] = -oldk;
+    //return;
+  //}
+
   double oldEnergy = energy(p, o);
 
   double sum = 0.0;
@@ -77,10 +83,6 @@ static void updateContinuous(EnergyFn *energy) {
   if (kparam[p][o] < mink) {
     kparam[p][o] = mink;
   }
-
-  // Update a K param regardless of the energy.
-  if (noise())
-    return;
 
   // Restore an old K param because the old energy is more stable (= low energy).
   if (oldEnergy < energy(p, o)) {
