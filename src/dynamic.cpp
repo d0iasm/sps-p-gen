@@ -8,25 +8,10 @@
 
 typedef double EnergyFn(int, int);
 
-// Noise for K param with p1 % probability.
-// Minimum probability is 0.001%.
-static bool noise() {
-  if ((rand() % 100000) < std::stod(p1) * 1000) { // p1 * 100000 / 100 because of p1 %.
-    return true;
-  }
-  return false;
-}
-
 static void updateDiscrete(EnergyFn *energy) {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
   double oldk = kparam[p][o];
-
-  // Reverse a K param regardless of the energy.
-  //if (noise()) {
-    //kparam[p][o] = -oldk;
-    //return;
-  //}
 
   double oldEnergy = energy(p, o);
 
@@ -59,12 +44,6 @@ static void updateContinuous(EnergyFn *energy) {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
   double oldk = kparam[p][o];
-
-  // Reverse a K param regardless of the energy.
-  //if (noise()) {
-    //kparam[p][o] = -oldk;
-    //return;
-  //}
 
   double oldEnergy = energy(p, o);
 
