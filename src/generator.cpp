@@ -82,9 +82,21 @@ static int countUnbalance() {
   return count;
 }
 
+// Noise for K parameters. It is possible to reverse its value with p1 % probability.
+// Minimum probability is 0.001%.
+static void noiseP1() {
+  for (int j = 0; j < NPOINTS; j++) {
+    for (int k = 0; k < NPOINTS; k++) {
+      if ((rand() % 100000) < std::stod(p1) * 1000) {
+        kparam[j][k] = -kparam[j][k];
+      }
+    }
+  }
+}
+
 // Noise for a position from -cycle/10 to cycle/10 (or from -3 to 3 in open boundary) with p2 % probability.
 // Minimum probability is 0.001%.
-static Point noise() {
+static Point noiseP2() {
   double x = 0;
   double y = 0;
   int base = (cycle == -1) ? 3 : (cycle * 2 / 10 + 1) ;
@@ -93,6 +105,7 @@ static Point noise() {
     x = (rand() % base) - (base / 2);
     y = (rand() % base) - (base / 2);
   }
+  // This is difference, not a position for a particle.
   return {x, y, NONE};
 }
 
@@ -101,8 +114,6 @@ static void step() {
   timestep++;
   Point next[NPOINTS];
   Point dxdy[NPOINTS];
-  // Target for noise injection.
-  int target = rand() % NPOINTS;
 
   for (int i = 0; i < NPOINTS; i++) {
     Point &pi = points[i];
@@ -124,13 +135,6 @@ static void step() {
       double plsy = (k / dist - pow(dist, -2)) * dy / dist;
       x += plsx;
       y += plsy;
-    }
-
-    // Noise for a target particle.
-    if (i == target) {
-      Point pls = noise();
-      x += pls.x;
-      y += pls.y;
     }
 
     x = rungeKutta(x);
@@ -607,6 +611,11 @@ int main(int argc, char **argv) {
 
   // Main loop.
   for (int i = 0; i < maxgen; i++) {
+  // Experiment for the movement of particles.
+    if (i % 100000 == 0) {
+      noiseP1();
+    }
+
     // Store the current Kparam before update it.
     // Update K parameters based on the Energy.
     storeKparam();
