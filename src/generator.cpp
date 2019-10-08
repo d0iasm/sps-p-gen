@@ -148,7 +148,7 @@ static Point noiseP2() {
 }
 
 // Inject noise to 1 particle per a step.
-static void step() {
+static void step(int step) {
   timestep++;
   Point next[NPOINTS];
   Point dxdy[NPOINTS];
@@ -181,22 +181,26 @@ static void step() {
     dxdy[i] = {imaging(x), imaging(y)};
   }
 
-  result.push_back(std::vector<Point>(points, points + NPOINTS));
   memcpy(points, next, sizeof(next));
 
-  // XV.
-  xv.push_back(computeXV(dxdy));
+  if (step % thinning == 0) {
+    // Points' positions.
+    result.push_back(std::vector<Point>(points, points + NPOINTS));
 
-  // Energies.
-  std::vector<double> e(4);
-  e[0] = energyAverage(0, 0);
-  e[1] = energyVariance();
-  e[2] = energyAverageDist(0, 0);
-  e[3] = energyVarianceDist();
-  energy.push_back(e);
+    // XV.
+    xv.push_back(computeXV(dxdy));
 
-  // Kparams.
-  kparam_counter.push_back(countKparam());
+    // Energies.
+    std::vector<double> e(4);
+    e[0] = energyAverage(0, 0);
+    e[1] = energyVariance();
+    e[2] = energyAverageDist(0, 0);
+    e[3] = energyVarianceDist();
+    energy.push_back(e);
+
+    // Kparams.
+    kparam_counter.push_back(countKparam());
+  }
 }
 
 static void initPoints() {
@@ -356,8 +360,8 @@ static void printBody() {
   outfile << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>Static Energy</h2>"
-            << "Average: " << energy[0][0] << " => " << energy[maxgen-1][0] << "<br />"
-            << "Variance: " << energy[0][1] << " => " << energy[maxgen-1][1]
+            << "Average: " << energy[0][0] << " => " << energy[energy.size()-1][0] << "<br />"
+            << "Variance: " << energy[0][1] << " => " << energy[energy.size()-1][1]
             << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>Dynamic Energy</h2>"
@@ -370,7 +374,7 @@ static void printBody() {
 
 static void printPoints() {
   outfile << "<script>const points = [\n";
-  for (int i = 0; i < result.size(); i += 100) {
+  for (int i = 0; i < result.size(); i += thinning) {
     outfile << "  [" << i << ",";
     for (int j = 0; j < result[i].size(); j++) {
       Point &p = result[i][j];
@@ -390,7 +394,7 @@ static void printPoints() {
 
 static void printKparam() {
   outfile << "<script>const kparam = [\n";
-  for (int i = 0; i < kparam_result.size(); i += 100) {
+  for (int i = 0; i < kparam_result.size(); i += thinning) {
     outfile << "{step: " << i;
     outfile << ",k:[";
     for (int j = 0; j < kparam_result[i].size(); j++) {
@@ -555,7 +559,7 @@ static void html() {
 
 static void json() {
   outfile << "["; // Start of Json.
-  for (int i = 0; i < maxgen; i+=100) {
+  for (int i = 0; i < maxgen; i += thinning) {
     outfile << "{"; // Start of one step.
     // Kparams.
     outfile << "\"k\":{";
@@ -662,7 +666,7 @@ int main(int argc, char **argv) {
     updateKparam();
 
     // Update particle's positions based on Kano's model.
-    step();
+    step(i);
   }
 
   switch (output) {

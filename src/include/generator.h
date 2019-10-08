@@ -7,7 +7,7 @@
 #include <vector>
 
 // Constants
-#define NPOINTS 50
+#define NPOINTS 10
 
 enum Color {
   RED,
@@ -57,5 +57,6 @@ static Output output = HTML;
 static Init init_param = NORMAL;
 static std::ofstream outfile;
 static std::string path = ".";
+static int thinning = 100;
 
 #endif // GENERATOR_H
