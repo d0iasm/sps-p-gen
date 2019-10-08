@@ -50,6 +50,7 @@ static std::map<double, int> countKparam() {
   return m;
 }
 
+// Count balanced triangles based on combinations.
 static int countBalance() {
   int count = 0;
   for (int i = 0; i < NPOINTS-2; i++) {
@@ -59,6 +60,25 @@ static int countBalance() {
           kparam[i][k] * kparam[k][i] *
           kparam[j][k] * kparam[k][j] >= 0) {
             count++;
+        }
+      }
+    }
+  }
+  return count;
+}
+
+// Count balanced triangles based on permutations.
+static int countBalanceP() {
+  int count = 0;
+  for (int p =0; p < NPOINTS; p++) {
+    for (int o = 0; o < NPOINTS; o++) {
+      if (p == o)
+        continue;
+      for (int x = 0; x < NPOINTS; x++) {
+        if (p == x || o == x)
+          continue;
+        if (kparam[p][o] * kparam[o][x] * kparam[p][x] >= 0) {
+          count++;
         }
       }
     }
@@ -82,13 +102,31 @@ static int countUnbalance() {
   return count;
 }
 
+static int countUnbalanceP() {
+  int count = 0;
+  for (int p =0; p < NPOINTS; p++) {
+    for (int o = 0; o < NPOINTS; o++) {
+      if (p == o)
+        continue;
+      for (int x = 0; x < NPOINTS; x++) {
+        if (p == x || o == x)
+          continue;
+        if (kparam[p][o] * kparam[o][x] * kparam[p][x] < 0) {
+          count++;
+        }
+      }
+    }
+  }
+  return count;
+}
+
 // Noise for K parameters. It is possible to reverse its value with p1 % probability.
 // Minimum probability is 0.001%.
 static void noiseP1() {
-  for (int j = 0; j < NPOINTS; j++) {
-    for (int k = 0; k < NPOINTS; k++) {
+  for (int i = 0; i < NPOINTS; i++) {
+    for (int j = 0; j < NPOINTS; j++) {
       if ((rand() % 100000) < std::stod(p1) * 1000) {
-        kparam[j][k] = -kparam[j][k];
+        kparam[i][j] = (rand() % 25 - 12) / 10.0;
       }
     }
   }
@@ -297,6 +335,8 @@ static void printBody() {
   outfile << "<div>Density: " << getDensity() << "</div>";
   outfile << "<div>Balanced triangles: " << countBalance() << "</div>";
   outfile << "<div>Unbalanced triangles: " << countUnbalance() << "</div>";
+  outfile << "<div>Balanced triangles (heider): " << countBalanceP() << "</div>";
+  outfile << "<div>Unbalanced triangles (heider): " << countUnbalanceP() << "</div>";
   outfile << "<br />\n";
   outfile << "<h2>Static K Parameters</h2>\n";
   outfile << "<div>Initial K[00,01,10,11]: "
