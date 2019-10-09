@@ -67,6 +67,23 @@ static int countBalance() {
   return count;
 }
 
+// Count balanced triangles based on average of asymmetrical edges.
+static int countBalanceA() {
+  int count = 0;
+  for (int i = 0; i < NPOINTS-2; i++) {
+    for (int j = i+1; j < NPOINTS-1; j++) {
+      for (int k = j+1; k < NPOINTS; k++) {
+        if (((kparam[i][j] + kparam[j][i]) / 2) *
+          ((kparam[i][k] + kparam[k][i]) / 2) *
+          ((kparam[j][k] + kparam[k][j]) / 2) >= 0) {
+            count++;
+        }
+      }
+    }
+  }
+  return count;
+}
+
 // Count balanced triangles based on permutations.
 static int countBalanceP() {
   int count = 0;
@@ -102,6 +119,22 @@ static int countUnbalance() {
   return count;
 }
 
+static int countUnbalanceA() {
+  int count = 0;
+  for (int i = 0; i < NPOINTS-2; i++) {
+    for (int j = i+1; j < NPOINTS-1; j++) {
+      for (int k = j+1; k < NPOINTS; k++) {
+        if (((kparam[i][j] + kparam[j][i]) / 2) *
+          ((kparam[i][k] + kparam[k][i]) / 2) *
+          ((kparam[j][k] + kparam[k][j]) / 2) < 0) {
+            count++;
+        }
+      }
+    }
+  }
+  return count;
+}
+
 static int countUnbalanceP() {
   int count = 0;
   for (int p =0; p < NPOINTS; p++) {
@@ -122,14 +155,25 @@ static int countUnbalanceP() {
 
 // Noise for K parameters. It is possible to reverse its value with p1 % probability.
 // Minimum probability is 0.001%.
+static double noise_inc = 10.0;
 static void noiseP1() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
+      // Incremental noise when p1 is lower than 0.
+      if (std::stod(p1) < 0) {
+        if ((rand() % 100000) < noise_inc * 1000) {
+          kparam[i][j] = (rand() % 25 - 12) / 10.0;
+        }
+        continue;
+      }
+
+      // Fixed noise.
       if ((rand() % 100000) < std::stod(p1) * 1000) {
         kparam[i][j] = (rand() % 25 - 12) / 10.0;
       }
     }
   }
+  noise_inc += 10.0;
 }
 
 // Noise for a position from -cycle/10 to cycle/10 (or from -3 to 3 in open boundary) with p2 % probability.
@@ -339,6 +383,8 @@ static void printBody() {
   outfile << "<div>Density: " << getDensity() << "</div>";
   outfile << "<div>Balanced triangles: " << countBalance() << "</div>";
   outfile << "<div>Unbalanced triangles: " << countUnbalance() << "</div>";
+  outfile << "<div>Balanced triangles (average): " << countBalanceA() << "</div>";
+  outfile << "<div>Unbalanced triangles (average): " << countUnbalanceA() << "</div>";
   outfile << "<div>Balanced triangles (heider): " << countBalanceP() << "</div>";
   outfile << "<div>Unbalanced triangles (heider): " << countUnbalanceP() << "</div>";
   outfile << "<br />\n";
@@ -354,12 +400,13 @@ static void printBody() {
   outfile << "<h2>Dynamic K Parameters</h2>\n"
 	    << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
 	    << "Average: " << kAverage() << "<br />"
-	    << "Variance: " << kVariance() << "<br />";
+ 	    << "Variance: " << kVariance() << "<br />";
   printCountedKparam();
   outfile << "</div></div><div><h1>Figures</h1>\n<h2>K params</h2>";
   outfile << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>Static Energy</h2>"
+	        << "(min: " << energyMin() << ", max: "<< energyMax() << ")" << "<br />"
             << "Average: " << energy[0][0] << " => " << energy[energy.size()-1][0] << "<br />"
             << "Variance: " << energy[0][1] << " => " << energy[energy.size()-1][1]
             << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
@@ -656,7 +703,7 @@ int main(int argc, char **argv) {
   // Main loop.
   for (int i = 0; i < maxgen; i++) {
   // Experiment for the movement of particles.
-    if (i % 100000 == 0) {
+    if (i % 50000 == 0 && i < maxgen - 50000) {
       noiseP1();
     }
 

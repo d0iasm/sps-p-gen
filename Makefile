@@ -27,10 +27,10 @@ CYCLES=20
 DYNAMICS=local-dynamic-discrete
 #INITS=zero random
 INITS=random
-PROB=0 0.1 1 5 10
-#PROB=0
-SEEDS=0
-#SEEDS=0 1 2 3 4 5
+PROB=-1 0 1 5 10 20 30 40 50 60 70 80
+PROB2=0
+#SEEDS=0
+SEEDS=0 1 2 3 4 5
 
 generator:
 	make -C src generator
@@ -49,7 +49,7 @@ html: generator
 
 html-p: generator-p
 	parallel $(SRC)/generator-p -path $(HTML_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 json: generator
 	parallel $(SRC)/generator-o -json -path $(JSON_PATH) -dynamic '{1}' -gen $(MAXGEN) -init '{2}' -seed '{3}' \
@@ -57,13 +57,13 @@ json: generator
 
 json-p: generator-p
 	parallel $(SRC)/generator-p -json -path $(JSON_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all-p: json-p
 	parallel $(ENV) python3 $(UTIL_ALL) \
 		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-energy: json
 	parallel $(ENV) python3 $(UTIL_ENERGY) \
@@ -75,7 +75,7 @@ img-energy-p: json-p
 	parallel $(ENV) python3 $(UTIL_ENERGY) \
 		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/energy\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-kparam: json
 	parallel $(ENV) python3 $(UTIL_K) \
@@ -87,7 +87,7 @@ img-kparam-p: json-p
 	parallel $(ENV) python3 $(UTIL_K) \
 		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/kparam\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-xv: json
 	parallel $(ENV) python3 $(UTIL_XV) \
@@ -99,7 +99,7 @@ img-xv-p: json-p
 	parallel $(ENV) python3 $(UTIL_XV) \
 		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/xv\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB) ::: $(SEEDS)
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img: img-energy img-kparam img-xv
 img-p: img-energy-p img-kparam-p img-xv-p
