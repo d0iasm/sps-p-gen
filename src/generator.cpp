@@ -374,8 +374,8 @@ static void printBody() {
 
 static void printPoints() {
   outfile << "<script>const points = [\n";
-  for (int i = 0; i < result.size(); i += thinning) {
-    outfile << "  [" << i << ",";
+  for (int i = 0; i < result.size(); i++) {
+    outfile << "  [" << i * thinning << ",";
     for (int j = 0; j < result[i].size(); j++) {
       Point &p = result[i][j];
       outfile << "{x:" << p.x
@@ -394,7 +394,7 @@ static void printPoints() {
 
 static void printKparam() {
   outfile << "<script>const kparam = [\n";
-  for (int i = 0; i < kparam_result.size(); i += thinning) {
+  for (int i = 0; i < kparam_result.size(); i++) {
     outfile << "{step: " << i;
     outfile << ",k:[";
     for (int j = 0; j < kparam_result[i].size(); j++) {
@@ -559,7 +559,7 @@ static void html() {
 
 static void json() {
   outfile << "["; // Start of Json.
-  for (int i = 0; i < maxgen; i += thinning) {
+  for (int i = 0; i < maxgen/thinning; i++) {
     outfile << "{"; // Start of one step.
     // Kparams.
     outfile << "\"k\":{";
@@ -606,7 +606,7 @@ static void json() {
     outfile << "\"v\":" << xv[i].v;
     outfile << "}"; // End of xv.
     outfile << "}\n"; // End of one step.
-    if (i < maxgen - 100)
+    if (i < maxgen/thinning - 1)
       outfile << ",";
   }
   outfile << "]"; // End on Json.
@@ -662,7 +662,8 @@ int main(int argc, char **argv) {
 
     // Store the current Kparam before update it.
     // Update K parameters based on the Energy.
-    storeKparam();
+    if (i % thinning == 0)
+      storeKparam();
     updateKparam();
 
     // Update particle's positions based on Kano's model.
