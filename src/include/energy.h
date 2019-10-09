@@ -8,6 +8,8 @@
 extern std::vector<std::vector<double> > energy;
 
 // Global functions.
+double energyMax();
+double energyMin();
 double energyAverage(int, int);
 double energyAverageDist(int, int);
 double energyVariance();

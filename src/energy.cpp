@@ -71,6 +71,14 @@ static double heiderUndirectedSpaceLocality(int i, int j, int k) {
   return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
 
+double energyMax() {
+  return - (maxk * maxk * maxk);
+}
+
+double energyMin() {
+  return - (mink * mink * mink);
+}
+
 // Calculate an average energy of all triangles.
 // Note: Energy takes a negative value!
 double energyAverage(int p, int o) {
