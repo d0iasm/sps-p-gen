@@ -22,7 +22,7 @@ def plot(n, e_ave, e_var, is_dynamic):
     x = np.arange(0, 100*n, 100)
 
     ax.plot(x, e_ave, label='Average')
-    ax.plot(x, e_var, label='Variance')
+    #ax.plot(x, e_var, label='Variance')
     leg = ax.legend(loc='upper right', fancybox=True, shadow=True)
     leg.get_frame().set_alpha(0.4)
     ax.grid()
