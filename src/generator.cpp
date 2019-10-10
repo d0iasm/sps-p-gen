@@ -703,7 +703,7 @@ int main(int argc, char **argv) {
   // Main loop.
   for (int i = 0; i < maxgen; i++) {
   // Experiment for the movement of particles.
-    if (i % 50000 == 0 && i < maxgen - 50000) {
+    if (i % 100000 == 0 && i < maxgen - 100000 && i > 100000) {
       noiseP1();
     }
 
