@@ -20,7 +20,7 @@ const MIN = -1.2;
 
 // Variables
 let handle;
-let index = 0;
+let timestep = 0;
 let relationOn = true;
 
 function drawGrid() {
@@ -41,6 +41,34 @@ function drawGrid() {
     ctx.stroke();
   }
   ctx.restore();
+}
+
+// Fix the p1's position and move p2 to 9 virtual positions.
+// Get the positon of the closest virtual image of p2.
+function closest(p1, p2) {
+  let closest = Number.MAX_SAFE_INTEGER;
+  const x1 = p1.x;
+  const y1 = p1.y;
+  const x2 = p2.x;
+  const y2 = p2.y;
+
+  let closestDistance = Number.MAX_SAFE_INTEGER;
+  let closestX = x2;
+  let closestY = y2;
+
+  for (let i=-1; i<=1; i++) {
+    for (let j=-1; j<=1; j++) {
+      const dx = (x2 + cycle * i) - x1;
+      const dy = (y2 + cycle * j) - y1;
+      const tmp = Math.sqrt(dx * dx + dy * dy);
+      if (tmp < closestDistance) {
+        closestDistance = tmp;
+        closestX = x2 + cycle * i;
+        closestY = y2 + cycle * j;
+      }
+    }
+  }
+  return { "x": closestX, "y": closestY };
 }
 
 function drawPoint(p) {
@@ -71,10 +99,13 @@ function drawPoint(p) {
       const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
       ctx.strokeStyle = 'rgba(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ', 0.4)';
 
+      // Find the closest virtual position.
+      q = closest(p, points[timestep][i+1]);
+
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
       // Note: the target starts from index 1.
-      ctx.lineTo(points[index][i+1].x, points[index][i+1].y);
+      ctx.lineTo(q.x, q.y);
       ctx.stroke();
     }
   }
@@ -87,18 +118,18 @@ function redraw() {
 
   drawGrid();
 
-  for (let i = 1; i < points[index].length; i++) {
-    drawPoint(points[index][i]);
+  for (let i = 1; i < points[timestep].length; i++) {
+    drawPoint(points[timestep][i]);
   }
 
-  document.getElementById('timestep').value = points[index][0];
+  document.getElementById('timestep').value = points[timestep][0];
   ctx.restore();
 }
 
 function step() {
-  if (index < points.length) {
+  if (timestep < points.length) {
     redraw();
-    index++;
+    timestep++;
   } else {
     stop();
   }
@@ -118,7 +149,7 @@ function stop() {
 function reset() {
   const running = handle;
   if (running) stop();
-  index = 0;
+  timestep = 0;
   redraw();
   if (running) start();
 }
@@ -129,8 +160,8 @@ function on() {
   relationButton.style.backgroundColor = "#333";
   relationButton.style.color = "white";
   if (!handle) {
-    if (index >= points.length) {
-      index = points.length - 1;
+    if (timestep >= points.length) {
+      timestep = points.length - 1;
     }
     redraw();
   }
@@ -142,8 +173,8 @@ function off() {
   relationButton.style.backgroundColor = "white";
   relationButton.style.color = "#333";
   if (!handle) {
-    if (index >= points.length) {
-      index = points.length - 1;
+    if (timestep >= points.length) {
+      timestep = points.length - 1;
     }
     redraw();
   }
@@ -168,7 +199,7 @@ relationButton.addEventListener('click', function() {
 });
 
 document.getElementById('timestep').addEventListener('change', e => {
-  index = parseInt(e.currentTarget.value / 100);
+  timestep = parseInt(e.currentTarget.value / 100);
   redraw();
 });
 

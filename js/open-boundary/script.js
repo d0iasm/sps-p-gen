@@ -20,7 +20,7 @@ const MIN = -1.2;
 // Variables.
 let currentScale = 1;
 let handle;
-let index = 0;
+let timestep = 0;
 let relationOn = true;
 
 function drawGrid() {
@@ -71,7 +71,7 @@ function drawPoint(p) {
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
       // Note: the target starts from index 1.
-      ctx.lineTo(points[index][i+1].x, points[index][i+1].y);
+      ctx.lineTo(points[timestep][i+1].x, points[timestep][i+1].y);
       ctx.stroke();
     }
   }
@@ -80,8 +80,8 @@ function drawPoint(p) {
 
 function scaleout() {
   let max = 0;
-  for (let i = 1; i < points[index].length; i++) {
-    const p = points[index][i];
+  for (let i = 1; i < points[timestep].length; i++) {
+    const p = points[timestep][i];
     max = Math.max(max, Math.abs(p.x), Math.abs(p.y));
   }
 
@@ -96,19 +96,19 @@ function redraw() {
   scaleout();
   drawGrid();
 
-  // i starts 1 because points[index][0] represents the number of steps.
-  for (let i = 1; i < points[index].length; i++) {
-    drawPoint(points[index][i]);
+  // i starts 1 because points[timestep][0] represents the number of steps.
+  for (let i = 1; i < points[timestep].length; i++) {
+    drawPoint(points[timestep][i]);
   }
 
-  document.getElementById('timestep').value = points[index][0];
+  document.getElementById('timestep').value = points[timestep][0];
   ctx.restore();
 }
 
 function step() {
-  if (index < points.length) {
+  if (timestep < points.length) {
     redraw();
-    index++;
+    timestep++;
   } else {
     stop();
   }
@@ -128,7 +128,7 @@ function stop() {
 function reset() {
   const running = handle;
   if (running) stop();
-  index = 0;
+  timestep = 0;
   redraw();
   if (running) start();
 }
@@ -139,8 +139,8 @@ function on() {
   relationButton.style.backgroundColor = "#333";
   relationButton.style.color = "white";
   if (!handle) {
-    if (index >= points.length) {
-      index = points.length - 1;
+    if (timestep >= points.length) {
+      timestep = points.length - 1;
     }
     redraw();
   }
@@ -152,8 +152,8 @@ function off() {
   relationButton.style.backgroundColor = "white";
   relationButton.style.color = "#333";
   if (!handle) {
-    if (index >= points.length) {
-      index = points.length - 1;
+    if (timestep >= points.length) {
+      timestep = points.length - 1;
     }
     redraw();
   }
@@ -178,7 +178,7 @@ relationButton.addEventListener('click', function() {
 });
 
 document.getElementById('timestep').addEventListener('change', e => {
-  index = parseInt(e.currentTarget.value / 100);
+  timestep = parseInt(e.currentTarget.value / 100);
   redraw();
 });
 

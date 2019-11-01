@@ -36,7 +36,15 @@ PROB2=0
 #SEEDS=0
 SEEDS=$(shell seq 1000)
 
-GENERATOR:
+MAXGEN=500000
+SEEDS=1
+test: generator-p
+	parallel $(SRC)/generator-p -path $(HTML_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
+	cp -r css $(DEV)
+	cp -r js $(DEV)
+
+generator:
 	make -C src generator
 
 generator-p:
@@ -113,6 +121,8 @@ dev: html img
 	cp -r js $(DEV)
 
 dev-p: html-p img-all-p
+	cp -r css $(DEV)
+	cp -r js $(DEV)
 
 dev-all: dev dev-p
 

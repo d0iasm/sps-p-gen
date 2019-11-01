@@ -9,6 +9,7 @@
 #include "boundary.h"
 
 // Global variable defined in boundary.h.
+// The value 10 is default. It can be rewritten by `-cycle` flag.
 int cycle = 10;
 
 static double rem(double x, long y) {
