@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <random>
+#include <regex>
 #include <math.h>
 #include <map>
 #include <vector>
@@ -332,6 +333,11 @@ static std::string filename() {
   return fn;
 }
 
+static std::string settings() {
+  std::string name = filename();
+  return std::regex_replace(name, std::regex("&"), "<br />");
+}
+
 static void printBody() {
   outfile << R"END(<body>
   <div class=container>
@@ -343,9 +349,10 @@ static void printBody() {
       <button id=relation>ON</button>
     </div>
   </div>
-  <div>)END";
-  outfile << "<h1>" << filename() << "</h1>";
-  outfile << "<br />\n";
+  <div style="padding: 0 20px;">)END";
+  outfile << "<h1>A particle swarm model</h1><br />";
+  outfile << "<h2>Settings</h2>" << settings();
+  outfile << "<br /><br />\n";
   outfile << "<div>timestep: <input type=text size=6 id=timestep></input></div>\n";
   outfile << "<div>density: " << getDensity() << "</div>";
   outfile << "<div>balanced triangles (average, nC3): " << countBalanceAverage() << "</div>";
@@ -353,34 +360,37 @@ static void printBody() {
   outfile << "<div>balanced triangles (heider, nP3): " << countBalanceHeider() << "</div>";
   outfile << "<div>unbalanced triangles (heider, nP3): " << countUnbalanceHeider() << "</div>";
   outfile << "<br />\n";
-  outfile << "<h2>Initial K Parameters</h2>\n";
+  outfile << "<h2>Initial K Parameters</h2>"
+          << "(valid values only for Kano's parameters)\n";
   outfile << "<div>initial K[00,01,10,11]: "
-            << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
-            << initial_kparam[1][0] << "," << initial_kparam[1][1]
-            << "</div>\n";
+          << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
+          << initial_kparam[1][0] << "," << initial_kparam[1][1]
+          << "</div>\n";
   outfile << "<div>initial K[a, b, p, m]: "
-            << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
-            << getP() << "," << getM();
+          << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
+          << getP() << "," << getM();
   outfile << "</div>\n<br />\n<div>";
   outfile << "<h2>K Parameters' distribution</h2>\n"
-    << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
-    << "last step (average): " << kAverage() << "<br />"
-    << "last step (variance): " << kVariance() << "<br />";
+          << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
+          << "last step (average): " << kAverage() << "<br />"
+          << "last step (variance): " << kVariance() << "<br />";
   printCountedKparam();
-  outfile << "</div></div><div><h1>Figures</h1>\n<h2>K params</h2>";
+  outfile << "</div></div><div><h1>Figures</h1>\n<h2>K Parameters</h2>";
   outfile << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>Static Heider Energy</h2>"
-    << "(high: " << energyHigh() << ", low: "<< energyLow() << ")" << "<br />"
+          << "(high: " << energyHigh() << ", low: "<< energyLow() << ")" << "<br />"
           << "initial => final step: " << energy[0][0] << " => " << energy[energy.size()-1][0] << "<br />"
           << "initial => final step (variance): " << energy[0][1] << " => " << energy[energy.size()-1][1]
           << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
   outfile << "<br />";
-  outfile << "<h2>Dynamic Energy</h2>"
+  outfile << "<h2>Dynamic Heider Energy</h2>"
           << "<div><img width=350 src=\"img/dynamic_energy%3F" << filename() << ".png\" /></div>";
+  /*
   outfile << "<br />";
   outfile << "<h2>X-V Log Log Plot</h2>"
           << "<div><img width=350 src=\"img/xv%3F" << filename() << ".png\" /></div>";
+          */
   outfile << "</div></div></div>";
 }
 
