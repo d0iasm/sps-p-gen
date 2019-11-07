@@ -399,7 +399,6 @@ static void printPoints() {
   for (int i = 0; i < point_result.size(); i++) {
     outfile << "{step:" << i * thinning << ","
             << "points:[\n";
-    //outfile << "  [" << i * thinning << ",";
     for (int j = 0; j < point_result[i].size(); j++) {
       Point &p = point_result[i][j];
       outfile << "{x:" << p.x
@@ -585,6 +584,17 @@ static void json() {
   outfile << "["; // Start of Json.
   for (int i = 0; i < maxgen/thinning; i++) {
     outfile << "{"; // Start of one step.
+    outfile << "\"points\":["; // Start of points.
+    for (int j = 0; j < point_result[i].size(); j++) {
+      Point &p = point_result[i][j];
+      outfile << "{\"x\":" << p.x
+              << ",\"y\":" << p.y
+              << ",\"color\":" << p.color << "}";
+      if (j != point_result[i].size() - 1) {
+        outfile << ",";
+      }
+    }
+    outfile << "],"; // End of points.
     // Kparams.
     outfile << "\"k\":{";
     // All Kparams.
