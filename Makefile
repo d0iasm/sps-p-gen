@@ -12,6 +12,7 @@ UTIL_ALL=$(UTIL)/main.py
 UTIL_K=$(UTIL)/stackplot.py
 UTIL_ENERGY=$(UTIL)/logplot.py
 UTIL_XV=$(UTIL)/loglogplot.py
+UTIL_CLUSTERING=$(UTIL)/clustering.py
 
 HTML_PATH=$(DEV)
 JSON_PATH=$(JSON)
@@ -38,7 +39,7 @@ SEEDS=0
 
 MAXGEN=50000
 PROB=0
-DYNAMICS=local-dynamic-discrete local-static-discrete
+DYNAMICS=local-dynamic-discrete
 generator:
 	make -C src generator
 
@@ -111,6 +112,13 @@ img-xv-p: json-p
 	parallel $(ENV) python3 $(UTIL_XV) \
 		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/xv\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
+		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
+
+# TODO: make open boundary version.
+img-clustring-p:
+	parallel $(ENV) python3 $(UTIL_CLUSTERING) \
+		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-out '$(IMG_PATH)/clustering\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img: img-energy img-kparam img-xv
