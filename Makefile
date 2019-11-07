@@ -37,9 +37,12 @@ PROB2=0
 SEEDS=0
 #SEEDS=$(shell seq 1000)
 
-MAXGEN=50000
+MAXGEN=500000
 PROB=0
 DYNAMICS=local-dynamic-discrete
+HTML_PATH=$(LOCAL)
+IMG_PATH=$(LOCAL_IMG)
+ENV=
 generator:
 	make -C src generator
 
@@ -115,7 +118,7 @@ img-xv-p: json-p
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 # TODO: make open boundary version.
-img-clustring-p:
+img-clustering-p:
 	parallel $(ENV) python3 $(UTIL_CLUSTERING) \
 		-src '$(JSON_PATH)/sps-p\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/clustering\?b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \

@@ -8,6 +8,8 @@ from matplotlib.colors import LogNorm
 from sklearn import mixture
 from sklearn.cluster import KMeans
 import seaborn as sns
+import scipy.cluster.hierarchy as hcluster
+
 
 
 src = ''
@@ -62,26 +64,37 @@ if __name__ == '__main__':
         sys.exit('Error: ' + extension + ' file is not supported.')
     data = read_json()
     points = [d['points'] for d in data]
-    step = 0
+    step = len(points)-1
     X = np.array([[p['x'], p['y']] for p in points[step]])
 
-    random_state=0
-    y_pred = KMeans(n_clusters=6, random_state=random_state).fit_predict(X)
+    thresh = 1.5
+    clusters = hcluster.fclusterdata(X, thresh, criterion="distance")
 
-    plt.subplot(221)
-    plt.scatter(X[:, 0], X[:, 1], c=y_pred)
-    plt.title("Incorrect Number of Blobs")
+    # plotting
+    plt.scatter(*np.transpose(X), c=clusters)
+    plt.axis("equal")
+    title = "threshold: %f, number of clusters: %d" % (thresh, len(set(clusters)))
+    plt.title(title)
+    plt.show()
+
+
+    #random_state=0
+    #y_pred = KMeans(n_clusters=6, random_state=random_state).fit_predict(X)
+
+    #plt.subplot(221)
+    #plt.scatter(X[:, 0], X[:, 1], c=y_pred)
+    #plt.title("Incorrect Number of Blobs")
 
     # Anisotropicly distributed data
-    transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
-    X_aniso = np.dot(X, transformation)
-    y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
+    #transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
+    #X_aniso = np.dot(X, transformation)
+    #y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
 
-    plt.subplot(222)
-    plt.scatter(X_aniso[:, 0], X_aniso[:, 1], c=y_pred)
-    plt.title("Anisotropicly Distributed Blobs")
+    #plt.subplot(222)
+    #plt.scatter(X_aniso[:, 0], X_aniso[:, 1], c=y_pred)
+    #plt.title("Anisotropicly Distributed Blobs")
 
-    plt.show()
+    #plt.show()
 
 
 
