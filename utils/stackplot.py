@@ -4,11 +4,14 @@ import json
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 src = ''
 out = ''
 
+maxk = 1.0
+mink = -1.0
 
 def read_json():
     with open(src) as f:
@@ -31,11 +34,23 @@ def plot(n, y):
                 labels[i] = key
             i += 1
 
+    # color pallete
+    #   n_colors : int number of colors in the palette
+    #pal = ["#0000ff", "#00ff00", "#0000ff", "#000000"]
+    pal = ["#ff0000", "#ff5500", "#ff8000", "#ffaa00",
+            "#ffd500", "#ffff00", "#d4ff00", "#80ff00",
+            "#55ff00", "#00ff00", "#00ff55", "#00ff80",
+            "#00ffaa", "#00ffd5", "#00ffff", "#00d5ff",
+            "#00aaff", "#0080ff", "#0055ff", "#002aff",
+            "#0000ff"]
+    # for color orders (red: friendly, blue: hostile)
+    pal = pal[::-1]
+
     y = [list(step.values()) for step in y]
     # x: 1d array of dimension N.
     # y: 2d array (dimension MxN), or sequence of
     #    1d arrays (each dimension 1xN)
-    ax.stackplot(x, list(zip(*y)), labels=labels)
+    ax.stackplot(x, list(zip(*y)), labels=labels, colors=pal)
     leg = ax.legend(loc='upper right', prop={'size': 6})
     leg.get_frame().set_alpha(0.4)
 
@@ -45,7 +60,7 @@ def plot(n, y):
 def reshape_k(data):
     y = []
     for step in data:
-        x = {key/10:0 for key in range(-24, 25)}
+        x = {key/10:0 for key in range(int(mink*10), int(maxk*10)+1)}
         for param_num in step['k']['count']:
             x[param_num[0]] += param_num[1]
         y.append(x)
