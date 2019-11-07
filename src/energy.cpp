@@ -71,11 +71,11 @@ static double heiderUndirectedSpaceLocality(int i, int j, int k) {
   return (p1 + p2 + p3 + p4 + p5 + p6) / 6;
 }
 
-double energyMax() {
+double energyLow() {
   return - (maxk * maxk * maxk);
 }
 
-double energyMin() {
+double energyHigh() {
   return - (mink * mink * mink);
 }
 

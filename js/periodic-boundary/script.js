@@ -15,8 +15,8 @@ const RED = 0;
 const BLUE = 1;
 const BLACK = 2;
 
-const MAX = 1.2;
-const MIN = -1.2;
+const MAX = 1.0;
+const MIN = -1.0;
 
 // Variables
 let handle;

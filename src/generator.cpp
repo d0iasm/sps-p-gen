@@ -17,8 +17,8 @@
 // Global variables.
 double kparam[NPOINTS][NPOINTS];
 Point points[NPOINTS];
-double maxk = 1.2;
-double mink = -1.2;
+double maxk = 1.0;
+double mink = -1.0;
 std::string dynamic = "none";
 std::string p1 = "0";
 std::string p2 = "0";
@@ -50,25 +50,8 @@ static std::map<double, int> countKparam() {
   return m;
 }
 
-// Count balanced triangles based on combinations.
-static int countBalance() {
-  int count = 0;
-  for (int i = 0; i < NPOINTS-2; i++) {
-    for (int j = i+1; j < NPOINTS-1; j++) {
-      for (int k = j+1; k < NPOINTS; k++) {
-        if (kparam[i][j] * kparam[j][i] *
-          kparam[i][k] * kparam[k][i] *
-          kparam[j][k] * kparam[k][j] >= 0) {
-            count++;
-        }
-      }
-    }
-  }
-  return count;
-}
-
 // Count balanced triangles based on average of asymmetrical edges.
-static int countBalanceA() {
+static int countBalanceAverage() {
   int count = 0;
   for (int i = 0; i < NPOINTS-2; i++) {
     for (int j = i+1; j < NPOINTS-1; j++) {
@@ -85,7 +68,7 @@ static int countBalanceA() {
 }
 
 // Count balanced triangles based on permutations.
-static int countBalanceP() {
+static int countBalanceHeider() {
   int count = 0;
   for (int p =0; p < NPOINTS; p++) {
     for (int o = 0; o < NPOINTS; o++) {
@@ -103,23 +86,7 @@ static int countBalanceP() {
   return count;
 }
 
-static int countUnbalance() {
-  int count = 0;
-  for (int i = 0; i < NPOINTS-2; i++) {
-    for (int j = i+1; j < NPOINTS-1; j++) {
-      for (int k = j+1; k < NPOINTS; k++) {
-        if (kparam[i][j] * kparam[j][i] *
-          kparam[i][k] * kparam[k][i] *
-          kparam[j][k] * kparam[k][j] < 0 ) {
-          count++;
-        }
-      }
-    }
-  }
-  return count;
-}
-
-static int countUnbalanceA() {
+static int countUnbalanceAverage() {
   int count = 0;
   for (int i = 0; i < NPOINTS-2; i++) {
     for (int j = i+1; j < NPOINTS-1; j++) {
@@ -135,7 +102,7 @@ static int countUnbalanceA() {
   return count;
 }
 
-static int countUnbalanceP() {
+static int countUnbalanceHeider() {
   int count = 0;
   for (int p =0; p < NPOINTS; p++) {
     for (int o = 0; o < NPOINTS; o++) {
@@ -229,7 +196,7 @@ static void step(int step) {
 
   if (step % thinning == 0) {
     // Points' positions.
-    result.push_back(std::vector<Point>(points, points + NPOINTS));
+    point_result.push_back(std::vector<Point>(points, points + NPOINTS));
 
     // XV.
     xv.push_back(computeXV(dxdy));
@@ -270,7 +237,7 @@ static void initKparamWithK() {
 static void initKparamRandom() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {
-      kparam[i][j] = (rand() % 25 - 12) / 10.0;
+      kparam[i][j] = (rand() % (int)(maxk*2*10+1) - (int)maxk*10) / 10.0;
     }
   }
 }
@@ -379,52 +346,50 @@ static void printBody() {
   <div>)END";
   outfile << "<h1>" << filename() << "</h1>";
   outfile << "<br />\n";
-  outfile << "<div>Timestep: <input type=text size=6 id=timestep></input></div>\n";
-  outfile << "<div>Density: " << getDensity() << "</div>";
-  outfile << "<div>Balanced triangles: " << countBalance() << "</div>";
-  outfile << "<div>Unbalanced triangles: " << countUnbalance() << "</div>";
-  outfile << "<div>Balanced triangles (average): " << countBalanceA() << "</div>";
-  outfile << "<div>Unbalanced triangles (average): " << countUnbalanceA() << "</div>";
-  outfile << "<div>Balanced triangles (heider): " << countBalanceP() << "</div>";
-  outfile << "<div>Unbalanced triangles (heider): " << countUnbalanceP() << "</div>";
+  outfile << "<div>timestep: <input type=text size=6 id=timestep></input></div>\n";
+  outfile << "<div>density: " << getDensity() << "</div>";
+  outfile << "<div>balanced triangles (average, nC3): " << countBalanceAverage() << "</div>";
+  outfile << "<div>unbalanced triangles (average, nC3): " << countUnbalanceAverage() << "</div>";
+  outfile << "<div>balanced triangles (heider, nP3): " << countBalanceHeider() << "</div>";
+  outfile << "<div>unbalanced triangles (heider, nP3): " << countUnbalanceHeider() << "</div>";
   outfile << "<br />\n";
-  outfile << "<h2>Static K Parameters</h2>\n";
-  outfile << "<div>Initial K[00,01,10,11]: "
+  outfile << "<h2>Initial K Parameters</h2>\n";
+  outfile << "<div>initial K[00,01,10,11]: "
             << initial_kparam[0][0] << "," << initial_kparam[0][1] << ","
             << initial_kparam[1][0] << "," << initial_kparam[1][1]
             << "</div>\n";
-  outfile << "<div>Initial K[a, b, p, m]: "
+  outfile << "<div>initial K[a, b, p, m]: "
             << initial_kparam[0][0] << "," << initial_kparam[1][1] << ","
             << getP() << "," << getM();
   outfile << "</div>\n<br />\n<div>";
-  outfile << "<h2>Dynamic K Parameters</h2>\n"
-	    << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
-	    << "Average: " << kAverage() << "<br />"
- 	    << "Variance: " << kVariance() << "<br />";
+  outfile << "<h2>K Parameters' distribution</h2>\n"
+    << "<span> (minK: " << mink << ", maxK: " << maxk << ")</span><br />"
+    << "last step (average): " << kAverage() << "<br />"
+    << "last step (variance): " << kVariance() << "<br />";
   printCountedKparam();
   outfile << "</div></div><div><h1>Figures</h1>\n<h2>K params</h2>";
   outfile << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
   outfile << "<br />";
-  outfile << "<h2>Static Energy</h2>"
-	        << "(min: " << energyMin() << ", max: "<< energyMax() << ")" << "<br />"
-            << "Average: " << energy[0][0] << " => " << energy[energy.size()-1][0] << "<br />"
-            << "Variance: " << energy[0][1] << " => " << energy[energy.size()-1][1]
-            << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
+  outfile << "<h2>Static Heider Energy</h2>"
+    << "(high: " << energyHigh() << ", low: "<< energyLow() << ")" << "<br />"
+          << "initial => final step: " << energy[0][0] << " => " << energy[energy.size()-1][0] << "<br />"
+          << "initial => final step (variance): " << energy[0][1] << " => " << energy[energy.size()-1][1]
+          << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>Dynamic Energy</h2>"
-            << "<div><img width=350 src=\"img/dynamic_energy%3F" << filename() << ".png\" /></div>";
+          << "<div><img width=350 src=\"img/dynamic_energy%3F" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>X-V Log Log Plot</h2>"
-            << "<div><img width=350 src=\"img/xv%3F" << filename() << ".png\" /></div>";
+          << "<div><img width=350 src=\"img/xv%3F" << filename() << ".png\" /></div>";
   outfile << "</div></div></div>";
 }
 
 static void printPoints() {
   outfile << "<script>const points = [\n";
-  for (int i = 0; i < result.size(); i++) {
+  for (int i = 0; i < point_result.size(); i++) {
     outfile << "  [" << i * thinning << ",";
-    for (int j = 0; j < result[i].size(); j++) {
-      Point &p = result[i][j];
+    for (int j = 0; j < point_result[i].size(); j++) {
+      Point &p = point_result[i][j];
       outfile << "{x:" << p.x
                 << ",y:" << p.y
                 << ",color:" << p.color;

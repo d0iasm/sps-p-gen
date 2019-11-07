@@ -33,17 +33,12 @@ INITS=random
 #PROB=-1 0 1 5 10 20 30 40 50 60 70 80
 PROB=-1
 PROB2=0
-#SEEDS=0
-SEEDS=$(shell seq 1000)
+SEEDS=0
+#SEEDS=$(shell seq 1000)
 
 MAXGEN=500000
-SEEDS=1
-test: generator-p
-	parallel $(SRC)/generator-p -path $(HTML_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
-		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
-	cp -r css $(DEV)
-	cp -r js $(DEV)
-
+PROB=0
+DYNAMICS=local-dynamic-discrete local-static-discrete
 generator:
 	make -C src generator
 
