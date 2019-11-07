@@ -100,11 +100,10 @@ function drawPoint(p) {
       ctx.strokeStyle = 'rgba(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ', 0.4)';
 
       // Find the closest virtual position.
-      q = closest(p, points[timestep][i+1]);
+      const q = closest(p, points[timestep]['points'][i]);
 
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      // Note: the target starts from index 1.
       ctx.lineTo(q.x, q.y);
       ctx.stroke();
     }
@@ -118,11 +117,11 @@ function redraw() {
 
   drawGrid();
 
-  for (let i = 1; i < points[timestep].length; i++) {
-    drawPoint(points[timestep][i]);
+  for (let i = 0; i < points[timestep]['points'].length; i++) {
+    drawPoint(points[timestep]['points'][i]);
   }
 
-  document.getElementById('timestep').value = points[timestep][0];
+  document.getElementById('timestep').value = points[timestep]['step'];
   ctx.restore();
 }
 

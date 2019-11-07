@@ -397,7 +397,9 @@ static void printBody() {
 static void printPoints() {
   outfile << "<script>const points = [\n";
   for (int i = 0; i < point_result.size(); i++) {
-    outfile << "  [" << i * thinning << ",";
+    outfile << "{step:" << i * thinning << ","
+            << "points:[\n";
+    //outfile << "  [" << i * thinning << ",";
     for (int j = 0; j < point_result[i].size(); j++) {
       Point &p = point_result[i][j];
       outfile << "{x:" << p.x
@@ -409,7 +411,7 @@ static void printPoints() {
       }
       outfile << "]},";
     }
-    outfile << "],\n";
+    outfile << "]},\n";
   }
   outfile << "];</script>\n";
 }
@@ -574,7 +576,7 @@ static void html() {
   outfile << "<head><link rel=stylesheet href='css/style.css'></head>";
   printBody();
   printPoints();
-  outfile << "<script>const cycle=" << getCycle() << "</script>\n";
+  outfile << "<script>const cycle=" << getCycle() << ";</script>\n";
   outfile << getScript() << "\n";
   outfile << "</body></html>\n";
 }

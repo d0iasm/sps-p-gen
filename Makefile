@@ -36,7 +36,7 @@ PROB2=0
 SEEDS=0
 #SEEDS=$(shell seq 1000)
 
-MAXGEN=500000
+MAXGEN=50000
 PROB=0
 DYNAMICS=local-dynamic-discrete local-static-discrete
 generator:
@@ -49,10 +49,9 @@ kano: generator
 	parallel $(SRC)/generator-o -path $(HTML_PATH) -dynamic '{1}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 ::: $(DYNAMICS)
 	parallel $(SRC)/generator-p -path $(HTML_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 ::: $(CYCLES) ::: $(DYNAMICS)
 
-#TODO: add probabilities p1 and p2.
 html: generator
-	parallel $(SRC)/generator-o -path $(HTML_PATH) -dynamic '{1}' -gen $(MAXGEN) -init '{2}' -seed '{3}' \
-		::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
+	parallel $(SRC)/generator-o -path $(HTML_PATH) -dynamic '{1}' -gen $(MAXGEN) -init '{2}' -p1 '{3}' -p2 '{4}' -seed '{5}' \
+		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 html-p: generator-p
 	parallel $(SRC)/generator-p -path $(HTML_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
@@ -65,6 +64,12 @@ json: generator
 json-p: generator-p
 	parallel $(SRC)/generator-p -json -path $(JSON_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
+
+img-all: json
+	parallel $(ENV) python3 $(UTIL_ALL) \
+		-src '$(JSON_PATH)/sps-p\?b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.json' \
+		-out '$(IMG_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.png' \
+		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all-p: json-p
 	parallel $(ENV) python3 $(UTIL_ALL) \
@@ -111,7 +116,7 @@ img-xv-p: json-p
 img: img-energy img-kparam img-xv
 img-p: img-energy-p img-kparam-p img-xv-p
 
-dev: html img
+dev: html img-all
 	cp -r css $(DEV)
 	cp -r js $(DEV)
 

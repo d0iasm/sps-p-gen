@@ -68,10 +68,11 @@ function drawPoint(p) {
       const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
       ctx.strokeStyle = 'rgba(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ', 0.4)';
 
+      const q = points[timestep]['points'][i];
+
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      // Note: the target starts from index 1.
-      ctx.lineTo(points[timestep][i+1].x, points[timestep][i+1].y);
+      ctx.lineTo(q.x, q.y)
       ctx.stroke();
     }
   }
@@ -80,8 +81,8 @@ function drawPoint(p) {
 
 function scaleout() {
   let max = 0;
-  for (let i = 1; i < points[timestep].length; i++) {
-    const p = points[timestep][i];
+  for (let i = 0; i < points[timestep]['points'].length; i++) {
+    const p = points[timestep]['points'][i];
     max = Math.max(max, Math.abs(p.x), Math.abs(p.y));
   }
 
@@ -96,12 +97,11 @@ function redraw() {
   scaleout();
   drawGrid();
 
-  // i starts 1 because points[timestep][0] represents the number of steps.
-  for (let i = 1; i < points[timestep].length; i++) {
-    drawPoint(points[timestep][i]);
+  for (let i = 0; i < points[timestep]['points'].length; i++) {
+    drawPoint(points[timestep]['points'][i]);
   }
 
-  document.getElementById('timestep').value = points[timestep][0];
+  document.getElementById('timestep').value = points[timestep]['step'];
   ctx.restore();
 }
 
