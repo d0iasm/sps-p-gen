@@ -2,18 +2,21 @@ import argparse
 import csv
 import json
 import sys
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 from sklearn import mixture
 from sklearn.cluster import KMeans
 import seaborn as sns
-import scipy.cluster.hierarchy as hcluster
-
+from scipy.cluster import hierarchy
 
 
 src = ''
 out = ''
+
+cycle = 20
+thinning = 100
 
 
 def read_json():
@@ -22,22 +25,46 @@ def read_json():
     return data
 
 
-def plot(n, y):
+def periodic_distance(p1, p2):
+    """
+    Calculate a shortest distance in a torus field.
+    The maximum distance is 1414.1421... (= Square Root 200)
+    with the length of a cycle is 20.
+    """
+    closest = sys.maxsize
+    x1 = p1[0]
+    y1 = p1[1]
+    x2 = p2[0]
+    y2 = p2[1]
+
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            dx = (x2 + cycle * i) - x1
+            dy = (y2 + cycle * j) - y1
+            tmp = math.sqrt(dx * dx + dy * dy)
+            if tmp < closest:
+                closest = tmp
+    return closest
+
+
+def plot(data, step):
     fig, ax = plt.subplots()
 
-    #x = np.arange(n)
-    x = np.arange(0, 100*n, 100)
+    # clustering
+    thresh = 1.5
+    clusters = hierarchy.fclusterdata(data, thresh,
+            criterion="distance", metric=periodic_distance)
 
+    # plotting
+    ax.scatter(*np.transpose(data), c=clusters)
+    ax.axis("equal")
+    title = "threshold: %f, number of clusters: %d, step: %d" % (thresh, len(set(clusters)), step*thinning)
+    plt.title(title)
+    fig.tight_layout()
 
-    y = [list(step.values()) for step in y]
-    # x: 1d array of dimension N.
-    # y: 2d array (dimension MxN), or sequence of
-    #    1d arrays (each dimension 1xN)
-    ax.stackplot(x, list(zip(*y)), labels=labels, colors=pal)
-    leg = ax.legend(loc='upper right', prop={'size': 6})
-    leg.get_frame().set_alpha(0.4)
-
-    plt.savefig(out)
+    filename = out.replace(".png", "&step=%d.png" % (step*thinning))
+    #plt.show()
+    plt.savefig(filename)
 
 
 def parse_args():
@@ -62,64 +89,8 @@ if __name__ == '__main__':
     extension = a[len(a)-1]
     if extension != 'json':
         sys.exit('Error: ' + extension + ' file is not supported.')
-    data = read_json()
-    points = [d['points'] for d in data]
+    raw_data = read_json()
+    points = [d['points'] for d in raw_data]
     step = len(points)-1
-    X = np.array([[p['x'], p['y']] for p in points[step]])
-
-    thresh = 1.5
-    clusters = hcluster.fclusterdata(X, thresh, criterion="distance")
-
-    # plotting
-    plt.scatter(*np.transpose(X), c=clusters)
-    plt.axis("equal")
-    title = "threshold: %f, number of clusters: %d" % (thresh, len(set(clusters)))
-    plt.title(title)
-    plt.show()
-
-
-    #random_state=0
-    #y_pred = KMeans(n_clusters=6, random_state=random_state).fit_predict(X)
-
-    #plt.subplot(221)
-    #plt.scatter(X[:, 0], X[:, 1], c=y_pred)
-    #plt.title("Incorrect Number of Blobs")
-
-    # Anisotropicly distributed data
-    #transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
-    #X_aniso = np.dot(X, transformation)
-    #y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
-
-    #plt.subplot(222)
-    #plt.scatter(X_aniso[:, 0], X_aniso[:, 1], c=y_pred)
-    #plt.title("Anisotropicly Distributed Blobs")
-
-    #plt.show()
-
-
-
-    #print(X_train)
-    #clf = mixture.GaussianMixture(n_components=2, covariance_type='full')
-    #clf.fit(X_train.reshape(-1, 1))
-
-    #x = np.linspace(-20., 30.)
-    #y = np.linspace(-20., 40.)
-    #X, Y = np.meshgrid(x, y)
-    #XX = np.array([X.ravel(), Y.ravel()]).T
-    #Z = -clf.score_samples(XX)
-    #Z = Z.reshape(X.shape)
-
-    #CS = plt.contour(X, Y, Z, norm=LogNorm(vmin=1.0, vmax=1000.0),
-                             #levels=np.logspace(0, 3, 10))
-    #CB = plt.colorbar(CS, shrink=0.8, extend='both')
-    #plt.scatter(X_train[:, 0], X_train[:, 1], .8)
-
-    #plt.title('Negative log-likelihood predicted by a GMM')
-    #plt.axis('tight')
-    #plt.show()
-
-    #plot(len(data), y)
-
-
-
-
+    data = np.array([[p['x'], p['y']] for p in points[step]])
+    plot(data, step)
