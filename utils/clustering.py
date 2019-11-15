@@ -1,14 +1,9 @@
 import argparse
-import csv
 import json
 import sys
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import LogNorm
-from sklearn import mixture
-from sklearn.cluster import KMeans
-import seaborn as sns
 from scipy.cluster import hierarchy
 
 
