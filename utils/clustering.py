@@ -1,7 +1,9 @@
 import argparse
 import json
+import fcntl
 import sys
 import math
+import re
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.cluster import hierarchy
@@ -10,8 +12,12 @@ from scipy.cluster import hierarchy
 src = ''
 out = ''
 
+text = ''
+
 cycle = 20
 thinning = 100
+# 0.1 (300,000~) 0.2 (400,000~) 0.3 (500,000~) 0.4 (600,000~) 0.5 (700,000~) 0.6 (800,000~) 0.7 (1,000,000~) 0.8 (1,200,000) 0.9 (1,400,000) 1.0 (1,600,000)
+steps = [3000, 4000, 5000, 6000, 7000, 8000, 10000, 12000, 14000, 16000]
 
 
 def read_json():
@@ -41,8 +47,8 @@ def periodic_distance(p1, p2):
                 closest = tmp
     return closest
 
-
 def plot(data, step):
+    global text
     fig, ax = plt.subplots()
 
     # clustering
@@ -60,6 +66,28 @@ def plot(data, step):
     filename = out.replace(".png", "&step=%d.png" % (step))
     #plt.show()
     plt.savefig(filename)
+
+    text += str(len(set(clusters))) + "\t"
+
+
+def write_clustering_csv():
+    f = open("clustering.csv", "a+")
+    fcntl.lockf(f, fcntl.LOCK_EX)
+    f.seek(0, 2)
+    f.write(text + "\n")
+    f.flush()
+    fcntl.lockf(f, fcntl.LOCK_UN)
+    f.close()
+
+
+def init_text():
+    global text
+    match = re.search('.*s=([0-9]+)\.png', out)
+    if match:
+        seed = match.group(1)
+        text += seed + "\t"
+    else:
+        text += "unknown\t"
 
 
 def parse_args():
@@ -86,8 +114,8 @@ if __name__ == '__main__':
         sys.exit('Error: ' + extension + ' file is not supported.')
     raw_data = read_json()
     points = [d['points'] for d in raw_data]
-    # 0.1 (300,000~) 0.2 (400,000~) 0.3 (500,000~) 0.4 (600,000~) 0.5 (700,000~) 0.6 (800,000~) 0.7 (1,000,000~) 0.8 (1,200,000) 0.9 (1,400,000) 1.0 (1,600,000)
-    steps = [3000, 4000, 5000, 6000, 7000, 8000, 10000, 12000, 14000, 16000]
+    init_text()
     for step in steps:
         data = np.array([[p['x'], p['y']] for p in points[step]])
         plot(data, step*thinning)
+    write_clustering_csv()

@@ -34,9 +34,9 @@ INITS=random
 #PROB=-1 0 1 5 10 20 30 40 50 60 70 80
 PROB=-1
 PROB2=0
-#SEEDS=0
-#SEEDS=$(shell seq 1000)
-SEEDS=$(shell seq 10)
+#SEEDS=1
+SEEDS=$(shell seq 1000)
+#SEEDS=$(shell seq 10)
 
 generator:
 	make -C src generator
@@ -63,6 +63,7 @@ img-all: gen
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all-p: gen-p
+	rm clustering.csv
 	parallel $(ENV) python3 $(UTIL_ALL) \
 		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
@@ -106,6 +107,7 @@ img-xv-p: gen-p
 
 # TODO: make open boundary version.
 img-clustering-p: gen-p
+	rm clustering.csv
 	parallel $(ENV) python3 $(UTIL_CLUSTERING) \
 		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/clustering_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
