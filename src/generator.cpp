@@ -130,14 +130,14 @@ static void noiseP1() {
       // Incremental noise when p1 is lower than 0.
       if (std::stod(p1) < 0) {
         if ((rand() % 100000) < noise_inc * 1000) {
-          kparam[i][j] = (rand() % 25 - 12) / 10.0;
+          kparam[i][j] = (rand() % (int)(maxk*2*10+1) - (int)maxk*10) / 10.0;
         }
         continue;
       }
 
       // Fixed noise.
       if ((rand() % 100000) < std::stod(p1) * 1000) {
-        kparam[i][j] = (rand() % 25 - 12) / 10.0;
+        kparam[i][j] = (rand() % (int)(maxk*2*10+1) - (int)maxk*10) / 10.0;
       }
     }
   }
@@ -392,6 +392,13 @@ static void printBody() {
           << "<div><img width=350 src=\"img/xv%3F" << filename() << ".png\" /></div>";
           */
   outfile << "</div></div></div>";
+  // clustering
+  outfile << "<div class=container>";
+  int steps[10] = {300, 400, 500, 600, 700, 800, 1000, 1200, 1400, 1600};
+  for (int i=0; i<10; i++) {
+    outfile << "<img width=350 src=\"img/clustering%3F" << filename() << "&step=" << steps[i] << ".png\" />";
+  }
+  outfile << "</div>";
 }
 
 static void printPoints() {

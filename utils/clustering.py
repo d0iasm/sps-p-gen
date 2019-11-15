@@ -58,11 +58,11 @@ def plot(data, step):
     # plotting
     ax.scatter(*np.transpose(data), c=clusters)
     ax.axis("equal")
-    title = "threshold: %f, number of clusters: %d, step: %d" % (thresh, len(set(clusters)), step*thinning)
+    title = "threshold: %f, number of clusters: %d, step: %d" % (thresh, len(set(clusters)), step)
     plt.title(title)
     fig.tight_layout()
 
-    filename = out.replace(".png", "&step=%d.png" % (step*thinning))
+    filename = out.replace(".png", "&step=%d.png" % (step))
     #plt.show()
     plt.savefig(filename)
 
@@ -91,6 +91,8 @@ if __name__ == '__main__':
         sys.exit('Error: ' + extension + ' file is not supported.')
     raw_data = read_json()
     points = [d['points'] for d in raw_data]
-    step = len(points)-1
-    data = np.array([[p['x'], p['y']] for p in points[step]])
-    plot(data, step)
+    # 0.1 (300,000~) 0.2 (400,000~) 0.3 (500,000~) 0.4 (600,000~) 0.5 (700,000~) 0.6 (800,000~) 0.7 (1,000,000~) 0.8 (1,200,000) 0.9 (1,400,000) 1.0 (1,600,000)
+    steps = [300, 400, 500, 600, 700, 800, 1000, 1200, 1400, 1600]
+    for step in steps:
+        data = np.array([[p['x'], p['y']] for p in points[step]])
+        plot(data, step*thinning)

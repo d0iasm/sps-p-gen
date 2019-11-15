@@ -1,9 +1,11 @@
 import argparse
 import json
+import numpy as np
 
 import stackplot
 import logplot
 import loglogplot
+import clustering
 
 
 src = ''
@@ -38,6 +40,9 @@ def parse_args():
     loglogplot.src = args.src
     loglogplot.out = out.replace("b=", "xv?b=", 1)
 
+    clustering.src = args.src
+    clustering.out = out.replace("b=", "clustering?b=", 1)
+
 
 if __name__ == '__main__':
     parse_args()
@@ -65,3 +70,11 @@ if __name__ == '__main__':
     x_data = [d['xv']['x'] for d in data]
     v_data = [d['xv']['v'] for d in data]
     loglogplot.plot(len(data), x_data, v_data)
+
+    # Plot for clustering.
+    points = [d['points'] for d in data]
+    # 0.1 (300,000~) 0.2 (400,000~) 0.3 (500,000~) 0.4 (600,000~) 0.5 (700,000~) 0.6 (800,000~) 0.7 (1,000,000~) 0.8 (1,200,000) 0.9 (1,400,000) 1.0 (1,600,000)
+    steps = [300, 400, 500, 600, 700, 800, 1000, 1200, 1400, 1600]
+    for step in steps:
+        point = np.array([[p['x'], p['y']] for p in points[step]])
+        clustering.plot(point, step*clustering.thinning)
