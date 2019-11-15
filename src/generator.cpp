@@ -376,27 +376,27 @@ static void printBody() {
           << "last step (variance): " << kVariance() << "<br />";
   printCountedKparam();
   outfile << "</div></div><div><h1>Figures</h1>\n<h2>K Parameters</h2>";
-  outfile << "<div><img width=350 src=\"img/kparam%3F" << filename() << ".png\" /></div>";
+  outfile << "<div><img width=350 src=\"img/kparam_" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>Static Heider Energy</h2>"
           << "(high: " << energyHigh() << ", low: "<< energyLow() << ")" << "<br />"
           << "initial => final step: " << energy[0][0] << " => " << energy[energy.size()-1][0] << "<br />"
           << "initial => final step (variance): " << energy[0][1] << " => " << energy[energy.size()-1][1]
-          << "<div><img width=350 src=\"img/static_energy%3F" << filename() << ".png\" /></div>";
+          << "<div><img width=350 src=\"img/static_energy_" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>Dynamic Heider Energy</h2>"
-          << "<div><img width=350 src=\"img/dynamic_energy%3F" << filename() << ".png\" /></div>";
+          << "<div><img width=350 src=\"img/dynamic_energy_" << filename() << ".png\" /></div>";
   /*
   outfile << "<br />";
   outfile << "<h2>X-V Log Log Plot</h2>"
-          << "<div><img width=350 src=\"img/xv%3F" << filename() << ".png\" /></div>";
+          << "<div><img width=350 src=\"img/xv_" << filename() << ".png\" /></div>";
           */
   outfile << "</div></div></div>";
   // clustering
   outfile << "<div class=container>";
-  int steps[10] = {300, 400, 500, 600, 700, 800, 1000, 1200, 1400, 1600};
+  int steps[10] = {300000, 400000, 500000, 600000, 700000, 800000, 1000000, 1200000, 1400000, 1600000};
   for (int i=0; i<10; i++) {
-    outfile << "<img width=350 src=\"img/clustering%3F" << filename() << "&step=" << steps[i] << ".png\" />";
+    outfile << "<img width=350 src=\"img/clustering_" << filename() << "&step=" << steps[i] << ".png\" />";
   }
   outfile << "</div>";
 }
@@ -440,25 +440,25 @@ static void printKparam() {
 }
 
 static void usage() {
-  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] ";
-  std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ] ";
-  std::cerr << "[ -dynamic none/global-static-discrete/global-dynamic-discrete/local-static-discrete/local-dynamic-discrete/local-static-continuous/local-dynamic-continuous] ";
-  std::cerr << "[ -init random/zero ] ";
-  std::cerr << "[ -path string ] ";
+  std::cerr << "Usage: generator [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ]\n";
+  std::cerr << "[ -init random/zero ]\n";
+  std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ]\n";
+  std::cerr << "[ -dynamic none/global-static-discrete/global-dynamic-discrete/local-static-discrete/local-dynamic-discrete/local-static-continuous/local-dynamic-continuous]\n";
+  std::cerr << "[ -path string ] [ -path_json string ]\n";
   std::cerr << "[ -p1 double ] [ -p2 double ]";
-  std::cerr << "[ -json ]\n\n";
+  std::cerr << "\n\n";
 
   std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
   std::cerr << "-k2        K paramters. k00=ka, k01=kp+km, k10=kp-km, and k11=kb.\n";
+  std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.\n";
   std::cerr << "-gen       The number of maximum steps.\n";
   std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
   std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
   std::cerr << "-dynamic   The flag to change the K parameters dinamically based on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.\n";
-  std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.";
-  std::cerr << "-path      The path directory for the output file name.\n";
+  std::cerr << "-path      The path directory for a html file name.\n";
+  std::cerr << "-path_json The path directory for a json file name.\n";
   std::cerr << "-p1        The probability of noise for updateing K params.\n";
   std::cerr << "-p2        The probability of noise for updateing paricle's positions.\n";
-  std::cerr << "-json      Output a json file for creating images by utils.\n";
   exit(1);
 }
 
@@ -540,17 +540,19 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
-    if (strcmp("-json", argv[0]) == 0) {
-      output = JSON;
-      argc -= 1;
-      argv += 1;
-      continue;
-    }
-
     if (strcmp("-path", argv[0]) == 0) {
       if (argc < 2)
         usage();
       path = argv[1];
+      argc -= 2;
+      argv += 2;
+      continue;
+    }
+
+    if (strcmp("-path_json", argv[0]) == 0) {
+      if (argc < 2)
+        usage();
+      path_json = argv[1];
       argc -= 2;
       argv += 2;
       continue;
@@ -588,69 +590,69 @@ static void html() {
 }
 
 static void json() {
-  outfile << "["; // Start of Json.
+  outfile_json << "["; // Start of Json.
   for (int i = 0; i < maxgen/thinning; i++) {
-    outfile << "{"; // Start of one step.
-    outfile << "\"points\":["; // Start of points.
+    outfile_json << "{"; // Start of one step.
+    outfile_json << "\"points\":["; // Start of points.
     for (int j = 0; j < point_result[i].size(); j++) {
       Point &p = point_result[i][j];
-      outfile << "{\"x\":" << p.x
+      outfile_json << "{\"x\":" << p.x
               << ",\"y\":" << p.y
               << ",\"color\":" << p.color << "}";
       if (j != point_result[i].size() - 1) {
-        outfile << ",";
+        outfile_json << ",";
       }
     }
-    outfile << "],"; // End of points.
+    outfile_json << "],"; // End of points.
     // Kparams.
-    outfile << "\"k\":{";
+    outfile_json << "\"k\":{";
     // All Kparams.
-    outfile << "\"all\":[";
+    outfile_json << "\"all\":[";
     for (int j = 0; j < NPOINTS; j++) {
-      outfile << "[";
+      outfile_json << "[";
       for (int k = 0; k < NPOINTS; k++) {
-        outfile << kparam_result[i][j][k];
+        outfile_json << kparam_result[i][j][k];
         if (k != NPOINTS - 1)
-          outfile << ",";
+          outfile_json << ",";
         }
-      outfile << "]";
+      outfile_json << "]";
       if (j != NPOINTS - 1)
-        outfile << ",\n";
+        outfile_json << ",\n";
     }
-    outfile << "],\n"; // End of k.all.
+    outfile_json << "],\n"; // End of k.all.
     // Counting Kparams.
-    outfile << "\"count\":[";
+    outfile_json << "\"count\":[";
     int n = kparam_counter[i].size();
     for (std::pair<double, int> e : kparam_counter[i]) {
-      outfile << "[" << e.first << "," << e.second << "]";
+      outfile_json << "[" << e.first << "," << e.second << "]";
       if (n > 1) {
-        outfile << ",";
+        outfile_json << ",";
         n--;
       }
     }
-    outfile << "]"; // End of k.count.
-    outfile << "},\n"; // End of k.
+    outfile_json << "]"; // End of k.count.
+    outfile_json << "},\n"; // End of k.
     // Energy.
-    outfile << "\"energy\":{";
-    outfile << "\"static\":{";
-    outfile << "\"average\":" << energy[i][0] << ",";
-    outfile << "\"variance\":" << energy[i][1];
-    outfile << "},"; // End of energy.static.
-    outfile << "\"dynamic\":{";
-    outfile << "\"average\":" << energy[i][2] << ",";
-    outfile << "\"variance\":" << energy[i][3];
-    outfile << "}"; // End of energy.dynamic.
-    outfile << "},\n"; // End of energy.
+    outfile_json << "\"energy\":{";
+    outfile_json << "\"static\":{";
+    outfile_json << "\"average\":" << energy[i][0] << ",";
+    outfile_json << "\"variance\":" << energy[i][1];
+    outfile_json << "},"; // End of energy.static.
+    outfile_json << "\"dynamic\":{";
+    outfile_json << "\"average\":" << energy[i][2] << ",";
+    outfile_json << "\"variance\":" << energy[i][3];
+    outfile_json << "}"; // End of energy.dynamic.
+    outfile_json << "},\n"; // End of energy.
     // XV.
-    outfile << "\"xv\":{";
-    outfile << "\"x\":" << xv[i].x << ",";
-    outfile << "\"v\":" << xv[i].v;
-    outfile << "}"; // End of xv.
-    outfile << "}\n"; // End of one step.
+    outfile_json << "\"xv\":{";
+    outfile_json << "\"x\":" << xv[i].x << ",";
+    outfile_json << "\"v\":" << xv[i].v;
+    outfile_json << "}"; // End of xv.
+    outfile_json << "}\n"; // End of one step.
     if (i < maxgen/thinning - 1)
-      outfile << ",";
+      outfile_json << ",";
   }
-  outfile << "]"; // End on Json.
+  outfile_json << "]"; // End on Json.
 }
 
 static void storeKparam() {
@@ -666,15 +668,8 @@ static void storeKparam() {
 int main(int argc, char **argv) {
   parseArgs(argc - 1, argv + 1);
 
-  // Setup the output file.
-  switch (output) {
-    case HTML:
-      outfile.open(path + "/sps-p?" + filename() + ".html");
-      break;
-    case JSON:
-      outfile.open(path + "/sps-p?" + filename() + ".json");
-      break;
-  }
+  outfile.open(path + "/sps-p_" + filename() + ".html");
+  outfile_json.open(path_json + "/sps-p_" + filename() + ".json");
 
   srand(seed);
 
@@ -714,14 +709,9 @@ int main(int argc, char **argv) {
     step(i);
   }
 
-  switch (output) {
-    case HTML:
-      html();
-      break;
-    case JSON:
-      json();
-      break;
-  }
+  html();
+  json();
+
   std::cerr << "genarated: " << filename() << "\n";
   outfile.close();
 }

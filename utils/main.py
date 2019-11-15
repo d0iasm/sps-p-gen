@@ -32,16 +32,16 @@ def parse_args():
     out = args.out
 
     stackplot.src = args.src
-    stackplot.out = out.replace("b=", "kparam?b=", 1)
+    stackplot.out = out.replace("b=", "kparam_b=", 1)
 
     logplot.src = args.src
-    logplot.out = out.replace("b=", "energy?b=", 1)
+    logplot.out = out.replace("b=", "energy_b=", 1)
 
     loglogplot.src = args.src
-    loglogplot.out = out.replace("b=", "xv?b=", 1)
+    loglogplot.out = out.replace("b=", "xv_b=", 1)
 
     clustering.src = args.src
-    clustering.out = out.replace("b=", "clustering?b=", 1)
+    clustering.out = out.replace("b=", "clustering_b=", 1)
 
 
 if __name__ == '__main__':

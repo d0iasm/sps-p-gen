@@ -1,4 +1,5 @@
 #ifndef GENERATOR_H
+
 #define GENERATOR_H
 
 #include <cstring>
@@ -56,7 +57,9 @@ static int maxgen = 50000;
 static Output output = HTML;
 static Init init_param = NORMAL;
 static std::ofstream outfile;
+static std::ofstream outfile_json;
 static std::string path = ".";
+static std::string path_json = "./json";
 static int thinning = 100;
 
 #endif // GENERATOR_H
