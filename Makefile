@@ -63,7 +63,7 @@ img-all: gen
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all-p: gen-p
-	rm clustering.csv
+	rm -f clustering.csv
 	parallel $(ENV) python3 $(UTIL_ALL) \
 		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
@@ -107,7 +107,7 @@ img-xv-p: gen-p
 
 # TODO: make open boundary version.
 img-clustering-p: gen-p
-	rm clustering.csv
+	rm -f clustering.csv
 	parallel $(ENV) python3 $(UTIL_CLUSTERING) \
 		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/clustering_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
