@@ -10,3 +10,5 @@ json/**
 img/**
 images/**
 test*
+js/data/**
+proto/bin/**

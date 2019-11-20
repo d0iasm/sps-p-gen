@@ -6,7 +6,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
-#include "../../proto/build/steps.pb.h"
+#include "steps.pb.h"
 
 // Constants
 #define NPOINTS 50
@@ -37,6 +37,9 @@ struct Point {
   double y;
   Color color;
 };
+
+// Global function.
+std::string filename();
 
 // Global variables.
 extern double kparam[NPOINTS][NPOINTS];

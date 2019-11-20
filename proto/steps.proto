@@ -4,7 +4,7 @@ package data;
 
 message Step {
   int32 step = 1;
-  repeated Particle points = 2;
+  repeated Particle particles = 2;
   double static_energy = 3;
   double dynamic_energy = 4;
   double x_value = 5;

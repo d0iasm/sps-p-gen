@@ -8,4 +8,5 @@ build: $(INPUTS)
 clean:
 	rm $(DST_DIR)/*
 
-.PHONY: build
+clean-data:
+	rm ./bin/*

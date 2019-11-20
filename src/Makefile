@@ -2,10 +2,10 @@ CLANG=clang++
 CFLAGS=-O2 -ffast-math -march=native -std=c++11 -lprotobuf -pthread
 
 TOP=$(CURDIR)
-INCLUDE=-I$(TOP)/include
+INCLUDE=-I$(TOP)/include -I$(TOP)/../proto/build
 
 common-files = ../proto/build/steps.pb.cc
-common-files += generator.cpp energy.cpp xv.cpp dynamic.cpp
+common-files += generator.cpp gen_js.cpp energy.cpp xv.cpp dynamic.cpp
 
 src-o += $(common-files)
 include $(TOP)/open-boundary/Makefile.inc

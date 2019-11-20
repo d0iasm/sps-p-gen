@@ -138,7 +138,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, step_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, points_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, particles_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, static_energy_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, dynamic_energy_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, x_value_),
@@ -185,18 +185,18 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\013steps.proto\022\004data\"\210\002\n\004Step\022\014\n\004step\030\001 \001"
-      "(\005\022#\n\006points\030\002 \003(\0132\023.data.Step.Particle\022"
-      "\025\n\rstatic_energy\030\003 \001(\001\022\026\n\016dynamic_energy"
-      "\030\004 \001(\001\022\017\n\007x_value\030\005 \001(\001\022\017\n\007v_value\030\006 \001(\001"
-      "\032|\n\010Particle\022\n\n\002id\030\001 \001(\005\022\t\n\001x\030\002 \001(\001\022\t\n\001y"
-      "\030\003 \001(\001\022+\n\007kparams\030\004 \003(\0132\032.data.Step.Part"
-      "icle.Kparam\032!\n\006Kparam\022\n\n\002id\030\001 \001(\005\022\013\n\003val"
-      "\030\002 \001(\002\"\"\n\005Steps\022\031\n\005steps\030\001 \003(\0132\n.data.St"
-      "epb\006proto3"
+      "\n\013steps.proto\022\004data\"\213\002\n\004Step\022\014\n\004step\030\001 \001"
+      "(\005\022&\n\tparticles\030\002 \003(\0132\023.data.Step.Partic"
+      "le\022\025\n\rstatic_energy\030\003 \001(\001\022\026\n\016dynamic_ene"
+      "rgy\030\004 \001(\001\022\017\n\007x_value\030\005 \001(\001\022\017\n\007v_value\030\006 "
+      "\001(\001\032|\n\010Particle\022\n\n\002id\030\001 \001(\005\022\t\n\001x\030\002 \001(\001\022\t"
+      "\n\001y\030\003 \001(\001\022+\n\007kparams\030\004 \003(\0132\032.data.Step.P"
+      "article.Kparam\032!\n\006Kparam\022\n\n\002id\030\001 \001(\005\022\013\n\003"
+      "val\030\002 \001(\002\"\"\n\005Steps\022\031\n\005steps\030\001 \003(\0132\n.data"
+      ".Stepb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 330);
+      descriptor, 333);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "steps.proto", &protobuf_RegisterTypes);
 }
@@ -825,7 +825,7 @@ void Step::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Step::kStepFieldNumber;
-const int Step::kPointsFieldNumber;
+const int Step::kParticlesFieldNumber;
 const int Step::kStaticEnergyFieldNumber;
 const int Step::kDynamicEnergyFieldNumber;
 const int Step::kXValueFieldNumber;
@@ -842,7 +842,7 @@ Step::Step()
 Step::Step(const Step& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      points_(from.points_) {
+      particles_(from.particles_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&static_energy_, &from.static_energy_,
     static_cast<size_t>(reinterpret_cast<char*>(&step_) -
@@ -884,7 +884,7 @@ void Step::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  points_.Clear();
+  particles_.Clear();
   ::memset(&static_energy_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&step_) -
       reinterpret_cast<char*>(&static_energy_)) + sizeof(step_));
@@ -915,12 +915,12 @@ bool Step::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .data.Step.Particle points = 2;
+      // repeated .data.Step.Particle particles = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
-                input, add_points()));
+                input, add_particles()));
         } else {
           goto handle_unusual;
         }
@@ -1014,12 +1014,12 @@ void Step::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->step(), output);
   }
 
-  // repeated .data.Step.Particle points = 2;
+  // repeated .data.Step.Particle particles = 2;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->points_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->particles_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2,
-      this->points(static_cast<int>(i)),
+      this->particles(static_cast<int>(i)),
       output);
   }
 
@@ -1062,12 +1062,12 @@ void Step::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->step(), target);
   }
 
-  // repeated .data.Step.Particle points = 2;
+  // repeated .data.Step.Particle particles = 2;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->points_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->particles_size()); i < n; i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
-        2, this->points(static_cast<int>(i)), deterministic, target);
+        2, this->particles(static_cast<int>(i)), deterministic, target);
   }
 
   // double static_energy = 3;
@@ -1107,14 +1107,14 @@ size_t Step::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
-  // repeated .data.Step.Particle points = 2;
+  // repeated .data.Step.Particle particles = 2;
   {
-    unsigned int count = static_cast<unsigned int>(this->points_size());
+    unsigned int count = static_cast<unsigned int>(this->particles_size());
     total_size += 1UL * count;
     for (unsigned int i = 0; i < count; i++) {
       total_size +=
         ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->points(static_cast<int>(i)));
+          this->particles(static_cast<int>(i)));
     }
   }
 
@@ -1172,7 +1172,7 @@ void Step::MergeFrom(const Step& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  points_.MergeFrom(from.points_);
+  particles_.MergeFrom(from.particles_);
   if (from.static_energy() != 0) {
     set_static_energy(from.static_energy());
   }
@@ -1214,7 +1214,7 @@ void Step::Swap(Step* other) {
 }
 void Step::InternalSwap(Step* other) {
   using std::swap;
-  CastToBase(&points_)->InternalSwap(CastToBase(&other->points_));
+  CastToBase(&particles_)->InternalSwap(CastToBase(&other->particles_));
   swap(static_energy_, other->static_energy_);
   swap(dynamic_energy_, other->dynamic_energy_);
   swap(x_value_, other->x_value_);

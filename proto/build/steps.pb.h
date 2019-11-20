@@ -402,17 +402,17 @@ class Step : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
 
   // accessors -------------------------------------------------------
 
-  // repeated .data.Step.Particle points = 2;
-  int points_size() const;
-  void clear_points();
-  static const int kPointsFieldNumber = 2;
-  ::data::Step_Particle* mutable_points(int index);
+  // repeated .data.Step.Particle particles = 2;
+  int particles_size() const;
+  void clear_particles();
+  static const int kParticlesFieldNumber = 2;
+  ::data::Step_Particle* mutable_particles(int index);
   ::google::protobuf::RepeatedPtrField< ::data::Step_Particle >*
-      mutable_points();
-  const ::data::Step_Particle& points(int index) const;
-  ::data::Step_Particle* add_points();
+      mutable_particles();
+  const ::data::Step_Particle& particles(int index) const;
+  ::data::Step_Particle* add_particles();
   const ::google::protobuf::RepeatedPtrField< ::data::Step_Particle >&
-      points() const;
+      particles() const;
 
   // double static_energy = 3;
   void clear_static_energy();
@@ -448,7 +448,7 @@ class Step : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField< ::data::Step_Particle > points_;
+  ::google::protobuf::RepeatedPtrField< ::data::Step_Particle > particles_;
   double static_energy_;
   double dynamic_energy_;
   double x_value_;
@@ -699,34 +699,34 @@ inline void Step::set_step(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:data.Step.step)
 }
 
-// repeated .data.Step.Particle points = 2;
-inline int Step::points_size() const {
-  return points_.size();
+// repeated .data.Step.Particle particles = 2;
+inline int Step::particles_size() const {
+  return particles_.size();
 }
-inline void Step::clear_points() {
-  points_.Clear();
+inline void Step::clear_particles() {
+  particles_.Clear();
 }
-inline ::data::Step_Particle* Step::mutable_points(int index) {
-  // @@protoc_insertion_point(field_mutable:data.Step.points)
-  return points_.Mutable(index);
+inline ::data::Step_Particle* Step::mutable_particles(int index) {
+  // @@protoc_insertion_point(field_mutable:data.Step.particles)
+  return particles_.Mutable(index);
 }
 inline ::google::protobuf::RepeatedPtrField< ::data::Step_Particle >*
-Step::mutable_points() {
-  // @@protoc_insertion_point(field_mutable_list:data.Step.points)
-  return &points_;
+Step::mutable_particles() {
+  // @@protoc_insertion_point(field_mutable_list:data.Step.particles)
+  return &particles_;
 }
-inline const ::data::Step_Particle& Step::points(int index) const {
-  // @@protoc_insertion_point(field_get:data.Step.points)
-  return points_.Get(index);
+inline const ::data::Step_Particle& Step::particles(int index) const {
+  // @@protoc_insertion_point(field_get:data.Step.particles)
+  return particles_.Get(index);
 }
-inline ::data::Step_Particle* Step::add_points() {
-  // @@protoc_insertion_point(field_add:data.Step.points)
-  return points_.Add();
+inline ::data::Step_Particle* Step::add_particles() {
+  // @@protoc_insertion_point(field_add:data.Step.particles)
+  return particles_.Add();
 }
 inline const ::google::protobuf::RepeatedPtrField< ::data::Step_Particle >&
-Step::points() const {
-  // @@protoc_insertion_point(field_list:data.Step.points)
-  return points_;
+Step::particles() const {
+  // @@protoc_insertion_point(field_list:data.Step.particles)
+  return particles_;
 }
 
 // double static_energy = 3;

@@ -12,9 +12,10 @@
 #include "boundary.h"
 #include "dynamic.h"
 #include "energy.h"
+#include "gen_js.h"
 #include "xv.h"
 #include "generator.h"
-#include "../proto/build/steps.pb.h"
+#include "steps.pb.h"
 
 // Global variables.
 double kparam[NPOINTS][NPOINTS];
@@ -160,6 +161,27 @@ static Point noiseP2() {
   return {x, y, NONE};
 }
 
+static void storeStep(XV xv, int step) {
+  auto *s = steps.add_steps();
+  s->set_step(step);
+  for (int i=0; i<NPOINTS; i++) {
+    auto *p = s->add_particles();
+    p->set_id(i);
+    p->set_x(points[i].x);
+    p->set_y(points[i].y);
+
+    for (int j = 0; j < NPOINTS; j++) {
+      auto *k = p->add_kparams();
+      k->set_id(j);
+      k->set_val(kparam[i][j]);
+    }
+  }
+  s->set_static_energy(energyAverage(0, 0));
+  s->set_dynamic_energy(energyAverageDist(0, 0));
+  s->set_x_value(xv.x);
+  s->set_v_value(xv.v);
+}
+
 // Inject noise to 1 particle per a step.
 static void step(int step) {
   timestep++;
@@ -192,6 +214,11 @@ static void step(int step) {
     y = rungeKutta(y);
     next[i] = {imaging(pi.x + x), imaging(pi.y + y), pi.color};
     dxdy[i] = {imaging(x), imaging(y)};
+  }
+
+  if (step % thinning == 0) {
+    auto xv = computeXV(dxdy);
+    storeStep(xv, step);
   }
 
   memcpy(points, next, sizeof(next));
@@ -292,7 +319,7 @@ static std::string trim(double x, int precision) {
   return std::to_string(x).substr(0, std::to_string(x).find(".") + precision + 1);
 }
 
-static std::string filename() {
+std::string filename() {
   // Filename includes the infomation: boundary, cycle, dynamic, maxgen, kparam, and seed.
   // Example: sps-p&b=open&c=-1&d=none&g=100000&k=zero&s=0
   std::string fn = "";
@@ -594,7 +621,8 @@ static void parseArgs(int argc, char **argv) {
 static void html() {
   outfile << "<head><link rel=stylesheet href='css/style.css'></head>";
   printBody();
-  printPoints();
+  //printPoints();
+  outfile << "<script src=\"js/data/" << filename() << ".js\"></script>";
   outfile << "<script>const cycle=" << getCycle() << ";</script>\n";
   outfile << getScript() << "\n";
   outfile << "</body></html>\n";
@@ -724,6 +752,7 @@ int main(int argc, char **argv) {
     step(i);
   }
 
+  js(steps);
   html();
   json();
 
