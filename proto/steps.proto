@@ -7,8 +7,10 @@ message Step {
   repeated Particle particles = 2;
   double static_energy = 3;
   double dynamic_energy = 4;
-  double x_value = 5;
-  double v_value = 6;
+  double static_energy_variance = 5;
+  double dynamic_energy_variance = 6;
+  double x_value = 7;
+  double v_value = 8;
 
   message Particle {
     int32 id = 1;

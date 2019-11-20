@@ -178,6 +178,8 @@ static void storeStep(XV xv, int step) {
   }
   s->set_static_energy(energyAverage(0, 0));
   s->set_dynamic_energy(energyAverageDist(0, 0));
+  s->set_static_energy_variance(energyVariance());
+  s->set_dynamic_energy_variance(energyVarianceDist());
   s->set_x_value(xv.x);
   s->set_v_value(xv.v);
 }

@@ -38,7 +38,7 @@ namespace protobuf_steps_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[4];
+  static const ::google::protobuf::internal::ParseTable schema[5];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -49,6 +49,9 @@ namespace data {
 class Step;
 class StepDefaultTypeInternal;
 extern StepDefaultTypeInternal _Step_default_instance_;
+class Step_K;
+class Step_KDefaultTypeInternal;
+extern Step_KDefaultTypeInternal _Step_K_default_instance_;
 class Step_Particle;
 class Step_ParticleDefaultTypeInternal;
 extern Step_ParticleDefaultTypeInternal _Step_Particle_default_instance_;
@@ -62,6 +65,7 @@ extern StepsDefaultTypeInternal _Steps_default_instance_;
 namespace google {
 namespace protobuf {
 template<> ::data::Step* Arena::CreateMaybeMessage<::data::Step>(Arena*);
+template<> ::data::Step_K* Arena::CreateMaybeMessage<::data::Step_K>(Arena*);
 template<> ::data::Step_Particle* Arena::CreateMaybeMessage<::data::Step_Particle>(Arena*);
 template<> ::data::Step_Particle_Kparam* Arena::CreateMaybeMessage<::data::Step_Particle_Kparam>(Arena*);
 template<> ::data::Steps* Arena::CreateMaybeMessage<::data::Steps>(Arena*);
@@ -313,6 +317,116 @@ class Step_Particle : public ::google::protobuf::Message /* @@protoc_insertion_p
 };
 // -------------------------------------------------------------------
 
+class Step_K : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:data.Step.K) */ {
+ public:
+  Step_K();
+  virtual ~Step_K();
+
+  Step_K(const Step_K& from);
+
+  inline Step_K& operator=(const Step_K& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  Step_K(Step_K&& from) noexcept
+    : Step_K() {
+    *this = ::std::move(from);
+  }
+
+  inline Step_K& operator=(Step_K&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Step_K& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Step_K* internal_default_instance() {
+    return reinterpret_cast<const Step_K*>(
+               &_Step_K_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  void Swap(Step_K* other);
+  friend void swap(Step_K& a, Step_K& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Step_K* New() const final {
+    return CreateMaybeMessage<Step_K>(NULL);
+  }
+
+  Step_K* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<Step_K>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const Step_K& from);
+  void MergeFrom(const Step_K& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Step_K* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // double k = 1;
+  void clear_k();
+  static const int kKFieldNumber = 1;
+  double k() const;
+  void set_k(double value);
+
+  // int32 count = 2;
+  void clear_count();
+  static const int kCountFieldNumber = 2;
+  ::google::protobuf::int32 count() const;
+  void set_count(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:data.Step.K)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  double k_;
+  ::google::protobuf::int32 count_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::protobuf_steps_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class Step : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:data.Step) */ {
  public:
   Step();
@@ -348,7 +462,7 @@ class Step : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
                &_Step_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   void Swap(Step* other);
   friend void swap(Step& a, Step& b) {
@@ -399,6 +513,7 @@ class Step : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
   // nested types ----------------------------------------------------
 
   typedef Step_Particle Particle;
+  typedef Step_K K;
 
   // accessors -------------------------------------------------------
 
@@ -414,6 +529,18 @@ class Step : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
   const ::google::protobuf::RepeatedPtrField< ::data::Step_Particle >&
       particles() const;
 
+  // repeated .data.Step.K k_count = 9;
+  int k_count_size() const;
+  void clear_k_count();
+  static const int kKCountFieldNumber = 9;
+  ::data::Step_K* mutable_k_count(int index);
+  ::google::protobuf::RepeatedPtrField< ::data::Step_K >*
+      mutable_k_count();
+  const ::data::Step_K& k_count(int index) const;
+  ::data::Step_K* add_k_count();
+  const ::google::protobuf::RepeatedPtrField< ::data::Step_K >&
+      k_count() const;
+
   // double static_energy = 3;
   void clear_static_energy();
   static const int kStaticEnergyFieldNumber = 3;
@@ -426,15 +553,27 @@ class Step : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
   double dynamic_energy() const;
   void set_dynamic_energy(double value);
 
-  // double x_value = 5;
+  // double static_energy_variance = 5;
+  void clear_static_energy_variance();
+  static const int kStaticEnergyVarianceFieldNumber = 5;
+  double static_energy_variance() const;
+  void set_static_energy_variance(double value);
+
+  // double dynamic_energy_variance = 6;
+  void clear_dynamic_energy_variance();
+  static const int kDynamicEnergyVarianceFieldNumber = 6;
+  double dynamic_energy_variance() const;
+  void set_dynamic_energy_variance(double value);
+
+  // double x_value = 7;
   void clear_x_value();
-  static const int kXValueFieldNumber = 5;
+  static const int kXValueFieldNumber = 7;
   double x_value() const;
   void set_x_value(double value);
 
-  // double v_value = 6;
+  // double v_value = 8;
   void clear_v_value();
-  static const int kVValueFieldNumber = 6;
+  static const int kVValueFieldNumber = 8;
   double v_value() const;
   void set_v_value(double value);
 
@@ -449,8 +588,11 @@ class Step : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::data::Step_Particle > particles_;
+  ::google::protobuf::RepeatedPtrField< ::data::Step_K > k_count_;
   double static_energy_;
   double dynamic_energy_;
+  double static_energy_variance_;
+  double dynamic_energy_variance_;
   double x_value_;
   double v_value_;
   ::google::protobuf::int32 step_;
@@ -494,7 +636,7 @@ class Steps : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
                &_Steps_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   void Swap(Steps* other);
   friend void swap(Steps& a, Steps& b) {
@@ -683,6 +825,38 @@ Step_Particle::kparams() const {
 
 // -------------------------------------------------------------------
 
+// Step_K
+
+// double k = 1;
+inline void Step_K::clear_k() {
+  k_ = 0;
+}
+inline double Step_K::k() const {
+  // @@protoc_insertion_point(field_get:data.Step.K.k)
+  return k_;
+}
+inline void Step_K::set_k(double value) {
+  
+  k_ = value;
+  // @@protoc_insertion_point(field_set:data.Step.K.k)
+}
+
+// int32 count = 2;
+inline void Step_K::clear_count() {
+  count_ = 0;
+}
+inline ::google::protobuf::int32 Step_K::count() const {
+  // @@protoc_insertion_point(field_get:data.Step.K.count)
+  return count_;
+}
+inline void Step_K::set_count(::google::protobuf::int32 value) {
+  
+  count_ = value;
+  // @@protoc_insertion_point(field_set:data.Step.K.count)
+}
+
+// -------------------------------------------------------------------
+
 // Step
 
 // int32 step = 1;
@@ -757,7 +931,35 @@ inline void Step::set_dynamic_energy(double value) {
   // @@protoc_insertion_point(field_set:data.Step.dynamic_energy)
 }
 
-// double x_value = 5;
+// double static_energy_variance = 5;
+inline void Step::clear_static_energy_variance() {
+  static_energy_variance_ = 0;
+}
+inline double Step::static_energy_variance() const {
+  // @@protoc_insertion_point(field_get:data.Step.static_energy_variance)
+  return static_energy_variance_;
+}
+inline void Step::set_static_energy_variance(double value) {
+  
+  static_energy_variance_ = value;
+  // @@protoc_insertion_point(field_set:data.Step.static_energy_variance)
+}
+
+// double dynamic_energy_variance = 6;
+inline void Step::clear_dynamic_energy_variance() {
+  dynamic_energy_variance_ = 0;
+}
+inline double Step::dynamic_energy_variance() const {
+  // @@protoc_insertion_point(field_get:data.Step.dynamic_energy_variance)
+  return dynamic_energy_variance_;
+}
+inline void Step::set_dynamic_energy_variance(double value) {
+  
+  dynamic_energy_variance_ = value;
+  // @@protoc_insertion_point(field_set:data.Step.dynamic_energy_variance)
+}
+
+// double x_value = 7;
 inline void Step::clear_x_value() {
   x_value_ = 0;
 }
@@ -771,7 +973,7 @@ inline void Step::set_x_value(double value) {
   // @@protoc_insertion_point(field_set:data.Step.x_value)
 }
 
-// double v_value = 6;
+// double v_value = 8;
 inline void Step::clear_v_value() {
   v_value_ = 0;
 }
@@ -783,6 +985,36 @@ inline void Step::set_v_value(double value) {
   
   v_value_ = value;
   // @@protoc_insertion_point(field_set:data.Step.v_value)
+}
+
+// repeated .data.Step.K k_count = 9;
+inline int Step::k_count_size() const {
+  return k_count_.size();
+}
+inline void Step::clear_k_count() {
+  k_count_.Clear();
+}
+inline ::data::Step_K* Step::mutable_k_count(int index) {
+  // @@protoc_insertion_point(field_mutable:data.Step.k_count)
+  return k_count_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::data::Step_K >*
+Step::mutable_k_count() {
+  // @@protoc_insertion_point(field_mutable_list:data.Step.k_count)
+  return &k_count_;
+}
+inline const ::data::Step_K& Step::k_count(int index) const {
+  // @@protoc_insertion_point(field_get:data.Step.k_count)
+  return k_count_.Get(index);
+}
+inline ::data::Step_K* Step::add_k_count() {
+  // @@protoc_insertion_point(field_add:data.Step.k_count)
+  return k_count_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::data::Step_K >&
+Step::k_count() const {
+  // @@protoc_insertion_point(field_list:data.Step.k_count)
+  return k_count_;
 }
 
 // -------------------------------------------------------------------
@@ -822,6 +1054,8 @@ Steps::steps() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -7,11 +7,8 @@ import logplot
 import loglogplot
 import clustering
 
-import steps_pb2
-
 
 src = ''
-proto = ''
 
 
 def read_json():
@@ -22,20 +19,16 @@ def read_json():
 
 def parse_args():
     global src
-    global proto
 
     parser = argparse.ArgumentParser(
             description='Generate an image from a json file.')
     parser.add_argument('-src', required=True,
-            help='The source file path')
-    parser.add_argument('-proto', required=True,
             help='The source file path')
     parser.add_argument('-out', required=True,
             help='The output image path')
 
     args = parser.parse_args()
     src = args.src
-    proto = args.proto
     out = args.out
 
     stackplot.src = args.src
@@ -53,49 +46,35 @@ def parse_args():
 
 if __name__ == '__main__':
     parse_args()
-
-    steps = steps_pb2.Steps()
-
-    # Read data from a protocol buffer binary
-    f = open(proto, "rb")
-    steps.ParseFromString(f.read())
-    f.close()
-
     a = src.split('.')
     extension = a[len(a)-1]
     if extension != 'json':
         sys.exit('Error: ' + extension + ' file is not supported.')
     data = read_json()
 
-    n = len(steps.steps)
-
     # Plot for K param.
     k_data = stackplot.reshape_k(data)
-    #k_data_reshaped = stackplot.reshape_k_count(steps)
-    #print(k_data_reshaped)
     stackplot.plot(len(data), k_data)
 
     # Plot for static energy.
-    static_energy = [step.static_energy for step in steps.steps]
-    static_energy_variance = [step.static_energy_variance for step in steps.steps]
-    logplot.plot(n, static_energy, static_energy_variance, False)
+    e_ave = [y['energy']['static']['average'] for y in data]
+    e_var = [y['energy']['static']['variance'] for y in data]
+    logplot.plot(len(data), e_ave, e_var, False)
 
     # Plot for dynamic energy.
-    dynamic_energy = [step.dynamic_energy for step in steps.steps]
-    dynamic_energy_variance = [step.dynamic_energy_variance for step in steps.steps]
-    logplot.plot(n, dynamic_energy, dynamic_energy_variance, True)
+    e_ave = [y['energy']['dynamic']['average'] for y in data]
+    e_var = [y['energy']['dynamic']['variance'] for y in data]
+    logplot.plot(len(data), e_ave, e_var, True)
 
     # Plot for XV.
-    x_value = [step.x_value for step in steps.steps]
-    v_value = [step.v_value for step in steps.steps]
-    loglogplot.plot(n, x_value, v_value)
+    x_data = [d['xv']['x'] for d in data]
+    v_data = [d['xv']['v'] for d in data]
+    loglogplot.plot(len(data), x_data, v_data)
 
     # Plot for clustering.
-    particles = [step.particles for step in steps.steps]
+    points = [d['points'] for d in data]
     clustering.init_text()
     for step in clustering.steps:
-        if step >= len(particles):
-            break
-        particle = np.array([[p.x, p.y] for p in particles[step]])
-        clustering.plot(particle, step*clustering.thinning)
+        point = np.array([[p['x'], p['y']] for p in points[step]])
+        clustering.plot(point, step*clustering.thinning)
     clustering.write_clustering_csv()

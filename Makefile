@@ -38,7 +38,11 @@ PROB2=0
 #SEEDS=0
 #SEEDS=$(shell seq 1000)
 #SEEDS=$(shell seq 1001 2000)
-SEEDS=$(shell seq 9990 9999)
+#SEEDS=$(shell seq 9990 9999)
+SEEDS=9999
+
+PROB=0
+MAXGEN=400000
 
 generator:
 	make -C src generator
@@ -61,56 +65,57 @@ gen-p: generator-p
 
 img-all: gen
 	parallel $(ENV) python3 $(UTIL_ALL) \
-		-src '$(JSON_PATH)/sps-p_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.json' \
+		-src '$(JSON_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.json' \
 		-out '$(IMG_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all-p: gen-p
 	parallel -j $(NPROC) $(ENV) python3 $(UTIL_ALL) \
-		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-src '$(JSON_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-proto 'proto/bin/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.bin' \
 		-out '$(IMG_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-energy: gen
 	parallel $(ENV) python3 $(UTIL_ENERGY) \
-		-src '$(JSON_PATH)/sps-p_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' \
+		-src '$(JSON_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' \
 		-out '$(IMG_PATH)/energy_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 img-energy-p: gen-p
 	parallel $(ENV) python3 $(UTIL_ENERGY) \
-		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-src '$(JSON_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/energy_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-kparam: gen
 	parallel $(ENV) python3 $(UTIL_K) \
-		-src '$(JSON_PATH)/sps-p_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' \
+		-src '$(JSON_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' \
 		-out '$(IMG_PATH)/kparam_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 img-kparam-p: gen-p
 	parallel $(ENV) python3 $(UTIL_K) \
-		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-src '$(JSON_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/kparam_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-xv: gen
 	parallel $(ENV) python3 $(UTIL_XV) \
-		-src '$(JSON_PATH)/sps-p_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' \
+		-src '$(JSON_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.json' \
 		-out '$(IMG_PATH)/xv_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&s={3}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(SEEDS)
 
 img-xv-p: gen-p
 	parallel $(ENV) python3 $(UTIL_XV) \
-		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-src '$(JSON_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/xv_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 # TODO: make open boundary version.
 img-clustering-p: gen-p
 	parallel $(ENV) python3 $(UTIL_CLUSTERING) \
-		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
+		-src '$(JSON_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/clustering_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
@@ -132,8 +137,7 @@ public: dev-all
 	cp -r js $(PUBLIC)
 	cp -r img $(PUBLIC)
 	./gen_index.sh
-	mv sps-p_* $(PUBLIC)
-	mv index.html $(PUBLIC)
+	mv *.html $(PUBLIC)
 
 clean:
 	make -C src clean

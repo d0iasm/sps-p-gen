@@ -20,9 +20,10 @@
 // @@protoc_insertion_point(includes)
 
 namespace protobuf_steps_2eproto {
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_steps_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Step_K;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_steps_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Step_Particle_Kparam;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_steps_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Step;
 extern PROTOBUF_INTERNAL_EXPORT_protobuf_steps_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Step_Particle;
+extern PROTOBUF_INTERNAL_EXPORT_protobuf_steps_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_Step;
 }  // namespace protobuf_steps_2eproto
 namespace data {
 class Step_Particle_KparamDefaultTypeInternal {
@@ -35,6 +36,11 @@ class Step_ParticleDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<Step_Particle>
       _instance;
 } _Step_Particle_default_instance_;
+class Step_KDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<Step_K>
+      _instance;
+} _Step_K_default_instance_;
 class StepDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<Step>
@@ -76,6 +82,20 @@ static void InitDefaultsStep_Particle() {
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsStep_Particle}, {
       &protobuf_steps_2eproto::scc_info_Step_Particle_Kparam.base,}};
 
+static void InitDefaultsStep_K() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::data::_Step_K_default_instance_;
+    new (ptr) ::data::Step_K();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::data::Step_K::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_Step_K =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsStep_K}, {}};
+
 static void InitDefaultsStep() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -87,9 +107,10 @@ static void InitDefaultsStep() {
   ::data::Step::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<1> scc_info_Step =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsStep}, {
-      &protobuf_steps_2eproto::scc_info_Step_Particle.base,}};
+::google::protobuf::internal::SCCInfo<2> scc_info_Step =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsStep}, {
+      &protobuf_steps_2eproto::scc_info_Step_Particle.base,
+      &protobuf_steps_2eproto::scc_info_Step_K.base,}};
 
 static void InitDefaultsSteps() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -109,11 +130,12 @@ static void InitDefaultsSteps() {
 void InitDefaults() {
   ::google::protobuf::internal::InitSCC(&scc_info_Step_Particle_Kparam.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Step_Particle.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_Step_K.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Step.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Steps.base);
 }
 
-::google::protobuf::Metadata file_level_metadata[4];
+::google::protobuf::Metadata file_level_metadata[5];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
@@ -133,6 +155,13 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_Particle, y_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_Particle, kparams_),
   ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_K, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_K, k_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_K, count_),
+  ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -141,8 +170,11 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, particles_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, static_energy_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, dynamic_energy_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, static_energy_variance_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, dynamic_energy_variance_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, x_value_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, v_value_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, k_count_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Steps, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -153,13 +185,15 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::data::Step_Particle_Kparam)},
   { 7, -1, sizeof(::data::Step_Particle)},
-  { 16, -1, sizeof(::data::Step)},
-  { 27, -1, sizeof(::data::Steps)},
+  { 16, -1, sizeof(::data::Step_K)},
+  { 23, -1, sizeof(::data::Step)},
+  { 37, -1, sizeof(::data::Steps)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::data::_Step_Particle_Kparam_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::data::_Step_Particle_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::data::_Step_K_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::data::_Step_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::data::_Steps_default_instance_),
 };
@@ -179,24 +213,27 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 4);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 5);
 }
 
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\013steps.proto\022\004data\"\213\002\n\004Step\022\014\n\004step\030\001 \001"
+      "\n\013steps.proto\022\004data\"\212\003\n\004Step\022\014\n\004step\030\001 \001"
       "(\005\022&\n\tparticles\030\002 \003(\0132\023.data.Step.Partic"
       "le\022\025\n\rstatic_energy\030\003 \001(\001\022\026\n\016dynamic_ene"
-      "rgy\030\004 \001(\001\022\017\n\007x_value\030\005 \001(\001\022\017\n\007v_value\030\006 "
-      "\001(\001\032|\n\010Particle\022\n\n\002id\030\001 \001(\005\022\t\n\001x\030\002 \001(\001\022\t"
-      "\n\001y\030\003 \001(\001\022+\n\007kparams\030\004 \003(\0132\032.data.Step.P"
-      "article.Kparam\032!\n\006Kparam\022\n\n\002id\030\001 \001(\005\022\013\n\003"
-      "val\030\002 \001(\002\"\"\n\005Steps\022\031\n\005steps\030\001 \003(\0132\n.data"
-      ".Stepb\006proto3"
+      "rgy\030\004 \001(\001\022\036\n\026static_energy_variance\030\005 \001("
+      "\001\022\037\n\027dynamic_energy_variance\030\006 \001(\001\022\017\n\007x_"
+      "value\030\007 \001(\001\022\017\n\007v_value\030\010 \001(\001\022\035\n\007k_count\030"
+      "\t \003(\0132\014.data.Step.K\032|\n\010Particle\022\n\n\002id\030\001 "
+      "\001(\005\022\t\n\001x\030\002 \001(\001\022\t\n\001y\030\003 \001(\001\022+\n\007kparams\030\004 \003"
+      "(\0132\032.data.Step.Particle.Kparam\032!\n\006Kparam"
+      "\022\n\n\002id\030\001 \001(\005\022\013\n\003val\030\002 \001(\002\032\035\n\001K\022\t\n\001k\030\001 \001("
+      "\001\022\r\n\005count\030\002 \001(\005\"\"\n\005Steps\022\031\n\005steps\030\001 \003(\013"
+      "2\n.data.Stepb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 333);
+      descriptor, 460);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "steps.proto", &protobuf_RegisterTypes);
 }
@@ -821,6 +858,269 @@ void Step_Particle::InternalSwap(Step_Particle* other) {
 
 // ===================================================================
 
+void Step_K::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Step_K::kKFieldNumber;
+const int Step_K::kCountFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Step_K::Step_K()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_steps_2eproto::scc_info_Step_K.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:data.Step.K)
+}
+Step_K::Step_K(const Step_K& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&k_, &from.k_,
+    static_cast<size_t>(reinterpret_cast<char*>(&count_) -
+    reinterpret_cast<char*>(&k_)) + sizeof(count_));
+  // @@protoc_insertion_point(copy_constructor:data.Step.K)
+}
+
+void Step_K::SharedCtor() {
+  ::memset(&k_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&count_) -
+      reinterpret_cast<char*>(&k_)) + sizeof(count_));
+}
+
+Step_K::~Step_K() {
+  // @@protoc_insertion_point(destructor:data.Step.K)
+  SharedDtor();
+}
+
+void Step_K::SharedDtor() {
+}
+
+void Step_K::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* Step_K::descriptor() {
+  ::protobuf_steps_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_steps_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const Step_K& Step_K::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_steps_2eproto::scc_info_Step_K.base);
+  return *internal_default_instance();
+}
+
+
+void Step_K::Clear() {
+// @@protoc_insertion_point(message_clear_start:data.Step.K)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&k_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&count_) -
+      reinterpret_cast<char*>(&k_)) + sizeof(count_));
+  _internal_metadata_.Clear();
+}
+
+bool Step_K::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:data.Step.K)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // double k = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(9u /* 9 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &k_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 count = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &count_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:data.Step.K)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:data.Step.K)
+  return false;
+#undef DO_
+}
+
+void Step_K::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:data.Step.K)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // double k = 1;
+  if (this->k() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(1, this->k(), output);
+  }
+
+  // int32 count = 2;
+  if (this->count() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->count(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:data.Step.K)
+}
+
+::google::protobuf::uint8* Step_K::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:data.Step.K)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // double k = 1;
+  if (this->k() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(1, this->k(), target);
+  }
+
+  // int32 count = 2;
+  if (this->count() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->count(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:data.Step.K)
+  return target;
+}
+
+size_t Step_K::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:data.Step.K)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // double k = 1;
+  if (this->k() != 0) {
+    total_size += 1 + 8;
+  }
+
+  // int32 count = 2;
+  if (this->count() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->count());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void Step_K::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:data.Step.K)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Step_K* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const Step_K>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:data.Step.K)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:data.Step.K)
+    MergeFrom(*source);
+  }
+}
+
+void Step_K::MergeFrom(const Step_K& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:data.Step.K)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.k() != 0) {
+    set_k(from.k());
+  }
+  if (from.count() != 0) {
+    set_count(from.count());
+  }
+}
+
+void Step_K::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:data.Step.K)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Step_K::CopyFrom(const Step_K& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:data.Step.K)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Step_K::IsInitialized() const {
+  return true;
+}
+
+void Step_K::Swap(Step_K* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Step_K::InternalSwap(Step_K* other) {
+  using std::swap;
+  swap(k_, other->k_);
+  swap(count_, other->count_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata Step_K::GetMetadata() const {
+  protobuf_steps_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_steps_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
 void Step::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -828,8 +1128,11 @@ const int Step::kStepFieldNumber;
 const int Step::kParticlesFieldNumber;
 const int Step::kStaticEnergyFieldNumber;
 const int Step::kDynamicEnergyFieldNumber;
+const int Step::kStaticEnergyVarianceFieldNumber;
+const int Step::kDynamicEnergyVarianceFieldNumber;
 const int Step::kXValueFieldNumber;
 const int Step::kVValueFieldNumber;
+const int Step::kKCountFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Step::Step()
@@ -842,7 +1145,8 @@ Step::Step()
 Step::Step(const Step& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
-      particles_(from.particles_) {
+      particles_(from.particles_),
+      k_count_(from.k_count_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&static_energy_, &from.static_energy_,
     static_cast<size_t>(reinterpret_cast<char*>(&step_) -
@@ -885,6 +1189,7 @@ void Step::Clear() {
   (void) cached_has_bits;
 
   particles_.Clear();
+  k_count_.Clear();
   ::memset(&static_energy_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&step_) -
       reinterpret_cast<char*>(&static_energy_)) + sizeof(step_));
@@ -955,10 +1260,38 @@ bool Step::MergePartialFromCodedStream(
         break;
       }
 
-      // double x_value = 5;
+      // double static_energy_variance = 5;
       case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(41u /* 41 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &static_energy_variance_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // double dynamic_energy_variance = 6;
+      case 6: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(49u /* 49 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &dynamic_energy_variance_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // double x_value = 7;
+      case 7: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(57u /* 57 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
@@ -969,14 +1302,26 @@ bool Step::MergePartialFromCodedStream(
         break;
       }
 
-      // double v_value = 6;
-      case 6: {
+      // double v_value = 8;
+      case 8: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(49u /* 49 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(65u /* 65 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
                  input, &v_value_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .data.Step.K k_count = 9;
+      case 9: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(74u /* 74 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_k_count()));
         } else {
           goto handle_unusual;
         }
@@ -1033,14 +1378,33 @@ void Step::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteDouble(4, this->dynamic_energy(), output);
   }
 
-  // double x_value = 5;
-  if (this->x_value() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(5, this->x_value(), output);
+  // double static_energy_variance = 5;
+  if (this->static_energy_variance() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(5, this->static_energy_variance(), output);
   }
 
-  // double v_value = 6;
+  // double dynamic_energy_variance = 6;
+  if (this->dynamic_energy_variance() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(6, this->dynamic_energy_variance(), output);
+  }
+
+  // double x_value = 7;
+  if (this->x_value() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(7, this->x_value(), output);
+  }
+
+  // double v_value = 8;
   if (this->v_value() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(6, this->v_value(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(8, this->v_value(), output);
+  }
+
+  // repeated .data.Step.K k_count = 9;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->k_count_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      9,
+      this->k_count(static_cast<int>(i)),
+      output);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1080,14 +1444,32 @@ void Step::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(4, this->dynamic_energy(), target);
   }
 
-  // double x_value = 5;
-  if (this->x_value() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(5, this->x_value(), target);
+  // double static_energy_variance = 5;
+  if (this->static_energy_variance() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(5, this->static_energy_variance(), target);
   }
 
-  // double v_value = 6;
+  // double dynamic_energy_variance = 6;
+  if (this->dynamic_energy_variance() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(6, this->dynamic_energy_variance(), target);
+  }
+
+  // double x_value = 7;
+  if (this->x_value() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(7, this->x_value(), target);
+  }
+
+  // double v_value = 8;
   if (this->v_value() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(6, this->v_value(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(8, this->v_value(), target);
+  }
+
+  // repeated .data.Step.K k_count = 9;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->k_count_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        9, this->k_count(static_cast<int>(i)), deterministic, target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1118,6 +1500,17 @@ size_t Step::ByteSizeLong() const {
     }
   }
 
+  // repeated .data.Step.K k_count = 9;
+  {
+    unsigned int count = static_cast<unsigned int>(this->k_count_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->k_count(static_cast<int>(i)));
+    }
+  }
+
   // double static_energy = 3;
   if (this->static_energy() != 0) {
     total_size += 1 + 8;
@@ -1128,12 +1521,22 @@ size_t Step::ByteSizeLong() const {
     total_size += 1 + 8;
   }
 
-  // double x_value = 5;
+  // double static_energy_variance = 5;
+  if (this->static_energy_variance() != 0) {
+    total_size += 1 + 8;
+  }
+
+  // double dynamic_energy_variance = 6;
+  if (this->dynamic_energy_variance() != 0) {
+    total_size += 1 + 8;
+  }
+
+  // double x_value = 7;
   if (this->x_value() != 0) {
     total_size += 1 + 8;
   }
 
-  // double v_value = 6;
+  // double v_value = 8;
   if (this->v_value() != 0) {
     total_size += 1 + 8;
   }
@@ -1173,11 +1576,18 @@ void Step::MergeFrom(const Step& from) {
   (void) cached_has_bits;
 
   particles_.MergeFrom(from.particles_);
+  k_count_.MergeFrom(from.k_count_);
   if (from.static_energy() != 0) {
     set_static_energy(from.static_energy());
   }
   if (from.dynamic_energy() != 0) {
     set_dynamic_energy(from.dynamic_energy());
+  }
+  if (from.static_energy_variance() != 0) {
+    set_static_energy_variance(from.static_energy_variance());
+  }
+  if (from.dynamic_energy_variance() != 0) {
+    set_dynamic_energy_variance(from.dynamic_energy_variance());
   }
   if (from.x_value() != 0) {
     set_x_value(from.x_value());
@@ -1215,8 +1625,11 @@ void Step::Swap(Step* other) {
 void Step::InternalSwap(Step* other) {
   using std::swap;
   CastToBase(&particles_)->InternalSwap(CastToBase(&other->particles_));
+  CastToBase(&k_count_)->InternalSwap(CastToBase(&other->k_count_));
   swap(static_energy_, other->static_energy_);
   swap(dynamic_energy_, other->dynamic_energy_);
+  swap(static_energy_variance_, other->static_energy_variance_);
+  swap(dynamic_energy_variance_, other->dynamic_energy_variance_);
   swap(x_value_, other->x_value_);
   swap(v_value_, other->v_value_);
   swap(step_, other->step_);
@@ -1467,6 +1880,9 @@ template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::data::Step_Particle_Kparam* Aren
 }
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::data::Step_Particle* Arena::CreateMaybeMessage< ::data::Step_Particle >(Arena* arena) {
   return Arena::CreateInternal< ::data::Step_Particle >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::data::Step_K* Arena::CreateMaybeMessage< ::data::Step_K >(Arena* arena) {
+  return Arena::CreateInternal< ::data::Step_K >(arena);
 }
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::data::Step* Arena::CreateMaybeMessage< ::data::Step >(Arena* arena) {
   return Arena::CreateInternal< ::data::Step >(arena);

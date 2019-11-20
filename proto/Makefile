@@ -1,9 +1,11 @@
 SRC_DIR=.
-DST_DIR=./build
+CPP_DST_DIR=./build
+PY_DST_DIR=../utils
 INPUTS = $(wildcard $(SRC_DIR)/*.proto)
 
 build: $(INPUTS)
-	protoc -I=$(SRC_DIR) --cpp_out=$(DST_DIR) $(INPUTS)
+	protoc -I=$(SRC_DIR) --cpp_out=$(CPP_DST_DIR) $(INPUTS)
+	protoc -I=$(SRC_DIR) --python_out=$(PY_DST_DIR) $(INPUTS)
 
 clean:
 	rm $(DST_DIR)/*
