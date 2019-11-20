@@ -31,7 +31,7 @@
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-#define PROTOBUF_INTERNAL_EXPORT_protobuf_steps_2eproto
+#define PROTOBUF_INTERNAL_EXPORT_protobuf_steps_2eproto 
 
 namespace protobuf_steps_2eproto {
 // Internal implementation detail -- do not use these members.
@@ -586,7 +586,7 @@ inline ::google::protobuf::int32 Step_Particle_Kparam::id() const {
   return id_;
 }
 inline void Step_Particle_Kparam::set_id(::google::protobuf::int32 value) {
-
+  
   id_ = value;
   // @@protoc_insertion_point(field_set:data.Step.Particle.Kparam.id)
 }
@@ -600,7 +600,7 @@ inline float Step_Particle_Kparam::val() const {
   return val_;
 }
 inline void Step_Particle_Kparam::set_val(float value) {
-
+  
   val_ = value;
   // @@protoc_insertion_point(field_set:data.Step.Particle.Kparam.val)
 }
@@ -618,7 +618,7 @@ inline ::google::protobuf::int32 Step_Particle::id() const {
   return id_;
 }
 inline void Step_Particle::set_id(::google::protobuf::int32 value) {
-
+  
   id_ = value;
   // @@protoc_insertion_point(field_set:data.Step.Particle.id)
 }
@@ -632,7 +632,7 @@ inline double Step_Particle::x() const {
   return x_;
 }
 inline void Step_Particle::set_x(double value) {
-
+  
   x_ = value;
   // @@protoc_insertion_point(field_set:data.Step.Particle.x)
 }
@@ -646,7 +646,7 @@ inline double Step_Particle::y() const {
   return y_;
 }
 inline void Step_Particle::set_y(double value) {
-
+  
   y_ = value;
   // @@protoc_insertion_point(field_set:data.Step.Particle.y)
 }
@@ -694,7 +694,7 @@ inline ::google::protobuf::int32 Step::step() const {
   return step_;
 }
 inline void Step::set_step(::google::protobuf::int32 value) {
-
+  
   step_ = value;
   // @@protoc_insertion_point(field_set:data.Step.step)
 }
@@ -738,7 +738,7 @@ inline double Step::static_energy() const {
   return static_energy_;
 }
 inline void Step::set_static_energy(double value) {
-
+  
   static_energy_ = value;
   // @@protoc_insertion_point(field_set:data.Step.static_energy)
 }
@@ -752,7 +752,7 @@ inline double Step::dynamic_energy() const {
   return dynamic_energy_;
 }
 inline void Step::set_dynamic_energy(double value) {
-
+  
   dynamic_energy_ = value;
   // @@protoc_insertion_point(field_set:data.Step.dynamic_energy)
 }
@@ -766,7 +766,7 @@ inline double Step::x_value() const {
   return x_value_;
 }
 inline void Step::set_x_value(double value) {
-
+  
   x_value_ = value;
   // @@protoc_insertion_point(field_set:data.Step.x_value)
 }
@@ -780,7 +780,7 @@ inline double Step::v_value() const {
   return v_value_;
 }
 inline void Step::set_v_value(double value) {
-
+  
   v_value_ = value;
   // @@protoc_insertion_point(field_set:data.Step.v_value)
 }

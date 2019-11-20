@@ -10,3 +10,5 @@ clean:
 
 clean-data:
 	rm ./bin/*
+
+.PHONY: build

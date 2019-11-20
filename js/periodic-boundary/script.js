@@ -100,7 +100,7 @@ function drawPoint(p) {
       ctx.strokeStyle = 'rgba(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ', 0.4)';
 
       // Find the closest virtual position.
-      const q = closest(p, points[timestep]['points'][i]);
+      const q = closest(p, steps[timestep]['particles'][i]);
 
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
@@ -117,16 +117,16 @@ function redraw() {
 
   drawGrid();
 
-  for (let i = 0; i < points[timestep]['points'].length; i++) {
-    drawPoint(points[timestep]['points'][i]);
+  for (let i = 0; i < steps[timestep]['particles'].length; i++) {
+    drawPoint(steps[timestep]['particles'][i]);
   }
 
-  document.getElementById('timestep').value = points[timestep]['step'];
+  document.getElementById('timestep').value = steps[timestep]['step'];
   ctx.restore();
 }
 
 function step() {
-  if (timestep < points.length) {
+  if (timestep < steps.length) {
     redraw();
     timestep++;
   } else {
@@ -159,8 +159,8 @@ function on() {
   relationButton.style.backgroundColor = "#333";
   relationButton.style.color = "white";
   if (!handle) {
-    if (timestep >= points.length) {
-      timestep = points.length - 1;
+    if (timestep >= steps.length) {
+      timestep = steps.length - 1;
     }
     redraw();
   }
@@ -172,8 +172,8 @@ function off() {
   relationButton.style.backgroundColor = "white";
   relationButton.style.color = "#333";
   if (!handle) {
-    if (timestep >= points.length) {
-      timestep = points.length - 1;
+    if (timestep >= steps.length) {
+      timestep = steps.length - 1;
     }
     redraw();
   }

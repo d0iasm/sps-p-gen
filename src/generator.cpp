@@ -321,7 +321,7 @@ static std::string trim(double x, int precision) {
 
 std::string filename() {
   // Filename includes the infomation: boundary, cycle, dynamic, maxgen, kparam, and seed.
-  // Example: sps-p&b=open&c=-1&d=none&g=100000&k=zero&s=0
+  // Example: b=open&c=-1&d=none&g=100000&k=zero&s=0
   std::string fn = "";
   // Boundary.
   fn.append("b=");
@@ -427,44 +427,6 @@ static void printBody() {
     outfile << "<img width=350 src=\"img/clustering_" << filename() << "&step=" << s[i] << ".png\" />";
   }
   outfile << "</div>";
-}
-
-static void printPoints() {
-  outfile << "<script>const points = [\n";
-  for (int i = 0; i < point_result.size(); i++) {
-    outfile << "{step:" << i * thinning << ","
-            << "points:[\n";
-    for (int j = 0; j < point_result[i].size(); j++) {
-      Point &p = point_result[i][j];
-      outfile << "{x:" << p.x
-                << ",y:" << p.y
-                << ",color:" << p.color;
-      outfile << ",k:[";
-      for (int k = 0; k < NPOINTS; k++) {
-        outfile << kparam_result[i][j][k] << ",";
-      }
-      outfile << "]},";
-    }
-    outfile << "]},\n";
-  }
-  outfile << "];</script>\n";
-}
-
-static void printKparam() {
-  outfile << "<script>const kparam = [\n";
-  for (int i = 0; i < kparam_result.size(); i++) {
-    outfile << "{step: " << i;
-    outfile << ",k:[";
-    for (int j = 0; j < kparam_result[i].size(); j++) {
-      outfile << "[";
-      for (int k = 0; k < kparam_result[i][j].size(); k++) {
-        outfile << trim(kparam_result[i][j][k], 1) << ",";
-      }
-      outfile << "],\n";
-    }
-    outfile << "]},\n";
-  }
-  outfile << "];</script>\n";
 }
 
 static void usage() {
@@ -621,7 +583,6 @@ static void parseArgs(int argc, char **argv) {
 static void html() {
   outfile << "<head><link rel=stylesheet href='css/style.css'></head>";
   printBody();
-  //printPoints();
   outfile << "<script src=\"js/data/" << filename() << ".js\"></script>";
   outfile << "<script>const cycle=" << getCycle() << ";</script>\n";
   outfile << getScript() << "\n";
@@ -711,8 +672,8 @@ int main(int argc, char **argv) {
 
   parseArgs(argc - 1, argv + 1);
 
-  outfile.open(path + "/sps-p_" + filename() + ".html");
-  outfile_json.open(path_json + "/sps-p_" + filename() + ".json");
+  outfile.open(path + "/" + filename() + ".html");
+  outfile_json.open(path_json + "/" + filename() + ".json");
 
   srand(seed);
 
@@ -756,7 +717,7 @@ int main(int argc, char **argv) {
   html();
   json();
 
-  std::fstream output(path_proto + "/sps-p_" + filename() + ".bin", std::ios::out | std::ios::trunc | std::ios::binary);
+  std::fstream output(path_proto + "/" + filename() + ".bin", std::ios::out | std::ios::trunc | std::ios::binary);
   if (!steps.SerializeToOstream(&output)) {
     std::cerr << "Failed to write a protocol buffer.\n";
   }

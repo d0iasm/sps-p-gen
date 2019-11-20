@@ -68,7 +68,7 @@ function drawPoint(p) {
       const rb = ((p.k[i] - MIN) / (MAX - MIN)) * (255 + 255) - 255;
       ctx.strokeStyle = 'rgba(' + Math.max(0, rb) + ', 0, ' + Math.abs(Math.min(0, rb)) + ', 0.4)';
 
-      const q = points[timestep]['points'][i];
+      const q = steps[timestep]['particles'][i];
 
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
@@ -81,8 +81,8 @@ function drawPoint(p) {
 
 function scaleout() {
   let max = 0;
-  for (let i = 0; i < points[timestep]['points'].length; i++) {
-    const p = points[timestep]['points'][i];
+  for (let i = 0; i < steps[timestep]['particles'].length; i++) {
+    const p = steps[timestep]['particles'][i];
     max = Math.max(max, Math.abs(p.x), Math.abs(p.y));
   }
 
@@ -97,16 +97,16 @@ function redraw() {
   scaleout();
   drawGrid();
 
-  for (let i = 0; i < points[timestep]['points'].length; i++) {
-    drawPoint(points[timestep]['points'][i]);
+  for (let i = 0; i < steps[timestep]['particles'].length; i++) {
+    drawPoint(steps[timestep]['particles'][i]);
   }
 
-  document.getElementById('timestep').value = points[timestep]['step'];
+  document.getElementById('timestep').value = steps[timestep]['step'];
   ctx.restore();
 }
 
 function step() {
-  if (timestep < points.length) {
+  if (timestep < steps.length) {
     redraw();
     timestep++;
   } else {
@@ -139,8 +139,8 @@ function on() {
   relationButton.style.backgroundColor = "#333";
   relationButton.style.color = "white";
   if (!handle) {
-    if (timestep >= points.length) {
-      timestep = points.length - 1;
+    if (timestep >= steps.length) {
+      timestep = steps.length - 1;
     }
     redraw();
   }
@@ -152,8 +152,8 @@ function off() {
   relationButton.style.backgroundColor = "white";
   relationButton.style.color = "#333";
   if (!handle) {
-    if (timestep >= points.length) {
-      timestep = points.length - 1;
+    if (timestep >= steps.length) {
+      timestep = steps.length - 1;
     }
     redraw();
   }
