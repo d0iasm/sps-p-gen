@@ -14,6 +14,7 @@
 #include "energy.h"
 #include "xv.h"
 #include "generator.h"
+#include "../proto/build/steps.pb.h"
 
 // Global variables.
 double kparam[NPOINTS][NPOINTS];
@@ -394,9 +395,9 @@ static void printBody() {
   outfile << "</div></div></div>";
   // clustering
   outfile << "<div class=container>";
-  int steps[10] = {300000, 400000, 500000, 600000, 700000, 800000, 1000000, 1200000, 1400000, 1600000};
+  int s[10] = {300000, 400000, 500000, 600000, 700000, 800000, 1000000, 1200000, 1400000, 1600000};
   for (int i=0; i<10; i++) {
-    outfile << "<img width=350 src=\"img/clustering_" << filename() << "&step=" << steps[i] << ".png\" />";
+    outfile << "<img width=350 src=\"img/clustering_" << filename() << "&step=" << s[i] << ".png\" />";
   }
   outfile << "</div>";
 }
@@ -448,17 +449,18 @@ static void usage() {
   std::cerr << "[ -p1 double ] [ -p2 double ]";
   std::cerr << "\n\n";
 
-  std::cerr << "-k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
-  std::cerr << "-k2        K paramters. k00=ka, k01=kp+km, k10=kp-km, and k11=kb.\n";
-  std::cerr << "-init      The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.\n";
-  std::cerr << "-gen       The number of maximum steps.\n";
-  std::cerr << "-cycle     The length of periodic boundary. It is useless for open boundary.\n";
-  std::cerr << "-seed      The seed number to be used for generating random number. Default value is 1.\n";
-  std::cerr << "-dynamic   The flag to change the K parameters dinamically based on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.\n";
-  std::cerr << "-path      The path directory for a html file name.\n";
-  std::cerr << "-path_json The path directory for a json file name.\n";
-  std::cerr << "-p1        The probability of noise for updateing K params.\n";
-  std::cerr << "-p2        The probability of noise for updateing paricle's positions.\n";
+  std::cerr << "-k1         K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.\n";
+  std::cerr << "-k2         K paramters. k00=ka, k01=kp+km, k10=kp-km, and k11=kb.\n";
+  std::cerr << "-init       The initial state for all particles. -init random indicates that all particles starts with a random K parameter. -init zero indicates that all particles starts with 0.\n";
+  std::cerr << "-gen        The number of maximum steps.\n";
+  std::cerr << "-cycle      The length of periodic boundary. It is useless for open boundary.\n";
+  std::cerr << "-seed       The seed number to be used for generating random number. Default value is 1.\n";
+  std::cerr << "-dynamic    The flag to change the K parameters dinamically based on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.\n";
+  std::cerr << "-path       The path directory for a html file name.\n";
+  std::cerr << "-path_json  The path directory for a json file name.\n";
+  std::cerr << "-path_proto The path directory for a protocol buffer binary.\n";
+  std::cerr << "-p1         The probability of noise for updateing K params.\n";
+  std::cerr << "-p2         The probability of noise for updateing paricle's positions.\n";
   exit(1);
 }
 
@@ -553,6 +555,15 @@ static void parseArgs(int argc, char **argv) {
       if (argc < 2)
         usage();
       path_json = argv[1];
+      argc -= 2;
+      argv += 2;
+      continue;
+    }
+
+    if (strcmp("-path_proto", argv[0]) == 0) {
+      if (argc < 2)
+        usage();
+      path_proto = argv[1];
       argc -= 2;
       argv += 2;
       continue;
@@ -666,6 +677,10 @@ static void storeKparam() {
 }
 
 int main(int argc, char **argv) {
+  // Verify that the version of the library that we linked against is
+  // compatible with the version of the headers we compiled against.
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
   parseArgs(argc - 1, argv + 1);
 
   outfile.open(path + "/sps-p_" + filename() + ".html");
@@ -711,6 +726,14 @@ int main(int argc, char **argv) {
 
   html();
   json();
+
+  std::fstream output(path_proto + "/sps-p_" + filename() + ".bin", std::ios::out | std::ios::trunc | std::ios::binary);
+  if (!steps.SerializeToOstream(&output)) {
+    std::cerr << "Failed to write a protocol buffer.\n";
+  }
+
+  // Optional:  Delete all global objects allocated by libprotobuf.
+  google::protobuf::ShutdownProtobufLibrary();
 
   std::cerr << "genarated: " << filename() << "\n";
   outfile.close();

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
+#include "../../proto/build/steps.pb.h"
 
 // Constants
 #define NPOINTS 50
@@ -47,6 +48,7 @@ extern std::string p1;
 extern std::string p2;
 
 // Variables which scope is only this file.
+static data::Steps steps;
 static double initial_kparam[2][2];
 static int timestep = 0;
 static std::vector<std::vector<Point>> point_result;
@@ -60,6 +62,7 @@ static std::ofstream outfile;
 static std::ofstream outfile_json;
 static std::string path = ".";
 static std::string path_json = "./json";
+static std::string path_proto = "./proto/bin";
 static int thinning = 100;
 
 #endif // GENERATOR_H

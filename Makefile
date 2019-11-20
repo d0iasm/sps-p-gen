@@ -1,5 +1,6 @@
 SRC=src
 JSON=json
+PROTO=proto/bin
 LOCAL=.
 LOCAL_IMG=$(LOCAL)/img
 DEV=../public_html
@@ -16,27 +17,28 @@ UTIL_CLUSTERING=$(UTIL)/clustering.py
 
 HTML_PATH=$(DEV)
 JSON_PATH=$(JSON)
+PROTO_PATH=$(PROTO)
 IMG_PATH=$(DEV_IMG)
 
 ENV=MPLBACKEND=Agg
 
+NPROC=40
+
 MAXGEN=1700000
 # for experiment of local-static-discrete
 #MAXGEN=800000
-#CYCLES=10 20 50 100
 CYCLES=20
 #DYNAMICS=none global-static-discrete global-dynamic-discrete local-static-discrete local-dynamic-discrete local-static-continuous local-dynamic-continuous
 #DYNAMICS=none global-static-discrete global-dynamic-discrete local-static-discrete local-dynamic-discrete
 DYNAMICS=local-dynamic-discrete
-#DYNAMICS=local-static-discrete
-#INITS=zero random
 INITS=random
 #PROB=-1 0 1 5 10 20 30 40 50 60 70 80
 PROB=-1
 PROB2=0
-#SEEDS=1
-SEEDS=$(shell seq 1000)
-#SEEDS=$(shell seq 10)
+#SEEDS=0
+#SEEDS=$(shell seq 1000)
+#SEEDS=$(shell seq 1001 2000)
+SEEDS=$(shell seq 9990 9999)
 
 generator:
 	make -C src generator
@@ -53,7 +55,8 @@ gen: generator
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 gen-p: generator-p
-	parallel $(SRC)/generator-p -path $(HTML_PATH) -path_json $(JSON_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
+	parallel -j $(NPROC) $(SRC)/generator-p -path $(HTML_PATH) -path_json $(JSON_PATH) -path_proto $(PROTO_PATH) \
+		-cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all: gen
@@ -63,8 +66,7 @@ img-all: gen
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all-p: gen-p
-	rm -f clustering.csv
-	parallel $(ENV) python3 $(UTIL_ALL) \
+	parallel -j $(NPROC) $(ENV) python3 $(UTIL_ALL) \
 		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
@@ -107,7 +109,6 @@ img-xv-p: gen-p
 
 # TODO: make open boundary version.
 img-clustering-p: gen-p
-	rm -f clustering.csv
 	parallel $(ENV) python3 $(UTIL_CLUSTERING) \
 		-src '$(JSON_PATH)/sps-p_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.json' \
 		-out '$(IMG_PATH)/clustering_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \

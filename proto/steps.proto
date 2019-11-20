@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package data;
+
+message Step {
+  int32 step = 1;
+  repeated Particle points = 2;
+  double static_energy = 3;
+  double dynamic_energy = 4;
+  double x_value = 5;
+  double v_value = 6;
+
+  message Particle {
+    int32 id = 1;
+    double x = 2;
+    double y = 3;
+    repeated Kparam kparams = 4;
+    message Kparam {
+      int32 id = 1;
+      float val = 2;
+    }
+  }
+}
+
+message Steps {
+  repeated Step steps = 1;
+}
