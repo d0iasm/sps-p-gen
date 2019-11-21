@@ -27,9 +27,6 @@ std::string dynamic = "none";
 std::string p1 = "0";
 std::string p2 = "0";
 
-// Global variables declared in energy.cpp.
-std::vector<std::vector<double> > energy;
-
 static double rungeKutta(double k1) {
   double k2 = k1 + k1 * 0.002 * 0.5;
   double k3 = k1 + k2 * 0.002 * 0.5;
@@ -206,16 +203,6 @@ static void step(int step) {
   }
 
   memcpy(points, next, sizeof(next));
-
-  if (step % thinning == 0) {
-    // Energies.
-    std::vector<double> e(4);
-    e[0] = energyAverage(0, 0);
-    e[1] = energyVariance();
-    e[2] = energyAverageDist(0, 0);
-    e[3] = energyVarianceDist();
-    energy.push_back(e);
-  }
 }
 
 static void initPoints() {
@@ -285,9 +272,19 @@ double kVariance() {
 }
 
 void printCountedKparam() {
-  std::map<double, int> m = countKparam();
-  for (std::pair<double, int> e : m)
-    outfile << e.first << " => " << e.second << "<br />";
+  std::map<int, int> count;
+  auto s = steps.steps()[steps.steps_size()-1];
+  for (auto p : s.particles()) {
+    for (auto k : p.kparams()) {
+      if (count.find(k) == count.end())
+        count.insert({k, 1});
+      else
+        count[k]++;
+    }
+  }
+
+  for (std::pair<int, int> elm : count)
+    outfile << elm.first << " => " << elm.second << "<br />";
 }
 
 static std::string trim(double x, int precision) {
@@ -383,8 +380,14 @@ static void printBody() {
   outfile << "<br />";
   outfile << "<h2>Static Heider Energy</h2>"
           << "(high: " << energyHigh() << ", low: "<< energyLow() << ")" << "<br />"
-          << "initial => final step: " << energy[0][0] << " => " << energy[energy.size()-1][0] << "<br />"
-          << "initial => final step (variance): " << energy[0][1] << " => " << energy[energy.size()-1][1]
+          << "initial => final step: "
+          << steps.steps()[0].static_energy()
+          << " => "
+          << steps.steps()[steps.steps_size()-1].static_energy() << "<br />"
+          << "initial => final step (variance): "
+          << steps.steps()[0].static_energy_variance()
+          << " => "
+          << steps.steps()[steps.steps_size()-1].static_energy_variance()
           << "<div><img width=350 src=\"img/static_energy_" << filename() << ".png\" /></div>";
   outfile << "<br />";
   outfile << "<h2>Dynamic Heider Energy</h2>"

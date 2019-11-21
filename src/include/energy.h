@@ -4,9 +4,6 @@
 #include <vector>
 #include "generator.h"
 
-// Global variables.
-extern std::vector<std::vector<double> > energy;
-
 // Global functions.
 double energyLow();
 double energyHigh();

@@ -35,9 +35,8 @@ PROB=-1
 PROB2=0
 #SEEDS=0
 #SEEDS=$(shell seq 1000)
-#SEEDS=$(shell seq 2000)
+SEEDS=$(shell seq 2000)
 #SEEDS=$(shell seq 9990 9999)
-SEEDS=1
 
 generator:
 	make -C src generator

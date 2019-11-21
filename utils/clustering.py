@@ -62,13 +62,13 @@ def plot(data, step):
 
     # plotting
     ax.scatter(*np.transpose(data), c=clusters)
+    #ax.set_xlim(0.0, 20.0)
     ax.axis("equal")
     title = "threshold: %f, number of clusters: %d, step: %d" % (thresh, len(set(clusters)), step)
     plt.title(title)
     fig.tight_layout()
 
     filename = out.replace(".png", "&step=%d.png" % (step))
-    #plt.show()
     plt.savefig(filename)
 
     text += str(len(set(clusters))) + "\t"
