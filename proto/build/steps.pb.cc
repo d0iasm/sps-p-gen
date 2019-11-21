@@ -161,7 +161,7 @@ void AddDescriptorsImpl() {
       "rgy\030\004 \001(\002\022\036\n\026static_energy_variance\030\005 \001("
       "\002\022\037\n\027dynamic_energy_variance\030\006 \001(\002\022\017\n\007x_"
       "value\030\007 \001(\002\022\017\n\007v_value\030\010 \001(\002\0321\n\010Particle"
-      "\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\017\n\007kparams\030\003 \003(\005\""
+      "\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\017\n\007kparams\030\003 \003(\021\""
       "\"\n\005Steps\022\031\n\005steps\030\001 \003(\0132\n.data.Stepb\006pro"
       "to3"
   };
@@ -291,18 +291,18 @@ bool Step_Particle::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated int32 kparams = 3;
+      // repeated sint32 kparams = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_SINT32>(
                  input, this->mutable_kparams())));
         } else if (
             static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_SINT32>(
                  1, 26u, input, this->mutable_kparams())));
         } else {
           goto handle_unusual;
@@ -346,14 +346,14 @@ void Step_Particle::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->y(), output);
   }
 
-  // repeated int32 kparams = 3;
+  // repeated sint32 kparams = 3;
   if (this->kparams_size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteTag(3, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
     output->WriteVarint32(static_cast< ::google::protobuf::uint32>(
         _kparams_cached_byte_size_));
   }
   for (int i = 0, n = this->kparams_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32NoTag(
+    ::google::protobuf::internal::WireFormatLite::WriteSInt32NoTag(
       this->kparams(i), output);
   }
 
@@ -381,7 +381,7 @@ void Step_Particle::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->y(), target);
   }
 
-  // repeated int32 kparams = 3;
+  // repeated sint32 kparams = 3;
   if (this->kparams_size() > 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
       3,
@@ -391,7 +391,7 @@ void Step_Particle::SerializeWithCachedSizes(
         static_cast< ::google::protobuf::int32>(
             _kparams_cached_byte_size_), target);
     target = ::google::protobuf::internal::WireFormatLite::
-      WriteInt32NoTagToArray(this->kparams_, target);
+      WriteSInt32NoTagToArray(this->kparams_, target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -411,10 +411,10 @@ size_t Step_Particle::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
-  // repeated int32 kparams = 3;
+  // repeated sint32 kparams = 3;
   {
     size_t data_size = ::google::protobuf::internal::WireFormatLite::
-      Int32Size(this->kparams_);
+      SInt32Size(this->kparams_);
     if (data_size > 0) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(

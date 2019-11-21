@@ -16,7 +16,7 @@ message Step {
     float x = 1;
     float y = 2;
     // use int instead of float because kparams are discrete values
-    repeated int32 kparams = 3;
+    repeated sint32 kparams = 3;
   }
 }
 

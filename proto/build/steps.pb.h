@@ -154,7 +154,7 @@ class Step_Particle : public ::google::protobuf::Message /* @@protoc_insertion_p
 
   // accessors -------------------------------------------------------
 
-  // repeated int32 kparams = 3;
+  // repeated sint32 kparams = 3;
   int kparams_size() const;
   void clear_kparams();
   static const int kKparamsFieldNumber = 3;
@@ -497,7 +497,7 @@ inline void Step_Particle::set_y(float value) {
   // @@protoc_insertion_point(field_set:data.Step.Particle.y)
 }
 
-// repeated int32 kparams = 3;
+// repeated sint32 kparams = 3;
 inline int Step_Particle::kparams_size() const {
   return kparams_.size();
 }
