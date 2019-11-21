@@ -5,22 +5,18 @@ package data;
 message Step {
   int32 step = 1;
   repeated Particle particles = 2;
-  double static_energy = 3;
-  double dynamic_energy = 4;
-  double static_energy_variance = 5;
-  double dynamic_energy_variance = 6;
-  double x_value = 7;
-  double v_value = 8;
+  float static_energy = 3;
+  float dynamic_energy = 4;
+  float static_energy_variance = 5;
+  float dynamic_energy_variance = 6;
+  float x_value = 7;
+  float v_value = 8;
 
   message Particle {
-    int32 id = 1;
-    double x = 2;
-    double y = 3;
-    repeated Kparam kparams = 4;
-    message Kparam {
-      int32 id = 1;
-      float val = 2;
-    }
+    float x = 1;
+    float y = 2;
+    // use int instead of float because kparams are discrete values
+    repeated int32 kparams = 3;
   }
 }
 

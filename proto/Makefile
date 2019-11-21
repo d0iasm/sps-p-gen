@@ -8,7 +8,8 @@ build: $(INPUTS)
 	protoc -I=$(SRC_DIR) --python_out=$(PY_DST_DIR) $(INPUTS)
 
 clean:
-	rm $(DST_DIR)/*
+	rm $(CPP_DST_DIR)/*
+	rm $(PY_DST_DIR)/*_pb2.py
 
 clean-data:
 	rm ./bin/*

@@ -66,6 +66,6 @@ static std::ofstream outfile_json;
 static std::string path = ".";
 static std::string path_json = "./json";
 static std::string path_proto = "./proto/bin";
-static int thinning = 100;
+static int thinning = 200;
 
 #endif // GENERATOR_H

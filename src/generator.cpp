@@ -164,16 +164,13 @@ static Point noiseP2() {
 static void storeStep(XV xv, int step) {
   auto *s = steps.add_steps();
   s->set_step(step);
-  for (int i=0; i<NPOINTS; i++) {
+  for (int i=0; i < NPOINTS; i++) {
     auto *p = s->add_particles();
-    p->set_id(i);
     p->set_x(points[i].x);
     p->set_y(points[i].y);
 
     for (int j = 0; j < NPOINTS; j++) {
-      auto *k = p->add_kparams();
-      k->set_id(j);
-      k->set_val(kparam[i][j]);
+      p->add_kparams(int(kparam[i][j] * 10));
     }
   }
   s->set_static_energy(energyAverage(0, 0));
