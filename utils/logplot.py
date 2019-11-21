@@ -1,17 +1,21 @@
 import argparse
-import json
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+import steps_pb2
 
 
 src = ''
 out = ''
 
 
-def read_json():
-    with open(src) as f:
-        data = json.load(f)
+def read_proto():
+    data = steps_pb2.Steps()
+
+    # Read data from a protocol buffer binary
+    f = open(src, "rb")
+    data.ParseFromString(f.read())
+    f.close()
     return data
 
 
@@ -37,7 +41,7 @@ def parse_args():
     global out
 
     parser = argparse.ArgumentParser(
-            description='Generate an image from a json file.')
+            description='Generate an image from a data file.')
     parser.add_argument('-src', required=True,
             help='The source file path')
     parser.add_argument('-out', required=True,
@@ -50,17 +54,16 @@ def parse_args():
 
 if __name__ == '__main__':
     parse_args()
-    a = src.split('.')
-    extension = a[len(a)-1]
-    if extension != 'json':
-        sys.exit('Error: ' + extension + ' file is not supported.')
-    data = read_json()
-    # Save an image for static energy.
-    e_ave = [y['energy']['static']['average'] for y in data]
-    e_var = [y['energy']['static']['variance'] for y in data]
-    plot(len(data), e_ave, e_var, False)
+    data = read_proto()
+    n = len(data.steps)
 
-    # Save an image for dynamic energy.
-    e_ave = [y['energy']['dynamic']['average'] for y in data]
-    e_var = [y['energy']['dynamic']['variance'] for y in data]
-    plot(len(data), e_ave, e_var, True)
+    # Plot for static energy.
+    static_energy = [step.static_energy for step in data.steps]
+    static_energy_variance = [step.static_energy_variance for step in data.steps]
+    plot(n, static_energy, static_energy_variance, False)
+
+    # Plot for dynamic energy.
+    dynamic_energy = [step.dynamic_energy for step in data.steps]
+    dynamic_energy_variance = [step.dynamic_energy_variance for step in data.steps]
+    plot(n, dynamic_energy, dynamic_energy_variance, True)
+

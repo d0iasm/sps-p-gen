@@ -1,5 +1,4 @@
 import argparse
-import json
 import fcntl
 import sys
 import math
@@ -7,6 +6,7 @@ import re
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.cluster import hierarchy
+import steps_pb2
 
 
 src = ''
@@ -17,12 +17,16 @@ text = ''
 cycle = 20
 thinning = 200
 # 0.1 (300,000~) 0.2 (400,000~) 0.3 (500,000~) 0.4 (600,000~) 0.5 (700,000~) 0.6 (800,000~) 0.7 (1,000,000~) 0.8 (1,200,000) 0.9 (1,400,000) 1.0 (1,600,000)
-steps = [3000, 4000, 5000, 6000, 7000, 8000, 10000, 12000, 14000, 16000]
+print_steps = [300000, 400000, 500000, 600000, 700000, 800000, 1000000, 1200000, 1400000, 1600000]
 
 
-def read_json():
-    with open(src) as f:
-        data = json.load(f)
+def read_proto():
+    data = steps_pb2.Steps()
+
+    # Read data from a protocol buffer binary
+    f = open(src, "rb")
+    data.ParseFromString(f.read())
+    f.close()
     return data
 
 
@@ -95,7 +99,7 @@ def parse_args():
     global out
 
     parser = argparse.ArgumentParser(
-            description='Generate an image from a json file.')
+            description='Generate an image from a data file.')
     parser.add_argument('-src', required=True,
             help='The source file path')
     parser.add_argument('-out', required=True,
@@ -108,14 +112,16 @@ def parse_args():
 
 if __name__ == '__main__':
     parse_args()
-    a = src.split('.')
-    extension = a[len(a)-1]
-    if extension != 'json':
-        sys.exit('Error: ' + extension + ' file is not supported.')
-    raw_data = read_json()
-    points = [d['points'] for d in raw_data]
+    data = read_proto()
+    n = len(data.steps)
+
+    particles = [step.particles for step in data.steps]
     init_text()
-    for step in steps:
-        data = np.array([[p['x'], p['y']] for p in points[step]])
-        plot(data, step*thinning)
+    for step in print_steps:
+        i = step//thinning
+        if i >= len(particles):
+            break
+        particle = np.array([[p.x, p.y] for p in particles[i]])
+        plot(particle, step)
     write_clustering_csv()
+

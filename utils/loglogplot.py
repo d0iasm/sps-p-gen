@@ -1,20 +1,24 @@
 import argparse
-import json
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from cycler import cycler
 from matplotlib.colors import Normalize
 from matplotlib.colorbar import ColorbarBase
+import steps_pb2
 
 
 src = ''
 out = ''
 
 
-def read_json():
-    with open(src) as f:
-        data = json.load(f)
+def read_proto():
+    data = steps_pb2.Steps()
+
+    # Read data from a protocol buffer binary
+    f = open(src, "rb")
+    data.ParseFromString(f.read())
+    f.close()
     return data
 
 
@@ -49,7 +53,7 @@ def parse_args():
     global out
 
     parser = argparse.ArgumentParser(
-            description='Generate an image from a json file.')
+            description='Generate an image from a data file.')
     parser.add_argument('-src', required=True,
             help='The source file path')
     parser.add_argument('-out', required=True,
@@ -62,11 +66,11 @@ def parse_args():
 
 if __name__ == '__main__':
     parse_args()
-    a = src.split('.')
-    extension = a[len(a)-1]
-    if extension != 'json':
-        sys.exit('Error: ' + extension + ' file is not supported.')
-    data = read_json()
-    x = [d['xv']['x'] for d in data]
-    v = [d['xv']['v'] for d in data]
-    plot(len(data), x, v)
+    data = read_proto()
+    n = len(data.steps)
+
+    # Plot for XV.
+    x_value = [step.x_value for step in data.steps]
+    v_value = [step.v_value for step in data.steps]
+    plot(n, x_value, v_value)
+

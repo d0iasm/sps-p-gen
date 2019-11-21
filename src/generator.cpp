@@ -1,6 +1,7 @@
 // This is main file. It implements basic algorithm to calcualte next
-// step for all particles and output a HTML file embedded particle's X-Y
-// coordinate and color as a json format inside a script tag.
+// step for all particles and output a HTML file, a JS file to include
+// particle's X-Y coordinate and k parameters and a protobol buffer binary
+// to convey data to other script like Python.
 
 #include <iostream>
 #include <string>
@@ -433,7 +434,7 @@ static void usage() {
   std::cerr << "[ -init random/zero ]\n";
   std::cerr << "[ -gen number ] [ -cycle number ] [ -seed number ]\n";
   std::cerr << "[ -dynamic none/global-static-discrete/global-dynamic-discrete/local-static-discrete/local-dynamic-discrete/local-static-continuous/local-dynamic-continuous]\n";
-  std::cerr << "[ -path string ] [ -path_json string ]\n";
+  std::cerr << "[ -path_html string ] [ -path_proto string ]\n";
   std::cerr << "[ -p1 double ] [ -p2 double ]";
   std::cerr << "\n\n";
 
@@ -444,8 +445,7 @@ static void usage() {
   std::cerr << "-cycle      The length of periodic boundary. It is useless for open boundary.\n";
   std::cerr << "-seed       The seed number to be used for generating random number. Default value is 1.\n";
   std::cerr << "-dynamic    The flag to change the K parameters dinamically based on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.\n";
-  std::cerr << "-path       The path directory for a html file name.\n";
-  std::cerr << "-path_json  The path directory for a json file name.\n";
+  std::cerr << "-path_html       The path directory for a html file name.\n";
   std::cerr << "-path_proto The path directory for a protocol buffer binary.\n";
   std::cerr << "-p1         The probability of noise for updateing K params.\n";
   std::cerr << "-p2         The probability of noise for updateing paricle's positions.\n";
@@ -530,19 +530,10 @@ static void parseArgs(int argc, char **argv) {
       continue;
     }
 
-    if (strcmp("-path", argv[0]) == 0) {
+    if (strcmp("-path_html", argv[0]) == 0) {
       if (argc < 2)
         usage();
-      path = argv[1];
-      argc -= 2;
-      argv += 2;
-      continue;
-    }
-
-    if (strcmp("-path_json", argv[0]) == 0) {
-      if (argc < 2)
-        usage();
-      path_json = argv[1];
+      path_html = argv[1];
       argc -= 2;
       argv += 2;
       continue;
@@ -588,82 +579,6 @@ static void html() {
   outfile << "</body></html>\n";
 }
 
-static void json() {
-  outfile_json << "["; // Start of Json.
-  for (int i = 0; i < maxgen/thinning; i++) {
-    outfile_json << "{"; // Start of one step.
-    outfile_json << "\"points\":["; // Start of points.
-    for (int j = 0; j < point_result[i].size(); j++) {
-      Point &p = point_result[i][j];
-      outfile_json << "{\"x\":" << p.x
-              << ",\"y\":" << p.y
-              << ",\"color\":" << p.color << "}";
-      if (j != point_result[i].size() - 1) {
-        outfile_json << ",";
-      }
-    }
-    outfile_json << "],"; // End of points.
-    // Kparams.
-    outfile_json << "\"k\":{";
-    // All Kparams.
-    outfile_json << "\"all\":[";
-    for (int j = 0; j < NPOINTS; j++) {
-      outfile_json << "[";
-      for (int k = 0; k < NPOINTS; k++) {
-        outfile_json << kparam_result[i][j][k];
-        if (k != NPOINTS - 1)
-          outfile_json << ",";
-        }
-      outfile_json << "]";
-      if (j != NPOINTS - 1)
-        outfile_json << ",\n";
-    }
-    outfile_json << "],\n"; // End of k.all.
-    // Counting Kparams.
-    outfile_json << "\"count\":[";
-    int n = kparam_counter[i].size();
-    for (std::pair<double, int> e : kparam_counter[i]) {
-      outfile_json << "[" << e.first << "," << e.second << "]";
-      if (n > 1) {
-        outfile_json << ",";
-        n--;
-      }
-    }
-    outfile_json << "]"; // End of k.count.
-    outfile_json << "},\n"; // End of k.
-    // Energy.
-    outfile_json << "\"energy\":{";
-    outfile_json << "\"static\":{";
-    outfile_json << "\"average\":" << energy[i][0] << ",";
-    outfile_json << "\"variance\":" << energy[i][1];
-    outfile_json << "},"; // End of energy.static.
-    outfile_json << "\"dynamic\":{";
-    outfile_json << "\"average\":" << energy[i][2] << ",";
-    outfile_json << "\"variance\":" << energy[i][3];
-    outfile_json << "}"; // End of energy.dynamic.
-    outfile_json << "},\n"; // End of energy.
-    // XV.
-    outfile_json << "\"xv\":{";
-    outfile_json << "\"x\":" << xv[i].x << ",";
-    outfile_json << "\"v\":" << xv[i].v;
-    outfile_json << "}"; // End of xv.
-    outfile_json << "}\n"; // End of one step.
-    if (i < maxgen/thinning - 1)
-      outfile_json << ",";
-  }
-  outfile_json << "]"; // End on Json.
-}
-
-static void storeKparam() {
-  std::vector<std::vector<double> > k(NPOINTS);
-  for (int i = 0; i < NPOINTS; i++) {
-    for (int j = 0; j < NPOINTS; j++) {
-      k[i].push_back(kparam[i][j]);
-    }
-  }
-  kparam_result.push_back(k);
-}
-
 int main(int argc, char **argv) {
   // Verify that the version of the library that we linked against is
   // compatible with the version of the headers we compiled against.
@@ -671,8 +586,7 @@ int main(int argc, char **argv) {
 
   parseArgs(argc - 1, argv + 1);
 
-  outfile.open(path + "/" + filename() + ".html");
-  outfile_json.open(path_json + "/" + filename() + ".json");
+  outfile.open(path_html + "/" + filename() + ".html");
 
   srand(seed);
 
@@ -702,10 +616,7 @@ int main(int argc, char **argv) {
       noiseP1();
     }
 
-    // Store the current Kparam before update it.
     // Update K parameters based on the Energy.
-    if (i % thinning == 0)
-      storeKparam();
     updateKparam();
 
     // Update particle's positions based on Kano's model.
@@ -714,7 +625,6 @@ int main(int argc, char **argv) {
 
   js(steps);
   html();
-  json();
 
   std::fstream output(path_proto + "/" + filename() + ".bin", std::ios::out | std::ios::trunc | std::ios::binary);
   if (!steps.SerializeToOstream(&output)) {

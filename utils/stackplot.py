@@ -1,10 +1,10 @@
 import argparse
 import csv
-import json
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import steps_pb2
 
 
 src = ''
@@ -13,9 +13,14 @@ out = ''
 maxk = 1.0
 mink = -1.0
 
-def read_json():
-    with open(src) as f:
-        data = json.load(f)
+
+def read_proto():
+    data = steps_pb2.Steps()
+
+    # Read data from a protocol buffer binary
+    f = open(src, "rb")
+    data.ParseFromString(f.read())
+    f.close()
     return data
 
 
@@ -57,14 +62,15 @@ def plot(n, y):
     plt.savefig(out)
 
 
-def reshape_k(data):
-    y = []
-    for step in data:
-        x = {key/10:0 for key in range(int(mink*10), int(maxk*10)+1)}
-        for param_num in step['k']['count']:
-            x[param_num[0]] += param_num[1]
-        y.append(x)
-    return y
+def count_k(steps):
+    count = []
+    for step in steps:
+        dic = {key/10:0 for key in range(int(mink*10), int(maxk*10)+1)}
+        for particle in step.particles:
+            for kparam in particle.kparams:
+                dic[kparam/10] += 1
+        count.append(dic)
+    return count
 
 
 def parse_args():
@@ -72,7 +78,7 @@ def parse_args():
     global out
 
     parser = argparse.ArgumentParser(
-            description='Generate an image from a json file.')
+            description='Generate an image from a data file.')
     parser.add_argument('-src', required=True,
             help='The source file path')
     parser.add_argument('-out', required=True,
@@ -85,10 +91,9 @@ def parse_args():
 
 if __name__ == '__main__':
     parse_args()
-    a = src.split('.')
-    extension = a[len(a)-1]
-    if extension != 'json':
-        sys.exit('Error: ' + extension + ' file is not supported.')
-    data = read_json()
-    y = reshape_k(data)
-    plot(len(data), y)
+    data = read_proto()
+    n = len(data.steps)
+
+    kparams_count = count_k(data.steps)
+    plot(n, kparams_count)
+

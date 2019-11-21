@@ -62,9 +62,7 @@ static int maxgen = 50000;
 static Output output = HTML;
 static Init init_param = NORMAL;
 static std::ofstream outfile;
-static std::ofstream outfile_json;
-static std::string path = ".";
-static std::string path_json = "./json";
+static std::string path_html = ".";
 static std::string path_proto = "./proto/bin";
 static int thinning = 200;
 
