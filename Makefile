@@ -20,7 +20,7 @@ IMG_PATH=$(DEV_IMG)
 
 ENV=MPLBACKEND=Agg
 
-NPROC=40
+NPROC=50
 
 MAXGEN=1700000
 # for experiment of local-static-discrete
@@ -35,12 +35,9 @@ PROB=-1
 PROB2=0
 #SEEDS=0
 #SEEDS=$(shell seq 1000)
-#SEEDS=$(shell seq 1001 2000)
+#SEEDS=$(shell seq 2000)
 #SEEDS=$(shell seq 9990 9999)
-SEEDS=9999
-
-PROB=0
-MAXGEN=400000
+SEEDS=1
 
 generator:
 	make -C src generator

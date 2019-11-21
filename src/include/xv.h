@@ -9,13 +9,8 @@ struct XV {
   double v;
 };
 
-// Global variables for drawing a graph.
-extern Point center;
-extern std::vector<XV> xv;
-
 // Global functions.
 Point computeCenter();
-XV computeXV(Point *dydx);
-int classify();
+XV computeXV(Point *dydx, Point p);
 
 #endif // XV_H

@@ -18,11 +18,6 @@ enum Color {
   NONE,
 };
 
-enum Output {
-  HTML,
-  JSON,
-};
-
 enum Init {
   NORMAL,
   RANDOM,
@@ -54,12 +49,8 @@ extern std::string p2;
 static data::Steps steps;
 static double initial_kparam[2][2];
 static int timestep = 0;
-static std::vector<std::vector<Point>> point_result;
-static std::vector<std::vector<std::vector<double> > > kparam_result;
-static std::vector<std::map<double, int> > kparam_counter;
 static int seed = 0;
 static int maxgen = 50000;
-static Output output = HTML;
 static Init init_param = NORMAL;
 static std::ofstream outfile;
 static std::string path_html = ".";

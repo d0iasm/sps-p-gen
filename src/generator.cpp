@@ -27,10 +27,6 @@ std::string dynamic = "none";
 std::string p1 = "0";
 std::string p2 = "0";
 
-// Global variables declared in xv.h.
-Point center;
-std::vector<XV> xv;
-
 // Global variables declared in energy.cpp.
 std::vector<std::vector<double> > energy;
 
@@ -217,19 +213,14 @@ static void step(int step) {
   }
 
   if (step % thinning == 0) {
-    auto xv = computeXV(dxdy);
+    Point center = computeCenter();
+    auto xv = computeXV(dxdy, center);
     storeStep(xv, step);
   }
 
   memcpy(points, next, sizeof(next));
 
   if (step % thinning == 0) {
-    // Points' positions.
-    point_result.push_back(std::vector<Point>(points, points + NPOINTS));
-
-    // XV.
-    xv.push_back(computeXV(dxdy));
-
     // Energies.
     std::vector<double> e(4);
     e[0] = energyAverage(0, 0);
@@ -237,9 +228,6 @@ static void step(int step) {
     e[2] = energyAverageDist(0, 0);
     e[3] = energyVarianceDist();
     energy.push_back(e);
-
-    // Kparams.
-    kparam_counter.push_back(countKparam());
   }
 }
 
@@ -604,7 +592,6 @@ int main(int argc, char **argv) {
   }
 
   initPoints();
-  center = computeCenter();
 
   // Main loop.
   for (int i = 0; i < maxgen; i++) {
