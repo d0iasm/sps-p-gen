@@ -16,7 +16,7 @@ $ make && ./generator-p [options]
 $ ./generator-p [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -init random/zero ]
 [ -gen number ] [ -cycle number ] [ -seed number ]
 [ -dynamic none/global-static-discrete/global-dynamic-discrete/local-static-discrete/local-dynamic-discrete/local-static-continuous/local-dynamic-continuous]
-[ -path string ] [ -path_json string ] [ -p1 double ] [ -p2 double ]
+[ -path_html string ] [ -path_proto string ] [ -p1 double ] [ -p2 double ]
 
 -k1        K paramters. k01 means the degree how the type 0 particle likes the type 1 particle.
 -k2        K paramters. k00=ka, k01=kp+km, k10=kp-km, and k11=kb.
@@ -32,8 +32,8 @@ $ ./generator-p [ -k1 k00 k01 k10 k11 ] [ -k2 ka kb kp km ] [ -init random/zero 
 -cycle     The length of periodic boundary. It is useless for open boundary.
 -seed      The seed number to be used for generating random number. Default value is 1.
 -dynamic   The flag to change the K parameters dinamically based on static energy/dynamic energy/local static energy. K params are not updated if you omit thid flag.
--path      The path directory for a html file name.
--path_json The path directory for a json file name.
+-path_html The path directory for a html file.
+-path_json The path directory for a protocol buffer binary.
 -p1        The probability of noise for updateing K params.
 -p2        The probability of noise for updateing paricle's positions.
 ```

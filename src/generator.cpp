@@ -37,19 +37,6 @@ static double rungeKutta(double k1) {
   return (k1 + 2 * k2 + 2 * k3 + k4) * (0.002 / 6.0);
 }
 
-static std::map<double, int> countKparam() {
-  std::map<double, int> m;
-  for (int i = 0; i < NPOINTS; i++) {
-    for (int j = 0; j < NPOINTS; j++) {
-      if (m.find(kparam[i][j]) == m.end())
-        m.insert(std::make_pair(kparam[i][j], 1));
-      else
-        m[kparam[i][j]]++;
-    }
-  }
-  return m;
-}
-
 // Count balanced triangles based on average of asymmetrical edges.
 static int countBalanceAverage() {
   int count = 0;
@@ -250,7 +237,7 @@ static void initKparamWithK() {
   }
 }
 
-// Initialize K params with [-1.2..1.2]
+// Initialize K params with [-1.0..1.0]
 static void initKparamRandom() {
   for (int i = 0; i < NPOINTS; i++) {
     for (int j = 0; j < NPOINTS; j++) {

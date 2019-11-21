@@ -75,7 +75,7 @@ if __name__ == '__main__':
     particles = [step.particles for step in data.steps]
     clustering.init_text()
     for step in clustering.print_steps:
-        i = step//thinning
+        i = step//clustering.thinning
         if i >= len(particles):
             break
         particle = np.array([[p.x, p.y] for p in particles[i]])
