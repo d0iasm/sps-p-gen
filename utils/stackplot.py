@@ -13,6 +13,8 @@ out = ''
 maxk = 1.0
 mink = -1.0
 
+thinning = 200
+
 
 def read_proto():
     data = steps_pb2.Steps()
@@ -27,8 +29,7 @@ def read_proto():
 def plot(n, y):
     fig, ax = plt.subplots()
 
-    #x = np.arange(n)
-    x = np.arange(0, 100*n, 100)
+    x = np.arange(0, thinning*n, thinning)
 
     # Get labels which have a value more than 0.
     labels = [None for _ in range(len(y[0]))]

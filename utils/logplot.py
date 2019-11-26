@@ -8,6 +8,8 @@ import steps_pb2
 src = ''
 out = ''
 
+thinning = 200
+
 
 def read_proto():
     data = steps_pb2.Steps()
@@ -22,8 +24,7 @@ def read_proto():
 def plot(n, e_ave, e_var, is_dynamic):
     fig, ax = plt.subplots()
 
-    #x = np.arange(n)
-    x = np.arange(0, 100*n, 100)
+    x = np.arange(0, thinning*n, thinning)
 
     ax.plot(x, e_ave, label='Average')
     #ax.plot(x, e_var, label='Variance')

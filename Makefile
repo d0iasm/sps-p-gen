@@ -118,19 +118,23 @@ img-p: img-energy-p img-kparam-p img-xv-p
 dev: gen img-all
 	cp -r css $(DEV)
 	cp -r js $(DEV)
+	rm js/data/*
 
 dev-p: gen-p img-all-p
 	cp -r css $(DEV)
 	cp -r js $(DEV)
+	rm js/data/*
 
 dev-all: dev dev-p
 
 public: dev-all
 	cp -r css $(PUBLIC)
 	cp -r js $(PUBLIC)
+	rm js/data/*
 	cp -r img $(PUBLIC)
 	./gen_index.sh
 	mv *.html $(PUBLIC)
 
 clean:
 	make -C src clean
+	rm js/data/*
