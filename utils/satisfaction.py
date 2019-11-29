@@ -39,6 +39,7 @@ def plot(n, satisfactions, k_average):
 
     ave = [a/len(satisfactions) for a in ave]
     ax.plot(x, ave, color='blue', linewidth=4, alpha=0.7)
+    ax.set_ylim(0, 2352) # The maximum satisfaction is 2352 (=49P2)
 
     subax = ax.twinx()
     subax.plot(x, k_average, color='orange', linewidth=4, alpha=0.7, label='K average')

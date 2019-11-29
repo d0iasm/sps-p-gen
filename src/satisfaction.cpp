@@ -6,6 +6,7 @@
 
 // Calcualte the satisfaction of a target particle. 
 // The number of triangles is 2352 (=49P2).
+// The minimum satisfaction is 0 and the maximum is 2352 (= 1.0*2352).
 double satisfaction(int p) {
   double sum = 0;
   for (int o=0; o < NPOINTS; o++) {
