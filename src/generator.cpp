@@ -15,8 +15,9 @@
 #include "energy.h"
 #include "gen_js.h"
 #include "xv.h"
-#include "generator.h"
+#include "satisfaction.h"
 #include "steps.pb.h"
+#include "generator.h"
 
 // Global variables.
 double kparam[NPOINTS][NPOINTS];
@@ -153,6 +154,8 @@ static void storeStep(XV xv, int step) {
     for (int j = 0; j < NPOINTS; j++) {
       p->add_kparams(int(kparam[i][j] * 10));
     }
+
+    p->set_satisfaction(satisfaction(i));
   }
   s->set_static_energy(energyAverage(0, 0));
   s->set_dynamic_energy(energyAverageDist(0, 0));
@@ -392,6 +395,8 @@ static void printBody() {
   outfile << "<br />";
   outfile << "<h2>Dynamic Heider Energy</h2>"
           << "<div><img width=350 src=\"img/dynamic_energy_" << filename() << ".png\" /></div>";
+  outfile << "<h2>Satisfactions</h2>"
+          << "<div><img width=350 src=\"img/satisfaction_" << filename() << ".png\" /></div>";
   /*
   outfile << "<br />";
   outfile << "<h2>X-V Log Log Plot</h2>"

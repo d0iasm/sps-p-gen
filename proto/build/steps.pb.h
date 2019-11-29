@@ -178,6 +178,12 @@ class Step_Particle : public ::google::protobuf::Message /* @@protoc_insertion_p
   float y() const;
   void set_y(float value);
 
+  // float satisfaction = 4;
+  void clear_satisfaction();
+  static const int kSatisfactionFieldNumber = 4;
+  float satisfaction() const;
+  void set_satisfaction(float value);
+
   // @@protoc_insertion_point(class_scope:data.Step.Particle)
  private:
 
@@ -186,6 +192,7 @@ class Step_Particle : public ::google::protobuf::Message /* @@protoc_insertion_p
   mutable int _kparams_cached_byte_size_;
   float x_;
   float y_;
+  float satisfaction_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_steps_2eproto::TableStruct;
 };
@@ -525,6 +532,20 @@ inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
 Step_Particle::mutable_kparams() {
   // @@protoc_insertion_point(field_mutable_list:data.Step.Particle.kparams)
   return &kparams_;
+}
+
+// float satisfaction = 4;
+inline void Step_Particle::clear_satisfaction() {
+  satisfaction_ = 0;
+}
+inline float Step_Particle::satisfaction() const {
+  // @@protoc_insertion_point(field_get:data.Step.Particle.satisfaction)
+  return satisfaction_;
+}
+inline void Step_Particle::set_satisfaction(float value) {
+  
+  satisfaction_ = value;
+  // @@protoc_insertion_point(field_set:data.Step.Particle.satisfaction)
 }
 
 // -------------------------------------------------------------------

@@ -8,13 +8,13 @@
 
 // Calculate an energy for a triangle using Heider Balance theory.
 // The triangle has directed, p->o, o->x, and p->x, edges.
-static double heider(int p, int o, int x) {
+double heider(int p, int o, int x) {
   return kparam[p][o] * kparam[o][x] * kparam[p][x];
 }
 
 // Calculate an energy for a triangle using Heider Balance theory.
 // The triangle has directed, p->o, o->x, and p->x, edges.
-static double heiderSpaceLocality(int p, int o, int x) {
+double heiderSpaceLocality(int p, int o, int x) {
   Point &pi = points[p];
   Point &pj = points[o];
   Point &pk = points[x];
@@ -176,25 +176,4 @@ double energyLocalDist(int p, int o) {
     sum += heiderSpaceLocality(p, o, x);
 	}
   return -sum / (NPOINTS - 2);
-}
-
-// Reduce K param's diversity.
-double cost(int i) {
-  Point &pi = points[i];
-  double average = 0.0;
-  double sum = 0.0;
-
-  for (int j=0; j < NPOINTS; j++) {
-    if (i == j)
-      continue;
-    average += kparam[i][j];
-  }
-  average /= (NPOINTS - 1);
-
-  for (int j=0; j < NPOINTS; j++) {
-    if (i == j)
-      continue;
-    sum += (kparam[i][j] - average) * (kparam[i][j] - average);
-  }
-  return sum / (NPOINTS-1);
 }

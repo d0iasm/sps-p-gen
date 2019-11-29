@@ -102,6 +102,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_Particle, x_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_Particle, y_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_Particle, kparams_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step_Particle, satisfaction_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::data::Step, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -124,8 +125,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::data::Step_Particle)},
-  { 8, -1, sizeof(::data::Step)},
-  { 21, -1, sizeof(::data::Steps)},
+  { 9, -1, sizeof(::data::Step)},
+  { 22, -1, sizeof(::data::Steps)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -155,18 +156,18 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\013steps.proto\022\004data\"\201\002\n\004Step\022\014\n\004step\030\001 \001"
+      "\n\013steps.proto\022\004data\"\227\002\n\004Step\022\014\n\004step\030\001 \001"
       "(\005\022&\n\tparticles\030\002 \003(\0132\023.data.Step.Partic"
       "le\022\025\n\rstatic_energy\030\003 \001(\002\022\026\n\016dynamic_ene"
       "rgy\030\004 \001(\002\022\036\n\026static_energy_variance\030\005 \001("
       "\002\022\037\n\027dynamic_energy_variance\030\006 \001(\002\022\017\n\007x_"
-      "value\030\007 \001(\002\022\017\n\007v_value\030\010 \001(\002\0321\n\010Particle"
-      "\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\017\n\007kparams\030\003 \003(\021\""
-      "\"\n\005Steps\022\031\n\005steps\030\001 \003(\0132\n.data.Stepb\006pro"
-      "to3"
+      "value\030\007 \001(\002\022\017\n\007v_value\030\010 \001(\002\032G\n\010Particle"
+      "\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\017\n\007kparams\030\003 \003(\021\022"
+      "\024\n\014satisfaction\030\004 \001(\002\"\"\n\005Steps\022\031\n\005steps\030"
+      "\001 \003(\0132\n.data.Stepb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 323);
+      descriptor, 345);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "steps.proto", &protobuf_RegisterTypes);
 }
@@ -192,6 +193,7 @@ void Step_Particle::InitAsDefaultInstance() {
 const int Step_Particle::kXFieldNumber;
 const int Step_Particle::kYFieldNumber;
 const int Step_Particle::kKparamsFieldNumber;
+const int Step_Particle::kSatisfactionFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Step_Particle::Step_Particle()
@@ -207,15 +209,15 @@ Step_Particle::Step_Particle(const Step_Particle& from)
       kparams_(from.kparams_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&x_, &from.x_,
-    static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-    reinterpret_cast<char*>(&x_)) + sizeof(y_));
+    static_cast<size_t>(reinterpret_cast<char*>(&satisfaction_) -
+    reinterpret_cast<char*>(&x_)) + sizeof(satisfaction_));
   // @@protoc_insertion_point(copy_constructor:data.Step.Particle)
 }
 
 void Step_Particle::SharedCtor() {
   ::memset(&x_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
+      reinterpret_cast<char*>(&satisfaction_) -
+      reinterpret_cast<char*>(&x_)) + sizeof(satisfaction_));
 }
 
 Step_Particle::~Step_Particle() {
@@ -248,8 +250,8 @@ void Step_Particle::Clear() {
 
   kparams_.Clear();
   ::memset(&x_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
+      reinterpret_cast<char*>(&satisfaction_) -
+      reinterpret_cast<char*>(&x_)) + sizeof(satisfaction_));
   _internal_metadata_.Clear();
 }
 
@@ -310,6 +312,20 @@ bool Step_Particle::MergePartialFromCodedStream(
         break;
       }
 
+      // float satisfaction = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(37u /* 37 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &satisfaction_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -357,6 +373,11 @@ void Step_Particle::SerializeWithCachedSizes(
       this->kparams(i), output);
   }
 
+  // float satisfaction = 4;
+  if (this->satisfaction() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->satisfaction(), output);
+  }
+
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
@@ -392,6 +413,11 @@ void Step_Particle::SerializeWithCachedSizes(
             _kparams_cached_byte_size_), target);
     target = ::google::protobuf::internal::WireFormatLite::
       WriteSInt32NoTagToArray(this->kparams_, target);
+  }
+
+  // float satisfaction = 4;
+  if (this->satisfaction() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->satisfaction(), target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -437,6 +463,11 @@ size_t Step_Particle::ByteSizeLong() const {
     total_size += 1 + 4;
   }
 
+  // float satisfaction = 4;
+  if (this->satisfaction() != 0) {
+    total_size += 1 + 4;
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -471,6 +502,9 @@ void Step_Particle::MergeFrom(const Step_Particle& from) {
   if (from.y() != 0) {
     set_y(from.y());
   }
+  if (from.satisfaction() != 0) {
+    set_satisfaction(from.satisfaction());
+  }
 }
 
 void Step_Particle::CopyFrom(const ::google::protobuf::Message& from) {
@@ -500,6 +534,7 @@ void Step_Particle::InternalSwap(Step_Particle* other) {
   kparams_.InternalSwap(&other->kparams_);
   swap(x_, other->x_);
   swap(y_, other->y_);
+  swap(satisfaction_, other->satisfaction_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
 }
 

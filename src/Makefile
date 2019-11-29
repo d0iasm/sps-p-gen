@@ -5,7 +5,7 @@ TOP=$(CURDIR)
 INCLUDE=-I$(TOP)/include -I$(TOP)/../proto/build
 
 common-files = ../proto/build/steps.pb.cc
-common-files += generator.cpp gen_js.cpp energy.cpp xv.cpp dynamic.cpp
+common-files += generator.cpp gen_js.cpp energy.cpp xv.cpp dynamic.cpp satisfaction.cpp
 
 src-o += $(common-files)
 include $(TOP)/open-boundary/Makefile.inc

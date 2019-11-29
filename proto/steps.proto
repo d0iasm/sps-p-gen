@@ -17,6 +17,7 @@ message Step {
     float y = 2;
     // use int instead of float because kparams are discrete values
     repeated sint32 kparams = 3;
+    float satisfaction = 4;
   }
 }
 
