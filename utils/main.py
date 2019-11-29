@@ -1,9 +1,10 @@
 import argparse
 import numpy as np
-import stackplot
-import logplot
-import loglogplot
+import kparam
+import energy
+import xv
 import clustering
+import satisfaction
 import steps_pb2
 
 
@@ -34,17 +35,20 @@ def parse_args():
     src = args.src
     out = args.out
 
-    stackplot.src = args.src
-    stackplot.out = out.replace("b=", "kparam_b=", 1)
+    kparam.src = args.src
+    kparam.out = out.replace("b=", "kparam_b=", 1)
 
-    logplot.src = args.src
-    logplot.out = out.replace("b=", "energy_b=", 1)
+    energy.src = args.src
+    energy.out = out.replace("b=", "energy_b=", 1)
 
-    loglogplot.src = args.src
-    loglogplot.out = out.replace("b=", "xv_b=", 1)
+    xv.src = args.src
+    xv.out = out.replace("b=", "xv_b=", 1)
 
     clustering.src = args.src
     clustering.out = out.replace("b=", "clustering_b=", 1)
+
+    satisfaction.src = args.src
+    satisfaction.out = out.replace("b=", "satisfaction_b=", 1)
 
 
 if __name__ == '__main__':
@@ -53,23 +57,23 @@ if __name__ == '__main__':
     n = len(data.steps)
 
     # Plot for K param.
-    kparams_count = stackplot.count_k(data.steps)
-    stackplot.plot(n, kparams_count)
+    kparams_count = kparam.count_k(data.steps)
+    kparam.plot(n, kparams_count)
 
     # Plot for static energy.
     static_energy = [step.static_energy for step in data.steps]
     static_energy_variance = [step.static_energy_variance for step in data.steps]
-    logplot.plot(n, static_energy, static_energy_variance, False)
+    energy.plot(n, static_energy, static_energy_variance, False)
 
     # Plot for dynamic energy.
     dynamic_energy = [step.dynamic_energy for step in data.steps]
     dynamic_energy_variance = [step.dynamic_energy_variance for step in data.steps]
-    logplot.plot(n, dynamic_energy, dynamic_energy_variance, True)
+    energy.plot(n, dynamic_energy, dynamic_energy_variance, True)
 
     # Plot for XV.
     x_value = [step.x_value for step in data.steps]
     v_value = [step.v_value for step in data.steps]
-    loglogplot.plot(n, x_value, v_value)
+    xv.plot(n, x_value, v_value)
 
     # Plot for clustering.
     particles = [step.particles for step in data.steps]
@@ -82,3 +86,6 @@ if __name__ == '__main__':
         clustering.plot(particle, step)
     clustering.write_clustering_csv()
 
+    # Plot for satisfaction.
+    satisfactions = satisfaction.reshape(data.steps)
+    satisfaction.plot(n, satisfactions)
