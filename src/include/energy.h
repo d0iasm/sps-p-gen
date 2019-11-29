@@ -5,6 +5,8 @@
 #include "generator.h"
 
 // Global functions.
+double heider(int, int, int);
+double heiderSpaceLocality(int, int, int);
 double energyLow();
 double energyHigh();
 double energyAverage(int, int);
