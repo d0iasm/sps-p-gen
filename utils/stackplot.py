@@ -56,7 +56,7 @@ def plot(n, y):
     # x: 1d array of dimension N.
     # y: 2d array (dimension MxN), or sequence of
     #    1d arrays (each dimension 1xN)
-    ax.stackplot(x, list(zip(*y)), labels=labels, colors=pal)
+    ax.stackplot(x, list(zip(*y)), labels=labels, colors=pal, edgecolors='black', linewidths=.5)
     leg = ax.legend(loc='upper right', prop={'size': 6})
     leg.get_frame().set_alpha(0.4)
 
