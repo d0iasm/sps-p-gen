@@ -407,6 +407,7 @@ static void printBody() {
   outfile << "<div class=container>";
   int s[10] = {300000, 400000, 500000, 600000, 700000, 800000, 1000000, 1200000, 1400000, 1600000};
   for (int i=0; i<10; i++) {
+    if (s[i] > maxgen) break;
     outfile << "<img width=350 src=\"img/clustering_" << filename() << "&step=" << s[i] << ".png\" />";
   }
   outfile << "</div>";
@@ -589,7 +590,7 @@ int main(int argc, char **argv) {
   initPoints();
 
   // Main loop.
-  for (int i = 0; i < maxgen; i++) {
+  for (int i = 0; i <= maxgen; i++) {
   // Experiment for the movement of particles.
     if (200000 < i && i < 800000 && i % 100000 == 0) {
       noiseP1();
