@@ -88,4 +88,5 @@ if __name__ == '__main__':
 
     # Plot for satisfaction.
     satisfactions = satisfaction.reshape(data.steps)
-    satisfaction.plot(n, satisfactions)
+    k_average = satisfaction.k_average(data.steps)
+    satisfaction.plot(n, satisfactions, k_average)
