@@ -39,7 +39,7 @@ def plot(n, satisfactions, k_average):
 
     ave = [a/len(satisfactions) for a in ave]
     ax.plot(x, ave, color='blue', linewidth=4, alpha=0.7)
-    ax.set_ylim(0, 2352) # The maximum satisfaction is 2352 (=49P2)
+    ax.set_ylim(0, 3000)
 
     subax = ax.twinx()
     subax.plot(x, k_average, color='orange', linewidth=4, alpha=0.7, label='K average')
@@ -62,10 +62,11 @@ def plot(n, satisfactions, k_average):
 
 
 def calc_k_ave(particles):
-    s = 0
+    s = 0.0
     for p in particles:
         for k in p.kparams:
-            s += k
+            # K params are stored as an integer.
+            s += (k/10)
     return s / (len(particles) * len(particles[0].kparams))
 
 
