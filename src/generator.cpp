@@ -395,13 +395,13 @@ static void printBody() {
   outfile << "<br />";
   outfile << "<h2>Dynamic Heider Energy</h2>"
           << "<div><img width=350 src=\"img/dynamic_energy_" << filename() << ".png\" /></div>";
+  /*
   outfile << "<h2>Satisfactions</h2>"
           << "<div><img width=350 src=\"img/satisfaction_" << filename() << ".png\" /></div>";
-  /*
+          */
   outfile << "<br />";
   outfile << "<h2>X-V Log Log Plot</h2>"
           << "<div><img width=350 src=\"img/xv_" << filename() << ".png\" /></div>";
-          */
   outfile << "</div></div></div>";
   // clustering
   outfile << "<div class=container>";
