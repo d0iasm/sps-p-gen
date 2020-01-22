@@ -198,7 +198,7 @@ relationButton.addEventListener('click', function() {
 });
 
 document.getElementById('timestep').addEventListener('change', e => {
-  timestep = parseInt(e.currentTarget.value / 100);
+  timestep = parseInt(e.currentTarget.value / 200);
   redraw();
 });
 
