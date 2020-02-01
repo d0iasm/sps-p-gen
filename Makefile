@@ -64,7 +64,7 @@ gen: generator
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 gen-p: generator-p
-	parallel -j $(NPROC) $(SRC)/generator-p -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) -path_proto $(PROTO_PATH) \
+	parallel -j $(NPROC) $(SRC)/generator-p -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) \
 		-cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
