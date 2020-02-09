@@ -11,6 +11,11 @@ typedef double EnergyFn(int, int);
 static void updateDiscrete(EnergyFn *energy) {
   int p = rand() % NPOINTS;
   int o = rand() % NPOINTS;
+  // TODO: AVOID self preference!!!
+  //while (p == o) {
+    //o = rand() % NPOINTS;
+  //}
+
   double oldk = kparam[p][o];
 
   double oldEnergy = energy(p, o);
