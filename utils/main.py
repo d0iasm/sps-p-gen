@@ -77,13 +77,21 @@ if __name__ == '__main__':
 
     # Plot for clustering.
     particles = [step.particles for step in data.steps]
+    # Initialize the global variable `text`.
     clustering.init_text()
+    # The final step for output.
+    final_step = 0
     for step in clustering.print_steps:
         i = step//clustering.thinning
         if i >= len(particles):
             break
         particle = np.array([[p.x, p.y] for p in particles[i]])
-        clustering.plot(particle, step)
+        cluster_size = clustering.plot(particle, step)
+        final_step = step//clustering.thinning
+    # Output the final step.
+    clustering.text += str(cluster_size) + "\t" + \
+        str(data.steps[final_step].static_energy) + "\t" + \
+        str(data.steps[final_step].dynamic_energy) + "\t"
     clustering.write_clustering_csv()
 
     # Plot for satisfaction.

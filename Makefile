@@ -36,10 +36,10 @@ DYNAMICS=local-dynamic-discrete
 ###################################
 #####    Basic experiment     #####
 ###################################
-MAXGEN=300001
+MAXGEN=500000
 PROB=0
 PROB2=0
-SEEDS=$(shell seq 1)
+SEEDS=$(shell seq 5000)
 
 ###################################
 ##### Perturbation experiment #####

@@ -53,8 +53,6 @@ def periodic_distance(p1, p2):
 
 
 def plot(data, step):
-    global text
-
     fig, ax = plt.subplots()
 
     # clustering
@@ -73,7 +71,6 @@ def plot(data, step):
     filename = out.replace(".png", "&step=%d.png" % (step))
     plt.savefig(filename)
 
-    text += str(len(set(clusters))) + "\t"
     return len(set(clusters))
 
 
@@ -94,7 +91,7 @@ def init_text():
         seed = match.group(1)
         text += seed + "\t"
     else:
-        text += "unknown\t"
+        text += "unknown" + "\t"
 
 
 def parse_args():
@@ -118,20 +115,30 @@ if __name__ == '__main__':
     data = read_proto()
     n = len(data.steps)
 
-    particles = [step.particles for step in data.steps]
+    # Initialize the global variable `text`.
     init_text()
+    # The final step for output.
+    final_step = 0
+
+    particles = [step.particles for step in data.steps]
     for step in print_steps:
         i = step//thinning
         if i >= len(particles):
             break
         particle = np.array([[p.x, p.y] for p in particles[i]])
         cluster_size = plot(particle, step)
+        final_step = step//thinning
         data.steps[step//thinning].clustering = cluster_size
+
+    # Output the final step.
+    text += str(cluster_size) + "\t" + \
+        str(data.steps[final_step].static_energy) + "\t" + \
+        str(data.steps[final_step].dynamic_energy) + "\t"
 
     # Re-write data
     f = open(src, "wb")
     f.truncate(0)
     f.write(data.SerializeToString())
     f.close()
-
+    
     write_clustering_csv()
