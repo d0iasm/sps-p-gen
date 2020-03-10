@@ -59,9 +59,14 @@ $ firebase deploy
 ```
 
 ### Dependencies
-- python libraries
+- python libraries: You can install the following libraries by `pip install
+  <library-name>`.
   - numpy
   - matplotlib
   - scipy
-- npm
+- npm: cross-platform JavaScript run-time environment.
 - firebase-tools
+- [Protocol Buffers](https://github.com/protocolbuffers/protobuf):
+  language-neutral, platform-neutral, extensible mechanism for serializing
+  structured data. To install protobuf, you can see [the
+  instruction](https://github.com/protocolbuffers/protobuf/blob/master/src/README.md)

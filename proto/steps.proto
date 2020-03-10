@@ -11,6 +11,7 @@ message Step {
   float dynamic_energy_variance = 6;
   float x_value = 7;
   float v_value = 8;
+  int32 clustering = 9;
 
   message Particle {
     float x = 1;

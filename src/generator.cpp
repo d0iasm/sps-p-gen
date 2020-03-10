@@ -163,6 +163,8 @@ static void storeStep(XV xv, int step) {
   s->set_dynamic_energy_variance(energyVarianceDist());
   s->set_x_value(xv.x);
   s->set_v_value(xv.v);
+  // This is a temporary value. It's updated by the utils/clustering.py.
+  s->set_clustering(0);
 }
 
 // Inject noise to 1 particle per a step.

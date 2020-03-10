@@ -24,7 +24,7 @@ UTIL_CLUSTERING=$(UTIL)/clustering.py
 ENV=MPLBACKEND=Agg
 
 # The number of threads.
-NPROC=50
+NPROC=120
 
 # Common settings
 CYCLES=20
@@ -36,10 +36,10 @@ DYNAMICS=local-dynamic-discrete
 ###################################
 #####    Basic experiment     #####
 ###################################
-MAXGEN=500000
+MAXGEN=300001
 PROB=0
 PROB2=0
-SEEDS=$(shell seq 5000)
+SEEDS=$(shell seq 1)
 
 ###################################
 ##### Perturbation experiment #####

@@ -51,8 +51,10 @@ def periodic_distance(p1, p2):
                 closest = tmp
     return closest
 
+
 def plot(data, step):
     global text
+
     fig, ax = plt.subplots()
 
     # clustering
@@ -72,6 +74,7 @@ def plot(data, step):
     plt.savefig(filename)
 
     text += str(len(set(clusters))) + "\t"
+    return len(set(clusters))
 
 
 def write_clustering_csv():
@@ -122,6 +125,13 @@ if __name__ == '__main__':
         if i >= len(particles):
             break
         particle = np.array([[p.x, p.y] for p in particles[i]])
-        plot(particle, step)
-    write_clustering_csv()
+        cluster_size = plot(particle, step)
+        data.steps[step//thinning].clustering = cluster_size
 
+    # Re-write data
+    f = open(src, "wb")
+    f.truncate(0)
+    f.write(data.SerializeToString())
+    f.close()
+
+    write_clustering_csv()
