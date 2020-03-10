@@ -56,7 +56,7 @@ def plot(data, step):
     fig, ax = plt.subplots()
 
     # clustering
-    thresh = 1.5
+    thresh = 1.2
     clusters = hierarchy.fclusterdata(data, thresh,
             criterion="distance", metric=periodic_distance)
 
@@ -115,12 +115,13 @@ if __name__ == '__main__':
     data = read_proto()
     n = len(data.steps)
 
+    particles = [step.particles for step in data.steps]
+
     # Initialize the global variable `text`.
     init_text()
     # The final step for output.
     final_step = 0
-
-    particles = [step.particles for step in data.steps]
+    cluster_size = 0
     for step in print_steps:
         i = step//thinning
         if i >= len(particles):
