@@ -56,15 +56,15 @@ def plot(data, step):
     fig, ax = plt.subplots()
 
     # clustering
-    thresh = 1.2
-    clusters = hierarchy.fclusterdata(data, thresh,
+    threshold = 1.2
+    clusters = hierarchy.fclusterdata(data, threshold,
             criterion="distance", metric=periodic_distance)
 
     # plotting
     ax.scatter(*np.transpose(data), c=clusters)
     #ax.set_xlim(0.0, 20.0)
     ax.axis("equal")
-    title = "threshold: %f, number of clusters: %d, step: %d" % (thresh, len(set(clusters)), step)
+    title = "threshold: %f, number of clusters: %d, step: %d" % (threshold, len(set(clusters)), step)
     plt.title(title)
     fig.tight_layout()
 
