@@ -56,7 +56,7 @@ def plot(data, step):
     fig, ax = plt.subplots()
 
     # clustering
-    threshold = 1.2
+    threshold = 0.9
     clusters = hierarchy.fclusterdata(data, threshold,
             criterion="distance", metric=periodic_distance)
 
@@ -135,6 +135,7 @@ if __name__ == '__main__':
     text += str(cluster_size) + "\t" + \
         str(data.steps[final_step].static_energy) + "\t" + \
         str(data.steps[final_step].dynamic_energy) + "\t"
+    print(text)
 
     # Re-write data
     f = open(src, "wb")

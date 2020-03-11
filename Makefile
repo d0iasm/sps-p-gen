@@ -56,74 +56,74 @@ generator-p:
 	make -C src periodic
 
 kano: generator
-	parallel $(SRC)/generator-o -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) -dynamic '{1}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 ::: $(DYNAMICS)
-	parallel $(SRC)/generator-p -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 ::: $(CYCLES) ::: $(DYNAMICS)
+	nice parallel $(SRC)/generator-o -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) -dynamic '{1}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 ::: $(DYNAMICS)
+	nice parallel $(SRC)/generator-p -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) -cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -k2 0.8 0.4 0.6 -0.6 ::: $(CYCLES) ::: $(DYNAMICS)
 
 gen: generator
-	parallel $(SRC)/generator-o -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) -dynamic '{1}' -gen $(MAXGEN) -init '{2}' -p1 '{3}' -p2 '{4}' -seed '{5}' \
+	nice parallel $(SRC)/generator-o -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) -dynamic '{1}' -gen $(MAXGEN) -init '{2}' -p1 '{3}' -p2 '{4}' -seed '{5}' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 gen-p: generator-p
-	parallel -j $(NPROC) $(SRC)/generator-p -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) \
+	nice parallel -j $(NPROC) $(SRC)/generator-p -path_html $(HTML_PATH) -path_proto $(PROTO_PATH) \
 		-cycle '{1}' -dynamic '{2}' -gen $(MAXGEN) -init '{3}' -p1 '{4}' -p2 '{5}' -seed '{6}' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all: gen
-	parallel $(ENV) python3 $(UTIL_ALL) \
+	nice parallel $(ENV) python3 $(UTIL_ALL) \
 		-src '$(PROTO_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.bin' \
 		-out '$(IMG_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&&s={5}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-all-p: gen-p
-	parallel -j $(NPROC) $(ENV) python3 $(UTIL_ALL) \
+	nice parallel -j $(NPROC) $(ENV) python3 $(UTIL_ALL) \
 		-src '$(PROTO_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.bin' \
 		-out '$(IMG_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-energy: gen
-	parallel $(ENV) python3 $(UTIL_ENERGY) \
+	nice parallel $(ENV) python3 $(UTIL_ENERGY) \
 		-src '$(PROTO_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.bin' \
 		-out '$(IMG_PATH)/energy_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&&s={5}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-energy-p: gen-p
-	parallel $(ENV) python3 $(UTIL_ENERGY) \
+	nice parallel $(ENV) python3 $(UTIL_ENERGY) \
 		-src '$(PROTO_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.bin' \
 		-out '$(IMG_PATH)/energy_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-kparam: gen
-	parallel $(ENV) python3 $(UTIL_K) \
+	nice parallel $(ENV) python3 $(UTIL_K) \
 		-src '$(PROTO_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.bin' \
 		-out '$(IMG_PATH)/kparam_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&&s={5}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-kparam-p: gen-p
-	parallel $(ENV) python3 $(UTIL_K) \
+	nice parallel $(ENV) python3 $(UTIL_K) \
 		-src '$(PROTO_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.bin' \
 		-out '$(IMG_PATH)/kparam_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-xv: gen
-	parallel $(ENV) python3 $(UTIL_XV) \
+	nice parallel $(ENV) python3 $(UTIL_XV) \
 		-src '$(PROTO_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.bin' \
 		-out '$(IMG_PATH)/xv_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&&s={5}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-xv-p: gen-p
-	parallel $(ENV) python3 $(UTIL_XV) \
+	nice parallel $(ENV) python3 $(UTIL_XV) \
 		-src '$(PROTO_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.bin' \
 		-out '$(IMG_PATH)/xv_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-clustering: gen
-	parallel $(ENV) python3 $(UTIL_CLUSTERING) \
+	nice parallel $(ENV) python3 $(UTIL_CLUSTERING) \
 		-src '$(PROTO_PATH)/b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.bin' \
 		-out '$(IMG_PATH)/clustering_b=open\&c=-1\&d={1}\&g=$(MAXGEN)\&k={2}\&p1={3}\&p2={4}\&s={5}.png' \
 		::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
 
 img-clustering-p: gen-p
-	parallel $(ENV) python3 $(UTIL_CLUSTERING) \
+	nice parallel $(ENV) python3 $(UTIL_CLUSTERING) \
 		-src '$(PROTO_PATH)/b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.bin' \
 		-out '$(IMG_PATH)/clustering_b=periodic\&c={1}\&d={2}\&g=$(MAXGEN)\&k={3}\&p1={4}\&p2={5}\&s={6}.png' \
 		::: $(CYCLES) ::: $(DYNAMICS) ::: $(INITS) ::: $(PROB) ::: $(PROB2) ::: $(SEEDS)
