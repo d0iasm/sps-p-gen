@@ -56,7 +56,7 @@ def plot(data, step):
     fig, ax = plt.subplots()
 
     # clustering
-    threshold = 0.9
+    threshold = 1.0
     clusters = hierarchy.fclusterdata(data, threshold,
             criterion="distance", metric=periodic_distance)
 
