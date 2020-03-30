@@ -81,6 +81,7 @@ if __name__ == '__main__':
     clustering.init_text()
     # The final step for output.
     final_step = 0
+    cluster_size = 0
     for step in clustering.print_steps:
         i = step//clustering.thinning
         if i >= len(particles):
