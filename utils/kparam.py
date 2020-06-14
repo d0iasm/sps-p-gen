@@ -56,7 +56,9 @@ def plot(n, y):
     # y: 2d array (dimension MxN), or sequence of
     #    1d arrays (each dimension 1xN)
     ax.stackplot(x, list(zip(*y)), labels=labels, colors=pal, edgecolors='black', linewidths=.5)
-    leg = ax.legend(loc='upper right', prop={'size': 6})
+    handles, labels = ax.get_legend_handles_labels()
+    # Place legend at the upper right and reverse to keep order consistent.
+    leg = ax.legend(reversed(handles), reversed(labels), loc='upper right', prop={'size': 6})
     leg.get_frame().set_alpha(0.4)
 
     plt.savefig(out)
