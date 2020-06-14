@@ -39,22 +39,29 @@ def plot(n, y):
                 labels[i] = key
             i += 1
 
-    # color pallete
-    #   n_colors : int number of colors in the palette
-    #pal = ["#0000ff", "#00ff00", "#0000ff", "#000000"]
+    # Color pallete.
     pal = ["#ff0000", "#ff5500", "#ff8000", "#ffaa00",
             "#ffd500", "#ffff00", "#d4ff00", "#80ff00",
             "#55ff00", "#00ff00", "#00ff55", "#00ff80",
             "#00ffaa", "#00ffd5", "#00ffff", "#00d5ff",
             "#00aaff", "#0080ff", "#0055ff", "#002aff",
             "#0000ff"]
-    # for color orders (red: friendly, blue: hostile)
+    # Revese the color order (red: friendly, blue: hostile)
     pal = pal[::-1]
 
     y = [list(step.values()) for step in y]
     # x: 1d array of dimension N.
     # y: 2d array (dimension MxN), or sequence of
     #    1d arrays (each dimension 1xN)
+    # x is the number of steps and y is the 2d array of each preference value and each step.
+    # y = [
+    #   (preference 1 and step 1, preference 1 and step 2, ..., preference 1 and step N),
+    #   (preference 2 and step 1, preference 2 and step 2, ..., preference 2 and step N),
+    #   ...
+    #   (preference M and step 1, preference M and step 2, ..., preference M and step N)]
+    # What is list(zip(*y))?
+    #   a = [[1,2],[3,4]]
+    #   print(list(zip(*a))) # [(1, 3), (2, 4)]
     ax.stackplot(x, list(zip(*y)), labels=labels, colors=pal, edgecolors='black', linewidths=.5)
     handles, labels = ax.get_legend_handles_labels()
     # Place legend at the upper right and reverse to keep order consistent.
