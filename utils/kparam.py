@@ -26,7 +26,7 @@ def read_proto():
 
 
 def plot(n, y):
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6.4, 9.6))
 
     x = np.arange(0, thinning*n, thinning)
 
