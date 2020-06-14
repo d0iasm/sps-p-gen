@@ -558,6 +558,8 @@ static void parseArgs(int argc, char **argv) {
 
 static void html() {
   outfile << "<head><link rel=stylesheet href='css/style.css'></head>";
+  outfile << "<meta http-equiv=\"Cache-Control\" content=\"no-cache\" />";
+  outfile << "<meta http-equiv=\"Pragma\" content=\"no-cache\" />";
   printBody();
   outfile << "<script src=\"js/data/" << filename() << ".js\"></script>";
   outfile << "<script>const cycle=" << getCycle() << ";</script>\n";
